@@ -126,7 +126,7 @@ public class DBManager {
                 resultSet.getString("name"),
                 resultSet.getString("description"),
                 resultSet.getDate("date_of_birth").toLocalDate(),
-                new ArrayList<>() // You need to load artObjects separately
+                new ArrayList<>()
         );
     }
 
