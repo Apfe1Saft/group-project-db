@@ -62,7 +62,7 @@ public class DBManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null; // Return null if not found or an error occurs
+        return null;
     }
 
     public static Author getAuthorById(Connection connection, int authorId) {
@@ -79,10 +79,9 @@ public class DBManager {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null; // Return null if not found or an error occurs
+        return null;
     }
 
-    // Method to get a Location by ID
     public static Location getLocationById(Connection connection, int locationId) {
         try {
             String sql = "SELECT * FROM Location WHERE location_id = ?";
@@ -97,10 +96,9 @@ public class DBManager {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null; // Return null if not found or an error occurs
+        return null;
     }
 
-    // Method to add a new Purchase
     public static void addPurchase(Connection connection, Purchase purchase) {
         try {
             String sql = "INSERT INTO Purchase (date_of_purchase, price, art_object_id, seller_id, buyer_id) VALUES (?, ?, ?, ?, ?)";
@@ -122,7 +120,6 @@ public class DBManager {
         }
     }
 
-    // Helper method to map ResultSet to Author
     private static Author mapResultSetToAuthor(ResultSet resultSet) throws SQLException {
         return new Author(
                 resultSet.getInt("author_id"),
@@ -133,7 +130,6 @@ public class DBManager {
         );
     }
 
-    // Helper method to map ResultSet to Location
     private static Location mapResultSetToLocation(ResultSet resultSet) throws SQLException {
         return new Location(
                 resultSet.getInt("location_id"),
@@ -141,7 +137,6 @@ public class DBManager {
                 resultSet.getString("description"),
                 resultSet.getDate("date_of_opening").toLocalDate(),
                 resultSet.getString("placement"),
-                // You need to load type and artObjects separately
                 null,
                 new ArrayList<>()
         );

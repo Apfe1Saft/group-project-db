@@ -11,8 +11,6 @@ public class Main {
         try {
             Connection connection = DBConnector.connect();
             System.out.println("Connected to the database");
-            //DBConnector.setDefault(connection);
-            // else requests
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
