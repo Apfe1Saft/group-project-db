@@ -12,6 +12,8 @@ import java.util.List;
 @NoArgsConstructor
 public class ArtObject {
     private int id;
+    private String name;
+    private String description;
     private Author author;
     private Owner owner;
     private Location location;
