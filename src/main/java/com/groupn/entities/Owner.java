@@ -1,8 +1,7 @@
-package com.groupn.Entities;
+package com.groupn.entities;
 
 import lombok.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -10,10 +9,9 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Author {
+public class Owner {
     private int id;
     private String name;
     private String description;
-    private LocalDate dateOfBirth;
     private List<ArtObject> artObjects;
 }

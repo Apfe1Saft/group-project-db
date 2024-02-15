@@ -1,4 +1,4 @@
-package com.groupn.Entities;
+package com.groupn.entities;
 
 import lombok.*;
 

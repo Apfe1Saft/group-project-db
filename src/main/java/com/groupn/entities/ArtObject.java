@@ -1,18 +1,17 @@
-package com.groupn.Entities;
+package com.groupn.entities;
 
 import lombok.*;
 
-import java.util.List;
+import java.time.LocalDate;
 
 @Data
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Owner {
+public class ArtObject {
     private int id;
     private String name;
     private String description;
-    private List<ArtObject> artObjects;
-    private List<Purchase> purchases;
+    private LocalDate dateOfCreation;
 }

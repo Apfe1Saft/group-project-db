@@ -1,4 +1,4 @@
-package com.groupn.DB;
+package com.groupn.database;
 
 import lombok.Getter;
 import lombok.Setter;

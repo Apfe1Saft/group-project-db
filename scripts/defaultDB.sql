@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS LocationType (
   location_type_id SERIAL PRIMARY KEY,
-  type_name VARCHAR(255) NOT NULL
+  location_type_name VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS EventType (
@@ -12,7 +12,8 @@ CREATE TABLE IF NOT EXISTS Location (
   location_id SERIAL PRIMARY KEY,
   location_name VARCHAR(255),
   location_description VARCHAR(255),
-  location VARCHAR(255),
+  placement VARCHAR(255),
+  date_of_opening DATE,
   location_type_id INTEGER REFERENCES LocationType(location_type_id)
 );
 
@@ -24,9 +25,9 @@ CREATE TABLE IF NOT EXISTS Owner (
 
 CREATE TABLE IF NOT EXISTS Author (
   author_id SERIAL PRIMARY KEY,
-  name VARCHAR(255),
-  description VARCHAR(255),
-  date_of_birth DATE
+  author_name VARCHAR(255),
+  author_description VARCHAR(255),
+  author_date_of_birth DATE
 );
 
 CREATE TABLE IF NOT EXISTS Event (
@@ -42,6 +43,7 @@ CREATE TABLE IF NOT EXISTS Purchase (
   purchase_id SERIAL PRIMARY KEY,
   purchase_date DATE,
   purchase_price INTEGER,
+  art_object_id INTEGER,
   seller_id INTEGER REFERENCES Owner(owner_id),
   buyer_id INTEGER REFERENCES Owner(owner_id)
 );
@@ -53,5 +55,5 @@ CREATE TABLE IF NOT EXISTS ArtObject (
   author_id INTEGER REFERENCES Author(author_id),
   current_owner_id INTEGER REFERENCES Owner(owner_id),
   current_location_id INTEGER REFERENCES Location(location_id),
-  date DATE
+  date_of_creation DATE
 );
