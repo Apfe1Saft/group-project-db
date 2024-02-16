@@ -9,11 +9,13 @@ import java.sql.ResultSet;
 public interface LocationTypeSQL {
     default LocationType getLocationTypeById(int locationTypeId, DBManager manager) {
         try {
+            manager.getLogger().info(" RUN getLocationTypeById.");
             String sql = "SELECT * FROM LocationType WHERE location_type_id = ?";
             try (PreparedStatement preparedStatement = manager.getConnection().prepareStatement(sql)) {
                 preparedStatement.setInt(1, locationTypeId);
                 ResultSet resultSet = preparedStatement.executeQuery();
                 if (resultSet.next()) {
+
                     return switch (resultSet.getInt("location_type_id")) {
                         case 1 -> LocationType.MUSEUM;
                         case 2 -> LocationType.PRIVATE_LOCATION;

@@ -1,28 +1,26 @@
 package com.groupn.database.sql_request;
 
 import com.groupn.database.DBManager;
-import com.groupn.entities.EventType;
+import com.groupn.entities.Event;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public interface EventSQL {
-    default EventType getEventTypeById(int eventTypeId, DBManager manager) {
+    default Event getEventById(int eventId, DBManager manager) {
         try {
-            String sql = "SELECT * FROM EventType WHERE event_type_id = ?";
+            manager.getLogger().info(" RUN getEventById.");
+            String sql = "SELECT * FROM Event WHERE event_id = ?";
             try (PreparedStatement preparedStatement = manager.getConnection().prepareStatement(sql)) {
-                preparedStatement.setInt(1, eventTypeId);
+                preparedStatement.setInt(1, eventId);
                 ResultSet resultSet = preparedStatement.executeQuery();
-
                 if (resultSet.next()) {
-                    return switch (resultSet.getInt("event_type_id")) {
-                        case 1 -> EventType.EXHEBITION;
-                        case 2 -> EventType.WRONGDOOR;
-                        default -> throw new Exception("Wrong Event Type");
-                    };
+
+                    return manager.getMapper().mapResultSetToEvent(resultSet);
                 }
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             manager.getLogger().severe("Error: " + e.getMessage());
         }
         return null;

@@ -10,6 +10,7 @@ import java.sql.SQLException;
 public interface PurchaseSQL {
     default void addPurchase(Purchase purchase, DBManager manager) {
         try {
+            manager.getLogger().info(" RUN addPurchase.");
             String sql = "INSERT INTO Purchase (date_of_purchase, price, art_object_id, seller_id, buyer_id) VALUES (?, ?, ?, ?, ?)";
             try (PreparedStatement preparedStatement = manager.getConnection().prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
                 preparedStatement.setDate(1, java.sql.Date.valueOf(purchase.getDateOfPurchase()));
@@ -29,8 +30,9 @@ public interface PurchaseSQL {
         }
     }
 
-    default Purchase getPurchase(int purchaseId, DBManager manager) {
+    default Purchase getPurchaseId(int purchaseId, DBManager manager) {
         try {
+            manager.getLogger().info(" RUN getPurchaseById.");
             String sql = "SELECT * FROM Purchase WHERE purchase_id = ?";
             try (PreparedStatement preparedStatement = manager.getConnection().prepareStatement(sql)) {
                 preparedStatement.setInt(1, purchaseId);

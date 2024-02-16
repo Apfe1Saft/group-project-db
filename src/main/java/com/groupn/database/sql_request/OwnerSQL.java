@@ -10,11 +10,13 @@ import java.sql.SQLException;
 public interface OwnerSQL {
     default Owner getOwnerById(int ownerId, DBManager manager) {
         try {
+            manager.getLogger().info(" RUN getLocationTypeById.");
             String sql = "SELECT * FROM Owner WHERE owner_id = ?";
             try (PreparedStatement preparedStatement = manager.getConnection().prepareStatement(sql)) {
                 preparedStatement.setInt(1, ownerId);
                 ResultSet resultSet = preparedStatement.executeQuery();
                 if (resultSet.next()) {
+
                     return manager.getMapper().mapResultSetToOwner(resultSet);
                 }
             }

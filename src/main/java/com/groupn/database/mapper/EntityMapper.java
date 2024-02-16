@@ -6,7 +6,6 @@ import lombok.Getter;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 @Getter
 public class EntityMapper {
@@ -24,7 +23,7 @@ public class EntityMapper {
                 resultSet.getDate("date_of_opening").toLocalDate(),
                 resultSet.getString("placement"),
                 dbManager.getLocationTypeById(resultSet.getInt("location_type_id")),
-                new ArrayList<>()
+                dbManager.getArtObjectByLocation(resultSet.getInt("location_id"))
         );
     }
 
@@ -64,6 +63,17 @@ public class EntityMapper {
                 resultSet.getString("author_description"),
                 resultSet.getDate("author_date_of_birth").toLocalDate(),
                 dbManager.getArtObjectByAuthor(resultSet.getInt("author_id"))
+        );
+    }
+
+    public Event mapResultSetToEvent(ResultSet resultSet) throws SQLException {
+        return new Event(
+                resultSet.getInt("event_id"),
+                dbManager.getEventTypeById(resultSet.getInt("event_type_id")),
+                resultSet.getString("event_description"),
+                resultSet.getDate("event_date").toLocalDate(),
+                dbManager.getLocationById(resultSet.getInt("event_location_id")),
+                resultSet.getInt("event_price")
         );
     }
 }

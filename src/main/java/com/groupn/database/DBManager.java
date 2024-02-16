@@ -13,17 +13,18 @@ import java.util.List;
 import java.util.logging.Logger;
 
 @Getter
-public class DBManager implements ArtObjectSQL, OwnerSQL, AuthorSQL, PurchaseSQL, LocationSQL, EventSQL, LocationTypeSQL {
+public class DBManager implements // implementing interfaces with specific sql requests for each entity
+        ArtObjectSQL, OwnerSQL, AuthorSQL, PurchaseSQL, LocationSQL, EventTypeSQL, LocationTypeSQL, EventSQL {
 
-    private EntityMapper mapper;
+    private EntityMapper mapper; // class which converts from ResultSet to Entity classes
 
-    private final Logger logger = Logger.getLogger(DBManager.class.getName());
+    private final Logger logger = Logger.getLogger(DBManager.class.getName()); // for logs
 
-    private Connection connection;
+    private Connection connection; // class which creates connection with database
 
-    private final String defaultDBFile = "./scripts/defaultDB.sql";
+    private final String defaultDBFile = "./scripts/defaultDB.sql"; // default .sql file with commands for creating database
 
-    private final String defaultDataFile = "./scripts/defaultData.sql";
+    private final String defaultDataFile = "./scripts/defaultData.sql"; // default .sql file for adding data into database
 
     public void createConnection(String url) {
         try {
@@ -81,6 +82,11 @@ public class DBManager implements ArtObjectSQL, OwnerSQL, AuthorSQL, PurchaseSQL
         return getEventTypeById(eventTypeId, this);
     }
 
+    //Event queries
+    public Event getEventById(int eventId) {
+        return getEventById(eventId, this);
+    }
+
     //Author queries
     public Author getAuthorById(int authorId) {
         return getAuthorById(authorId, this);
@@ -92,15 +98,13 @@ public class DBManager implements ArtObjectSQL, OwnerSQL, AuthorSQL, PurchaseSQL
     }
 
     //Purchases queries
-
-    public Purchase getPurchase(int purchaseId) {
-        return getPurchase(purchaseId, this);
+    public Purchase getPurchaseById(int purchaseId) {
+        return getPurchaseId(purchaseId, this);
     }
 
     public void addPurchase(Purchase purchase) {
         addPurchase(purchase, this);
     }
-    //Event queries
 
     //Owner queries
     public Owner getOwnerById(int ownerId) {
@@ -118,5 +122,9 @@ public class DBManager implements ArtObjectSQL, OwnerSQL, AuthorSQL, PurchaseSQL
 
     public List<ArtObject> getArtObjectByAuthor(int authorId) {
         return getArtObjectByAuthor(authorId, this);
+    }
+
+    public List<ArtObject> getArtObjectByLocation(int locationId) {
+        return getArtObjectByLocation(locationId, this);
     }
 }
