@@ -11,11 +11,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface ArtObjectSQL {
+    String artObjectJOINQuery = "SELECT * " +
+            "FROM ArtObject as ao " +
+            "JOIN Author as au ON ao.author_id = au.author_id " +
+            "JOIN Owner as ow ON ao.current_owner_id = ow.owner_id " +
+            "JOIN Location as lo ON ao.current_location_id = lo.location_id ";
 
     default ArtObject getArtObjectById(int artObjectId, DBManager manager) {
         try {
             manager.getLogger().info("RUN getArtObjectById.");
-            String sql = "SELECT * FROM ArtObject WHERE art_object_id = ?";
+            String sql = artObjectJOINQuery + "WHERE ao.art_object_id = ?";
             try (PreparedStatement preparedStatement = manager.getConnection().prepareStatement(sql)) {
                 preparedStatement.setInt(1, artObjectId);
                 ResultSet resultSet = preparedStatement.executeQuery();
@@ -34,7 +39,7 @@ public interface ArtObjectSQL {
         List<ArtObject> artObjects = new ArrayList<>();
         try {
             manager.getLogger().info(" RUN getArtObjectByAuthor.");
-            String sql = "SELECT * FROM ArtObject WHERE author_id = ?";
+            String sql = artObjectJOINQuery + " WHERE ao.author_id = ?";
             try (PreparedStatement preparedStatement = manager.getConnection().prepareStatement(sql)) {
                 preparedStatement.setInt(1, authorId);
                 ResultSet resultSet = preparedStatement.executeQuery();
@@ -55,7 +60,7 @@ public interface ArtObjectSQL {
         List<ArtObject> artObjects = new ArrayList<>();
         try {
             manager.getLogger().info(" RUN getArtObjectByOwner.");
-            String sql = "SELECT * FROM ArtObject WHERE current_owner_id = ?";
+            String sql = artObjectJOINQuery + " WHERE ao.current_owner_id = ?";
             try (PreparedStatement preparedStatement = manager.getConnection().prepareStatement(sql)) {
                 preparedStatement.setInt(1, ownerId);
                 ResultSet resultSet = preparedStatement.executeQuery();
@@ -76,7 +81,7 @@ public interface ArtObjectSQL {
         List<ArtObject> artObjects = new ArrayList<>();
         try {
             manager.getLogger().info(" RUN getArtObjectByOwner.");
-            String sql = "SELECT * FROM ArtObject WHERE current_location_id = ?";
+            String sql = artObjectJOINQuery + " WHERE ao.current_location_id = ?";
             try (PreparedStatement preparedStatement = manager.getConnection().prepareStatement(sql)) {
                 preparedStatement.setInt(1, locationId);
                 ResultSet resultSet = preparedStatement.executeQuery();
@@ -93,11 +98,11 @@ public interface ArtObjectSQL {
         return artObjects;
     }
 
-    default List<ArtObject> getAllArtObjects(DBManager manager){
+    default List<ArtObject> getAllArtObjects(DBManager manager) {
         List<ArtObject> artObjects = new ArrayList<>();
         try {
             manager.getLogger().info(" RUN getAllArtObjects.");
-            String sql = "SELECT * FROM ArtObject";
+            String sql = artObjectJOINQuery;
             try (PreparedStatement preparedStatement = manager.getConnection().prepareStatement(sql)) {
                 ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -113,7 +118,7 @@ public interface ArtObjectSQL {
         return artObjects;
     }
 
-    default void addArtObject(ArtObject artObject, DBManager manager){
+    default void addArtObject(ArtObject artObject, DBManager manager) {
         try {
             manager.getLogger().info(" RUN addArtObject.");
             String sql = "INSERT INTO ArtObject (art_object_name, art_object_description, author_id, current_owner_id, current_location_id,date_of_creation) VALUES (?, ?, ?, ?, ?, ?)";
@@ -130,6 +135,42 @@ public interface ArtObjectSQL {
                 if (generatedKeys.next()) {
                     artObject.setId(generatedKeys.getInt(1));
                 }
+            }
+        } catch (SQLException e) {
+            manager.getLogger().severe("Error: " + e.getMessage());
+        }
+    }
+
+    default void removeArtObjectById(int artObjectId, DBManager manager) {
+        try {
+            manager.getLogger().info("RUN removeArtObjectById.");
+            String sql = "DELETE FROM ArtObject WHERE art_object_id = ?";
+            try (PreparedStatement preparedStatement = manager.getConnection().prepareStatement(sql)) {
+                preparedStatement.setInt(1, artObjectId);
+                preparedStatement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            manager.getLogger().severe("Error: " + e.getMessage());
+        }
+    }
+
+    default void updateArtObject(ArtObject artObject, DBManager manager) {
+        try {
+            manager.getLogger().info("RUN updateArtObject.");
+            String sql = "UPDATE ArtObject SET art_object_name = ?, art_object_description = ?, " +
+                    "author_id = ?, current_owner_id = ?, current_location_id = ?, " +
+                    "date_of_creation = ? WHERE art_object_id = ?";
+
+            try (PreparedStatement preparedStatement = manager.getConnection().prepareStatement(sql)) {
+                preparedStatement.setString(1, artObject.getName());
+                preparedStatement.setString(2, artObject.getDescription());
+                preparedStatement.setInt(3, artObject.getAuthor().getId());
+                preparedStatement.setInt(4, artObject.getCurrentOwner().getId());
+                preparedStatement.setInt(5, artObject.getCurrentLocation().getId());
+                preparedStatement.setDate(6, Date.valueOf(artObject.getDateOfCreation()));
+                preparedStatement.setInt(7, artObject.getId());
+
+                preparedStatement.executeUpdate();
             }
         } catch (SQLException e) {
             manager.getLogger().severe("Error: " + e.getMessage());

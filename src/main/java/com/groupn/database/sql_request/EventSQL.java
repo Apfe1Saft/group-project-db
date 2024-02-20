@@ -12,10 +12,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface EventSQL {
+    String eventJOINQuery = "SELECT * " +
+            "FROM Event as ev " +
+            "JOIN Location as lo ON ev.event_location_id=lo.location_id ";
+
     default Event getEventById(int eventId, DBManager manager) {
         try {
             manager.getLogger().info(" RUN getEventById.");
-            String sql = "SELECT * FROM Event WHERE event_id = ?";
+            String sql = eventJOINQuery + " WHERE event_id = ?";
             try (PreparedStatement preparedStatement = manager.getConnection().prepareStatement(sql)) {
                 preparedStatement.setInt(1, eventId);
                 ResultSet resultSet = preparedStatement.executeQuery();
@@ -30,11 +34,11 @@ public interface EventSQL {
         return null;
     }
 
-    default List<Event> getAllEvents(DBManager manager){
+    default List<Event> getAllEvents(DBManager manager) {
         List<Event> events = new ArrayList<>();
         try {
             manager.getLogger().info(" RUN getAllEvents.");
-            String sql = "SELECT * FROM Event";
+            String sql = eventJOINQuery;
             try (PreparedStatement preparedStatement = manager.getConnection().prepareStatement(sql)) {
                 ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -49,6 +53,7 @@ public interface EventSQL {
 
         return events;
     }
+
     default void addEvent(Event event, DBManager manager) {
         try {
             manager.getLogger().info(" RUN addArtObject.");

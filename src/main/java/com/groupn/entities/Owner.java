@@ -13,5 +13,4 @@ public class Owner {
     private int id;
     private String name;
     private String description;
-    private List<ArtObject> artObjects;
 }

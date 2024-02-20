@@ -17,6 +17,5 @@ public class Location {
     private LocalDate dateOfOpening;
     private String placement;
     private LocationType type;
-    private List<ArtObject> artObjects;
 
 }

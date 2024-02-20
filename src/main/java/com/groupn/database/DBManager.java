@@ -149,4 +149,8 @@ public class DBManager implements // implementing interfaces with specific sql r
     public List<ArtObject> getAllArtObjects() {
         return getAllArtObjects(this);
     }
+
+    public void addArtObject(ArtObject artObject){addArtObject(artObject,this);}
+
+    public void removeArtObjectById(int artObjectId){removeArtObjectById(artObjectId,this);}
 }

@@ -22,8 +22,7 @@ public class EntityMapper {
                 resultSet.getString("location_description"),
                 resultSet.getDate("date_of_opening").toLocalDate(),
                 resultSet.getString("placement"),
-                dbManager.getLocationTypeById(resultSet.getInt("location_type_id")),
-                dbManager.getArtObjectByLocation(resultSet.getInt("location_id"))
+                dbManager.getLocationTypeById(resultSet.getInt("location_type_id"))
         );
     }
 
@@ -31,8 +30,7 @@ public class EntityMapper {
         return new Owner(
                 resultSet.getInt("owner_id"),
                 resultSet.getString("owner_name"),
-                resultSet.getString("owner_description"),
-                dbManager.getArtObjectByOwner(resultSet.getInt("owner_id"))
+                resultSet.getString("owner_description")
         );
     }
 
@@ -42,9 +40,9 @@ public class EntityMapper {
                 resultSet.getString("art_object_name"),
                 resultSet.getString("art_object_description"),
                 resultSet.getDate("date_of_creation").toLocalDate(),
-                dbManager.getAuthorById(resultSet.getInt("author_id")),
-                dbManager.getOwnerById(resultSet.getInt("current_owner_id")),
-                dbManager.getLocationById(resultSet.getInt("current_location_id"))
+                mapResultSetToAuthor(resultSet),
+                mapResultSetToOwner(resultSet),
+                mapResultSetToLocation(resultSet)
         );
     }
 
@@ -64,8 +62,7 @@ public class EntityMapper {
                 resultSet.getInt("author_id"),
                 resultSet.getString("author_name"),
                 resultSet.getString("author_description"),
-                resultSet.getDate("author_date_of_birth").toLocalDate(),
-                dbManager.getArtObjectByAuthor(resultSet.getInt("author_id"))
+                resultSet.getDate("author_date_of_birth").toLocalDate()
         );
     }
 
@@ -76,7 +73,7 @@ public class EntityMapper {
                 dbManager.getEventTypeById(resultSet.getInt("event_type_id")),
                 resultSet.getString("event_description"),
                 resultSet.getDate("event_date").toLocalDate(),
-                dbManager.getLocationById(resultSet.getInt("event_location_id")),
+                mapResultSetToLocation(resultSet),
                 resultSet.getInt("event_price")
         );
     }

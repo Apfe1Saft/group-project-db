@@ -15,5 +15,4 @@ public class Author {
     private String name;
     private String description;
     private LocalDate dateOfBirth;
-    private List<ArtObject> artObjects;
 }
