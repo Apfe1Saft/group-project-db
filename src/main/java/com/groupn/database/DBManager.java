@@ -87,9 +87,17 @@ public class DBManager implements // implementing interfaces with specific sql r
         return getEventById(eventId, this);
     }
 
+    public List<Event> getAllEvents() {
+        return getAllEvents(this);
+    }
+
     //Author queries
     public Author getAuthorById(int authorId) {
         return getAuthorById(authorId, this);
+    }
+
+    public List<Author> getAllAuthors() {
+        return getAllAuthors(this);
     }
 
     //Location queries
@@ -97,10 +105,16 @@ public class DBManager implements // implementing interfaces with specific sql r
         return getLocationById(locationId, this);
     }
 
+    public List<Location> getAllLocations() {
+        return getAllLocation(this);
+    }
+
     //Purchases queries
     public Purchase getPurchaseById(int purchaseId) {
         return getPurchaseId(purchaseId, this);
     }
+
+    public List<Purchase> getAllPurchases(){return getAllPurchases(this);}
 
     public void addPurchase(Purchase purchase) {
         addPurchase(purchase, this);
@@ -109,6 +123,10 @@ public class DBManager implements // implementing interfaces with specific sql r
     //Owner queries
     public Owner getOwnerById(int ownerId) {
         return getOwnerById(ownerId, this);
+    }
+
+    public List<Owner> getAllOwners() {
+        return getAllOwners(this);
     }
 
     //ArtObject queries
@@ -126,5 +144,9 @@ public class DBManager implements // implementing interfaces with specific sql r
 
     public List<ArtObject> getArtObjectByLocation(int locationId) {
         return getArtObjectByLocation(locationId, this);
+    }
+
+    public List<ArtObject> getAllArtObjects() {
+        return getAllArtObjects(this);
     }
 }

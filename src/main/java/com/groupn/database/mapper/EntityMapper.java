@@ -41,7 +41,10 @@ public class EntityMapper {
                 resultSet.getInt("art_object_id"),
                 resultSet.getString("art_object_name"),
                 resultSet.getString("art_object_description"),
-                resultSet.getDate("date_of_creation").toLocalDate()
+                resultSet.getDate("date_of_creation").toLocalDate(),
+                dbManager.getAuthorById(resultSet.getInt("author_id")),
+                dbManager.getOwnerById(resultSet.getInt("current_owner_id")),
+                dbManager.getLocationById(resultSet.getInt("current_location_id"))
         );
     }
 
@@ -69,6 +72,7 @@ public class EntityMapper {
     public Event mapResultSetToEvent(ResultSet resultSet) throws SQLException {
         return new Event(
                 resultSet.getInt("event_id"),
+                resultSet.getString("event_name"),
                 dbManager.getEventTypeById(resultSet.getInt("event_type_id")),
                 resultSet.getString("event_description"),
                 resultSet.getDate("event_date").toLocalDate(),

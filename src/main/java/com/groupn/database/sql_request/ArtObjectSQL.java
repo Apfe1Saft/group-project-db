@@ -3,6 +3,7 @@ package com.groupn.database.sql_request;
 import com.groupn.database.DBManager;
 import com.groupn.entities.ArtObject;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -90,5 +91,48 @@ public interface ArtObjectSQL {
         }
 
         return artObjects;
+    }
+
+    default List<ArtObject> getAllArtObjects(DBManager manager){
+        List<ArtObject> artObjects = new ArrayList<>();
+        try {
+            manager.getLogger().info(" RUN getAllArtObjects.");
+            String sql = "SELECT * FROM ArtObject";
+            try (PreparedStatement preparedStatement = manager.getConnection().prepareStatement(sql)) {
+                ResultSet resultSet = preparedStatement.executeQuery();
+
+                while (resultSet.next()) {
+                    ArtObject artObject = manager.getMapper().mapResultSetToArtObject(resultSet);
+                    artObjects.add(artObject);
+                }
+            }
+        } catch (SQLException e) {
+            manager.getLogger().severe("Error: " + e.getMessage());
+        }
+
+        return artObjects;
+    }
+
+    default void addArtObject(ArtObject artObject, DBManager manager){
+        try {
+            manager.getLogger().info(" RUN addArtObject.");
+            String sql = "INSERT INTO ArtObject (art_object_name, art_object_description, author_id, current_owner_id, current_location_id,date_of_creation) VALUES (?, ?, ?, ?, ?, ?)";
+            try (PreparedStatement preparedStatement = manager.getConnection().prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+                preparedStatement.setString(1, artObject.getName());
+                preparedStatement.setString(2, artObject.getDescription());
+                preparedStatement.setInt(3, artObject.getAuthor().getId());
+                preparedStatement.setInt(4, artObject.getCurrentOwner().getId());
+                preparedStatement.setInt(5, artObject.getCurrentLocation().getId());
+                preparedStatement.setDate(6, Date.valueOf(artObject.getDateOfCreation()));
+                preparedStatement.executeUpdate();
+
+                ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    artObject.setId(generatedKeys.getInt(1));
+                }
+            }
+        } catch (SQLException e) {
+            manager.getLogger().severe("Error: " + e.getMessage());
+        }
     }
 }

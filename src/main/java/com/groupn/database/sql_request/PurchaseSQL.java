@@ -1,11 +1,14 @@
 package com.groupn.database.sql_request;
 
 import com.groupn.database.DBManager;
+import com.groupn.entities.Event;
 import com.groupn.entities.Purchase;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public interface PurchaseSQL {
     default void addPurchase(Purchase purchase, DBManager manager) {
@@ -45,5 +48,25 @@ public interface PurchaseSQL {
             manager.getLogger().severe("Error: " + e.getMessage());
         }
         return null;
+    }
+
+    default List<Purchase> getAllPurchases(DBManager manager){
+        List<Purchase> purchases = new ArrayList<>();
+        try {
+            manager.getLogger().info(" RUN getAllEvents.");
+            String sql = "SELECT * FROM Purchase";
+            try (PreparedStatement preparedStatement = manager.getConnection().prepareStatement(sql)) {
+                ResultSet resultSet = preparedStatement.executeQuery();
+
+                while (resultSet.next()) {
+                    Purchase purchase = manager.getMapper().mapResultSetToPurchase(resultSet);
+                    purchases.add(purchase);
+                }
+            }
+        } catch (SQLException e) {
+            manager.getLogger().severe("Error: " + e.getMessage());
+        }
+
+        return purchases;
     }
 }

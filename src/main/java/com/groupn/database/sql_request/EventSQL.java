@@ -1,11 +1,15 @@
 package com.groupn.database.sql_request;
 
 import com.groupn.database.DBManager;
+import com.groupn.entities.ArtObject;
 import com.groupn.entities.Event;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public interface EventSQL {
     default Event getEventById(int eventId, DBManager manager) {
@@ -24,5 +28,46 @@ public interface EventSQL {
             manager.getLogger().severe("Error: " + e.getMessage());
         }
         return null;
+    }
+
+    default List<Event> getAllEvents(DBManager manager){
+        List<Event> events = new ArrayList<>();
+        try {
+            manager.getLogger().info(" RUN getAllEvents.");
+            String sql = "SELECT * FROM Event";
+            try (PreparedStatement preparedStatement = manager.getConnection().prepareStatement(sql)) {
+                ResultSet resultSet = preparedStatement.executeQuery();
+
+                while (resultSet.next()) {
+                    Event event = manager.getMapper().mapResultSetToEvent(resultSet);
+                    events.add(event);
+                }
+            }
+        } catch (SQLException e) {
+            manager.getLogger().severe("Error: " + e.getMessage());
+        }
+
+        return events;
+    }
+    default void addEvent(Event event, DBManager manager) {
+        try {
+            manager.getLogger().info(" RUN addArtObject.");
+            String sql = "INSERT INTO ArtObject (event_type_id, event_description, event_date, event_location_id, event_price) VALUES (?, ?, ?, ?, ?)";
+            try (PreparedStatement preparedStatement = manager.getConnection().prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+                preparedStatement.setString(1, event.getName());
+                preparedStatement.setString(2, event.getDescription());
+                preparedStatement.setDate(3, Date.valueOf(event.getStartDateOfEvent()));
+                preparedStatement.setInt(4, event.getLocation().getId());
+                preparedStatement.setInt(5, event.getPrice());
+                preparedStatement.executeUpdate();
+
+                ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    event.setId(generatedKeys.getInt(1));
+                }
+            }
+        } catch (SQLException e) {
+            manager.getLogger().severe("Error: " + e.getMessage());
+        }
     }
 }

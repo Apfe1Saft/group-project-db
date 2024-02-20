@@ -14,4 +14,7 @@ public class ArtObject {
     private String name;
     private String description;
     private LocalDate dateOfCreation;
+    private Author author;
+    private Owner currentOwner;
+    private Location currentLocation;
 }
