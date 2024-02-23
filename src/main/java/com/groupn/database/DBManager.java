@@ -91,6 +91,10 @@ public class DBManager implements // implementing interfaces with specific sql r
         return getAllEvents(this);
     }
 
+    public void addEvent(Event event) {
+        addEvent(event, this);
+    }
+
     //Author queries
     public Author getAuthorById(int authorId) {
         return getAuthorById(authorId, this);
@@ -98,6 +102,14 @@ public class DBManager implements // implementing interfaces with specific sql r
 
     public List<Author> getAllAuthors() {
         return getAllAuthors(this);
+    }
+
+    public void addAuthor(Author author) {
+        addAuthor(author, this);
+    }
+
+    public Author getAuthorByArtObjectId(int artObjectId) {
+        return getAuthorByArtObjectId(artObjectId, this);
     }
 
     //Location queries
@@ -114,7 +126,9 @@ public class DBManager implements // implementing interfaces with specific sql r
         return getPurchaseId(purchaseId, this);
     }
 
-    public List<Purchase> getAllPurchases(){return getAllPurchases(this);}
+    public List<Purchase> getAllPurchases() {
+        return getAllPurchases(this);
+    }
 
     public void addPurchase(Purchase purchase) {
         addPurchase(purchase, this);
@@ -150,7 +164,15 @@ public class DBManager implements // implementing interfaces with specific sql r
         return getAllArtObjects(this);
     }
 
-    public void addArtObject(ArtObject artObject){addArtObject(artObject,this);}
+    public void addArtObject(ArtObject artObject) {
+        addArtObject(artObject, this);
+    }
 
-    public void removeArtObjectById(int artObjectId){removeArtObjectById(artObjectId,this);}
+    public void removeArtObjectById(int artObjectId) {
+        removeArtObjectById(artObjectId, this);
+    }
+
+    public void updateArtObject(ArtObject artObject) {
+        updateArtObject(artObject, this);
+    }
 }
