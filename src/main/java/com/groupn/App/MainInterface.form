@@ -1,0 +1,942 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.groupn.App.MainInterface">
+  <grid id="27dc6" binding="rootPanel" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+    <margin top="0" left="0" bottom="0" right="0"/>
+    <constraints>
+      <xy x="20" y="20" width="900" height="500"/>
+    </constraints>
+    <properties>
+      <maximumSize width="900" height="450"/>
+      <minimumSize width="900" height="450"/>
+      <opaque value="true"/>
+      <preferredSize width="-1" height="-1"/>
+      <visible value="true"/>
+    </properties>
+    <border type="none"/>
+    <children>
+      <tabbedpane id="21001" binding="tabbedPane1" default-binding="true">
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="0" anchor="0" fill="3" indent="0" use-parent-layout="false">
+            <preferred-size width="900" height="450"/>
+          </grid>
+        </constraints>
+        <properties>
+          <visible value="true"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <grid id="cc9af" layout-manager="GridLayoutManager" row-count="3" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="0" left="0" bottom="100" right="0"/>
+            <constraints>
+              <tabbedpane title="Main"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <vspacer id="1112">
+                <constraints>
+                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                </constraints>
+              </vspacer>
+              <vspacer id="cef1b">
+                <constraints>
+                  <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                </constraints>
+              </vspacer>
+              <grid id="43317" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="0" vgap="0">
+                <margin top="0" left="0" bottom="0" right="0"/>
+                <constraints>
+                  <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="8" fill="2" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <component id="d6a1b" class="javax.swing.JButton" binding="helpButton" default-binding="true">
+                    <constraints>
+                      <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                        <minimum-size width="100" height="50"/>
+                      </grid>
+                    </constraints>
+                    <properties>
+                      <text value="Help"/>
+                    </properties>
+                  </component>
+                  <component id="b429d" class="javax.swing.JButton" binding="closeConn">
+                    <constraints>
+                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                        <minimum-size width="100" height="50"/>
+                      </grid>
+                    </constraints>
+                    <properties>
+                      <text value="Exit"/>
+                    </properties>
+                  </component>
+                  <component id="32dea" class="javax.swing.JButton" binding="aboutButton" default-binding="true">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                        <minimum-size width="100" height="50"/>
+                      </grid>
+                    </constraints>
+                    <properties>
+                      <font size="14"/>
+                      <text value="About"/>
+                    </properties>
+                  </component>
+                </children>
+              </grid>
+              <hspacer id="22443">
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                    <preferred-size width="200" height="-1"/>
+                  </grid>
+                </constraints>
+              </hspacer>
+            </children>
+          </grid>
+          <grid id="d6807" layout-manager="GridLayoutManager" row-count="4" column-count="6" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="0" left="0" bottom="0" right="0"/>
+            <constraints>
+              <tabbedpane title="Authors"/>
+            </constraints>
+            <properties>
+              <maximumSize width="400" height="300"/>
+              <minimumSize width="400" height="300"/>
+            </properties>
+            <border type="none"/>
+            <children>
+              <scrollpane id="dfabe" binding="AuthorScroll">
+                <constraints>
+                  <grid row="1" column="0" row-span="1" col-span="6" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                    <maximum-size width="321321397" height="123991231"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <autoscrolls value="true"/>
+                  <verticalScrollBarPolicy value="20"/>
+                </properties>
+                <border type="none"/>
+                <children>
+                  <component id="e7929" class="javax.swing.JTable" binding="AuthorTable">
+                    <constraints/>
+                    <properties>
+                      <autoResizeMode value="1"/>
+                      <autoscrolls value="true"/>
+                      <cellSelectionEnabled value="false"/>
+                      <columnSelectionAllowed value="false"/>
+                      <enabled value="true"/>
+                      <fillsViewportHeight value="true"/>
+                      <focusCycleRoot value="false"/>
+                      <focusable value="false"/>
+                      <font name="Monospaced" size="14" style="0"/>
+                      <inheritsPopupMenu value="false"/>
+                      <minimumSize width="800" height="273"/>
+                      <preferredScrollableViewportSize width="1920" height="1080"/>
+                      <preferredSize width="800" height="-1"/>
+                      <requestFocusEnabled value="true"/>
+                      <rowSelectionAllowed value="true"/>
+                      <surrendersFocusOnKeystroke value="false"/>
+                      <verifyInputWhenFocusTarget value="true"/>
+                    </properties>
+                    <clientProperties>
+                      <Table.isFileList class="java.lang.Boolean" value="true"/>
+                    </clientProperties>
+                  </component>
+                </children>
+              </scrollpane>
+              <component id="4bf09" class="javax.swing.JComboBox" binding="AuthorCB">
+                <constraints>
+                  <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                    <preferred-size width="150" height="-1"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <model>
+                    <item value="Author id"/>
+                    <item value="Art Object id"/>
+                  </model>
+                </properties>
+              </component>
+              <component id="34e7d" class="javax.swing.JButton" binding="searchAuthor">
+                <constraints>
+                  <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Search"/>
+                </properties>
+              </component>
+              <component id="44846" class="javax.swing.JButton" binding="refreshAuthor">
+                <constraints>
+                  <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Refresh table"/>
+                </properties>
+              </component>
+              <vspacer id="ed533">
+                <constraints>
+                  <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+                    <minimum-size width="-1" height="100"/>
+                    <preferred-size width="76" height="14"/>
+                  </grid>
+                </constraints>
+              </vspacer>
+              <hspacer id="19807">
+                <constraints>
+                  <grid row="0" column="5" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                    <minimum-size width="100" height="-1"/>
+                  </grid>
+                </constraints>
+              </hspacer>
+              <component id="163ca" class="javax.swing.JButton" binding="updateAuthor">
+                <constraints>
+                  <grid row="2" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <enabled value="false"/>
+                  <text value="Update"/>
+                </properties>
+              </component>
+              <component id="d6a97" class="javax.swing.JButton" binding="deleteAuthor">
+                <constraints>
+                  <grid row="2" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <enabled value="false"/>
+                  <text value="Delete"/>
+                </properties>
+              </component>
+              <component id="4a68b" class="javax.swing.JTextField" binding="AuthorTF">
+                <constraints>
+                  <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="4" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="150" height="-1"/>
+                    <maximum-size width="150" height="-1"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <requestFocusEnabled value="true"/>
+                </properties>
+              </component>
+              <component id="4acbc" class="javax.swing.JButton" binding="addAuthor">
+                <constraints>
+                  <grid row="2" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <enabled value="true"/>
+                  <text value="Add"/>
+                </properties>
+              </component>
+            </children>
+          </grid>
+          <grid id="653f0" layout-manager="GridLayoutManager" row-count="4" column-count="6" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="0" left="0" bottom="0" right="0"/>
+            <constraints>
+              <tabbedpane title="Art objects"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <scrollpane id="b34f6">
+                <constraints>
+                  <grid row="1" column="0" row-span="1" col-span="6" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                    <maximum-size width="321321397" height="123991231"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <focusTraversalPolicyProvider value="false"/>
+                  <focusable value="true"/>
+                  <font name="Monospaced" size="14" style="0"/>
+                </properties>
+                <border type="none"/>
+                <children>
+                  <component id="f3234" class="javax.swing.JTable" binding="ArtObjectsTable">
+                    <constraints/>
+                    <properties>
+                      <autoResizeMode value="1"/>
+                      <cellSelectionEnabled value="false"/>
+                      <fillsViewportHeight value="true"/>
+                      <focusable value="true"/>
+                      <font name="Monospaced" size="11" style="0"/>
+                      <minimumSize width="800" height="273"/>
+                      <preferredScrollableViewportSize width="1920" height="1080"/>
+                      <preferredSize width="800" height="-1"/>
+                      <requestFocusEnabled value="false"/>
+                      <rowSelectionAllowed value="true"/>
+                      <updateSelectionOnSort value="true"/>
+                      <verifyInputWhenFocusTarget value="true"/>
+                    </properties>
+                    <clientProperties>
+                      <Table.isFileList class="java.lang.Boolean" value="true"/>
+                    </clientProperties>
+                  </component>
+                </children>
+              </scrollpane>
+              <vspacer id="ffc9">
+                <constraints>
+                  <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+                    <minimum-size width="-1" height="100"/>
+                    <preferred-size width="76" height="14"/>
+                  </grid>
+                </constraints>
+              </vspacer>
+              <component id="5f5e3" class="javax.swing.JComboBox" binding="ArtCB">
+                <constraints>
+                  <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                    <minimum-size width="100" height="-1"/>
+                    <preferred-size width="150" height="-1"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <model>
+                    <item value="Art ojbect id"/>
+                    <item value="Author id"/>
+                    <item value="Owner id"/>
+                    <item value="Location id"/>
+                  </model>
+                </properties>
+              </component>
+              <hspacer id="7dc9f">
+                <constraints>
+                  <grid row="0" column="5" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                    <minimum-size width="100" height="-1"/>
+                  </grid>
+                </constraints>
+              </hspacer>
+              <component id="2bafb" class="javax.swing.JButton" binding="searchArt">
+                <constraints>
+                  <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Search"/>
+                </properties>
+              </component>
+              <component id="fb6e8" class="javax.swing.JButton" binding="refreshArt">
+                <constraints>
+                  <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="9" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Refresh table"/>
+                </properties>
+              </component>
+              <component id="df564" class="javax.swing.JButton" binding="updateArt">
+                <constraints>
+                  <grid row="2" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Update"/>
+                </properties>
+              </component>
+              <component id="334e4" class="javax.swing.JButton" binding="deleteArt">
+                <constraints>
+                  <grid row="2" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Delete"/>
+                </properties>
+              </component>
+              <component id="7c48a" class="javax.swing.JTextField" binding="ArtTF">
+                <constraints>
+                  <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="4" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="150" height="-1"/>
+                    <maximum-size width="150" height="-1"/>
+                  </grid>
+                </constraints>
+                <properties/>
+              </component>
+              <component id="957f7" class="javax.swing.JButton" binding="addArt">
+                <constraints>
+                  <grid row="2" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <enabled value="true"/>
+                  <text value="Add"/>
+                </properties>
+              </component>
+              <hspacer id="6288f">
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                    <preferred-size width="76" height="-1"/>
+                  </grid>
+                </constraints>
+              </hspacer>
+            </children>
+          </grid>
+          <grid id="33be1" layout-manager="GridLayoutManager" row-count="4" column-count="6" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="0" left="0" bottom="0" right="0"/>
+            <constraints>
+              <tabbedpane title="Event"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <scrollpane id="c1e9a">
+                <constraints>
+                  <grid row="1" column="0" row-span="1" col-span="6" vsize-policy="7" hsize-policy="7" anchor="1" fill="1" indent="0" use-parent-layout="false">
+                    <maximum-size width="321321397" height="123991231"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <focusTraversalPolicyProvider value="false"/>
+                  <focusable value="true"/>
+                  <font name="Monospaced" size="14" style="0"/>
+                </properties>
+                <border type="none"/>
+                <children>
+                  <component id="55b4" class="javax.swing.JTable" binding="EventTable">
+                    <constraints/>
+                    <properties>
+                      <autoResizeMode value="2"/>
+                      <cellSelectionEnabled value="false"/>
+                      <fillsViewportHeight value="true"/>
+                      <focusable value="true"/>
+                      <font name="Monospaced" size="11" style="0"/>
+                      <requestFocusEnabled value="false"/>
+                      <rowSelectionAllowed value="true"/>
+                      <updateSelectionOnSort value="false"/>
+                      <verifyInputWhenFocusTarget value="false"/>
+                    </properties>
+                    <clientProperties>
+                      <Table.isFileList class="java.lang.Boolean" value="true"/>
+                    </clientProperties>
+                  </component>
+                </children>
+              </scrollpane>
+              <vspacer id="19886">
+                <constraints>
+                  <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="0" indent="0" use-parent-layout="false">
+                    <minimum-size width="-1" height="100"/>
+                    <preferred-size width="76" height="14"/>
+                  </grid>
+                </constraints>
+              </vspacer>
+              <component id="d75b0" class="javax.swing.JButton" binding="searchEvent">
+                <constraints>
+                  <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Search"/>
+                </properties>
+              </component>
+              <hspacer id="52fce">
+                <constraints>
+                  <grid row="0" column="5" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                    <minimum-size width="100" height="-1"/>
+                  </grid>
+                </constraints>
+              </hspacer>
+              <component id="9e70e" class="javax.swing.JComboBox" binding="EventCB">
+                <constraints>
+                  <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                    <preferred-size width="150" height="-1"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <enabled value="false"/>
+                  <model>
+                    <item value="Event id"/>
+                  </model>
+                </properties>
+              </component>
+              <component id="8cdd6" class="javax.swing.JButton" binding="refreshEvent">
+                <constraints>
+                  <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="114" height="29"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <text value="Refresh table"/>
+                </properties>
+              </component>
+              <component id="d459f" class="javax.swing.JButton" binding="updateEvent">
+                <constraints>
+                  <grid row="2" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <enabled value="false"/>
+                  <text value="Update"/>
+                </properties>
+              </component>
+              <component id="7bbab" class="javax.swing.JButton" binding="deleteEvent">
+                <constraints>
+                  <grid row="2" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <enabled value="false"/>
+                  <text value="Delete"/>
+                </properties>
+              </component>
+              <component id="aaf99" class="javax.swing.JButton" binding="addEvent">
+                <constraints>
+                  <grid row="2" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <enabled value="true"/>
+                  <text value="Add"/>
+                </properties>
+              </component>
+              <component id="d73e8" class="javax.swing.JTextField" binding="EventTF">
+                <constraints>
+                  <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="4" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="150" height="-1"/>
+                    <maximum-size width="150" height="-1"/>
+                  </grid>
+                </constraints>
+                <properties/>
+              </component>
+              <grid id="f7122" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                <margin top="0" left="0" bottom="0" right="0"/>
+                <constraints>
+                  <grid row="2" column="2" row-span="2" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                    <preferred-size width="140" height="-1"/>
+                  </grid>
+                </constraints>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <component id="72956" class="javax.swing.JTextField" binding="EventTypeTF">
+                    <constraints>
+                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="9" fill="0" indent="0" use-parent-layout="false">
+                        <preferred-size width="150" height="-1"/>
+                        <maximum-size width="150" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <component id="ea60f" class="javax.swing.JButton" binding="searchEventType">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="9" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <focusable value="true"/>
+                      <hideActionText value="false"/>
+                      <opaque value="false"/>
+                      <text value="Search Event Type"/>
+                    </properties>
+                  </component>
+                  <vspacer id="28b35">
+                    <constraints>
+                      <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                  </vspacer>
+                </children>
+              </grid>
+            </children>
+          </grid>
+          <grid id="96322" layout-manager="GridLayoutManager" row-count="4" column-count="6" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="0" left="0" bottom="0" right="0"/>
+            <constraints>
+              <tabbedpane title="Location"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <scrollpane id="8a2ec">
+                <constraints>
+                  <grid row="1" column="0" row-span="1" col-span="6" vsize-policy="7" hsize-policy="7" anchor="1" fill="1" indent="0" use-parent-layout="false">
+                    <maximum-size width="321321397" height="123991231"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <focusTraversalPolicyProvider value="false"/>
+                  <focusable value="true"/>
+                </properties>
+                <border type="none"/>
+                <children>
+                  <component id="69879" class="javax.swing.JTable" binding="LocationTable">
+                    <constraints/>
+                    <properties>
+                      <autoResizeMode value="2"/>
+                      <cellSelectionEnabled value="false"/>
+                      <fillsViewportHeight value="true"/>
+                      <focusable value="true"/>
+                      <font name="Monospaced" size="11" style="0"/>
+                      <requestFocusEnabled value="false"/>
+                      <rowSelectionAllowed value="false"/>
+                      <updateSelectionOnSort value="false"/>
+                      <verifyInputWhenFocusTarget value="false"/>
+                    </properties>
+                    <clientProperties>
+                      <Table.isFileList class="java.lang.Boolean" value="true"/>
+                    </clientProperties>
+                  </component>
+                </children>
+              </scrollpane>
+              <hspacer id="d70c1">
+                <constraints>
+                  <grid row="0" column="5" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                    <minimum-size width="100" height="-1"/>
+                  </grid>
+                </constraints>
+              </hspacer>
+              <vspacer id="3adc3">
+                <constraints>
+                  <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+                    <minimum-size width="-1" height="100"/>
+                    <preferred-size width="76" height="14"/>
+                  </grid>
+                </constraints>
+              </vspacer>
+              <component id="ff963" class="javax.swing.JButton" binding="searchLocation">
+                <constraints>
+                  <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Search"/>
+                </properties>
+              </component>
+              <component id="e4736" class="javax.swing.JComboBox" binding="LocationCB">
+                <constraints>
+                  <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                    <preferred-size width="150" height="-1"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <enabled value="false"/>
+                  <model>
+                    <item value="Location id"/>
+                  </model>
+                </properties>
+              </component>
+              <component id="a439d" class="javax.swing.JButton" binding="refreshLocation">
+                <constraints>
+                  <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="114" height="29"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <text value="Refresh table"/>
+                </properties>
+              </component>
+              <component id="73348" class="javax.swing.JButton" binding="updateLocation">
+                <constraints>
+                  <grid row="2" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <enabled value="false"/>
+                  <text value="Update"/>
+                </properties>
+              </component>
+              <component id="ca325" class="javax.swing.JButton" binding="deleteLocation">
+                <constraints>
+                  <grid row="2" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <enabled value="false"/>
+                  <text value="Delete"/>
+                </properties>
+              </component>
+              <component id="c61d5" class="javax.swing.JTextField" binding="LocationTF">
+                <constraints>
+                  <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="4" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="150" height="-1"/>
+                    <maximum-size width="150" height="-1"/>
+                  </grid>
+                </constraints>
+                <properties/>
+              </component>
+              <component id="23dc7" class="javax.swing.JButton" binding="addLocation">
+                <constraints>
+                  <grid row="2" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <enabled value="true"/>
+                  <text value="Add"/>
+                </properties>
+              </component>
+              <grid id="9cb66" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                <margin top="0" left="0" bottom="0" right="0"/>
+                <constraints>
+                  <grid row="2" column="2" row-span="2" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                    <preferred-size width="140" height="-1"/>
+                  </grid>
+                </constraints>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <component id="6ba1c" class="javax.swing.JTextField" binding="LocationTypeTF">
+                    <constraints>
+                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                        <preferred-size width="165" height="-1"/>
+                        <maximum-size width="165" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties>
+                      <margin top="2" left="6" bottom="2" right="6"/>
+                    </properties>
+                  </component>
+                  <component id="c6a97" class="javax.swing.JButton" binding="searchLocationType">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="9" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <horizontalTextPosition value="2"/>
+                      <iconTextGap value="4"/>
+                      <opaque value="false"/>
+                      <text value="Search Location Type"/>
+                    </properties>
+                  </component>
+                  <vspacer id="c128f">
+                    <constraints>
+                      <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                        <preferred-size width="140" height="-1"/>
+                      </grid>
+                    </constraints>
+                  </vspacer>
+                </children>
+              </grid>
+            </children>
+          </grid>
+          <grid id="8c028" layout-manager="GridLayoutManager" row-count="4" column-count="6" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="0" left="0" bottom="0" right="0"/>
+            <constraints>
+              <tabbedpane title="Owner"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <hspacer id="d3973">
+                <constraints>
+                  <grid row="0" column="5" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                    <minimum-size width="100" height="-1"/>
+                  </grid>
+                </constraints>
+              </hspacer>
+              <component id="39c41" class="javax.swing.JButton" binding="searchOwner">
+                <constraints>
+                  <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Search"/>
+                </properties>
+              </component>
+              <component id="c95f0" class="javax.swing.JComboBox" binding="OwnerCB">
+                <constraints>
+                  <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                    <preferred-size width="150" height="-1"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <enabled value="false"/>
+                  <model>
+                    <item value="Owner id"/>
+                  </model>
+                </properties>
+              </component>
+              <scrollpane id="622dd">
+                <constraints>
+                  <grid row="1" column="0" row-span="1" col-span="6" vsize-policy="7" hsize-policy="7" anchor="1" fill="1" indent="0" use-parent-layout="false">
+                    <maximum-size width="321321397" height="123991231"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <focusTraversalPolicyProvider value="false"/>
+                  <focusable value="true"/>
+                </properties>
+                <border type="none"/>
+                <children>
+                  <component id="6f024" class="javax.swing.JTable" binding="OwnerTable">
+                    <constraints/>
+                    <properties>
+                      <autoResizeMode value="2"/>
+                      <cellSelectionEnabled value="false"/>
+                      <fillsViewportHeight value="true"/>
+                      <focusable value="true"/>
+                      <font name="Monospaced" size="14" style="0"/>
+                      <requestFocusEnabled value="false"/>
+                      <rowSelectionAllowed value="false"/>
+                      <updateSelectionOnSort value="false"/>
+                      <verifyInputWhenFocusTarget value="false"/>
+                    </properties>
+                    <clientProperties>
+                      <Table.isFileList class="java.lang.Boolean" value="true"/>
+                    </clientProperties>
+                  </component>
+                </children>
+              </scrollpane>
+              <vspacer id="9e74d">
+                <constraints>
+                  <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+                    <minimum-size width="-1" height="100"/>
+                    <preferred-size width="76" height="14"/>
+                  </grid>
+                </constraints>
+              </vspacer>
+              <component id="fd5d4" class="javax.swing.JButton" binding="refreshOwner">
+                <constraints>
+                  <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="114" height="29"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <text value="Refresh table"/>
+                </properties>
+              </component>
+              <component id="46e9b" class="javax.swing.JButton" binding="updateOwner">
+                <constraints>
+                  <grid row="2" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <enabled value="false"/>
+                  <text value="Update"/>
+                </properties>
+              </component>
+              <component id="ef0db" class="javax.swing.JButton" binding="deleteOwner">
+                <constraints>
+                  <grid row="2" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <enabled value="false"/>
+                  <text value="Delete"/>
+                </properties>
+              </component>
+              <component id="43823" class="javax.swing.JTextField" binding="OwnerTF">
+                <constraints>
+                  <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="4" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="150" height="-1"/>
+                    <maximum-size width="150" height="-1"/>
+                  </grid>
+                </constraints>
+                <properties/>
+              </component>
+              <component id="e8b5a" class="javax.swing.JButton" binding="addOwner">
+                <constraints>
+                  <grid row="2" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <enabled value="true"/>
+                  <text value="Add"/>
+                </properties>
+              </component>
+            </children>
+          </grid>
+          <grid id="180fa" layout-manager="GridLayoutManager" row-count="4" column-count="6" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="0" left="0" bottom="0" right="0"/>
+            <constraints>
+              <tabbedpane title="Purchase"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <scrollpane id="94bd8">
+                <constraints>
+                  <grid row="1" column="0" row-span="1" col-span="6" vsize-policy="7" hsize-policy="7" anchor="1" fill="1" indent="0" use-parent-layout="false">
+                    <maximum-size width="321321397" height="123991231"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <focusTraversalPolicyProvider value="false"/>
+                  <focusable value="true"/>
+                </properties>
+                <border type="none"/>
+                <children>
+                  <component id="1e026" class="javax.swing.JTable" binding="PurchaseTable">
+                    <constraints/>
+                    <properties>
+                      <autoResizeMode value="2"/>
+                      <cellSelectionEnabled value="false"/>
+                      <fillsViewportHeight value="true"/>
+                      <focusable value="true"/>
+                      <font name="Monospaced" size="11" style="0"/>
+                      <inheritsPopupMenu value="true"/>
+                      <requestFocusEnabled value="false"/>
+                      <rowSelectionAllowed value="false"/>
+                      <updateSelectionOnSort value="false"/>
+                      <verifyInputWhenFocusTarget value="false"/>
+                    </properties>
+                    <clientProperties>
+                      <Table.isFileList class="java.lang.Boolean" value="true"/>
+                    </clientProperties>
+                  </component>
+                </children>
+              </scrollpane>
+              <hspacer id="8cd87">
+                <constraints>
+                  <grid row="0" column="5" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                    <minimum-size width="100" height="-1"/>
+                  </grid>
+                </constraints>
+              </hspacer>
+              <component id="b0cc0" class="javax.swing.JButton" binding="searchPurchase">
+                <constraints>
+                  <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Search"/>
+                </properties>
+              </component>
+              <component id="94368" class="javax.swing.JComboBox" binding="PurchaseCB">
+                <constraints>
+                  <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                    <preferred-size width="150" height="-1"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <enabled value="false"/>
+                  <model>
+                    <item value="Purchase id"/>
+                  </model>
+                </properties>
+              </component>
+              <vspacer id="56f55">
+                <constraints>
+                  <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+                    <minimum-size width="-1" height="100"/>
+                    <preferred-size width="76" height="14"/>
+                  </grid>
+                </constraints>
+              </vspacer>
+              <component id="2dad6" class="javax.swing.JButton" binding="refreshPurchase">
+                <constraints>
+                  <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="114" height="29"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <text value="Refresh table"/>
+                </properties>
+              </component>
+              <component id="79d46" class="javax.swing.JButton" binding="updatePurchase">
+                <constraints>
+                  <grid row="2" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <enabled value="false"/>
+                  <focusPainted value="false"/>
+                  <focusable value="false"/>
+                  <text value="Update"/>
+                  <visible value="true"/>
+                </properties>
+              </component>
+              <component id="4f6ae" class="javax.swing.JButton" binding="deletePurchase">
+                <constraints>
+                  <grid row="2" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <enabled value="false"/>
+                  <text value="Delete"/>
+                </properties>
+              </component>
+              <component id="2beb" class="javax.swing.JTextField" binding="PurchaseTF">
+                <constraints>
+                  <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="4" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="150" height="-1"/>
+                    <maximum-size width="150" height="-1"/>
+                  </grid>
+                </constraints>
+                <properties/>
+              </component>
+              <component id="94d14" class="javax.swing.JButton" binding="addPurchase">
+                <constraints>
+                  <grid row="2" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <enabled value="true"/>
+                  <text value="Add"/>
+                </properties>
+              </component>
+            </children>
+          </grid>
+        </children>
+      </tabbedpane>
+    </children>
+  </grid>
+</form>
