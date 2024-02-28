@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS Author (
   author_id SERIAL PRIMARY KEY,
   author_name VARCHAR(255),
   author_description VARCHAR(255),
-  author_date_of_birth DATE
+  author_date_of_birth VARCHAR(255)
 );
 
 CREATE TABLE IF NOT EXISTS Event (
@@ -35,8 +35,10 @@ CREATE TABLE IF NOT EXISTS Event (
   event_type_id INTEGER REFERENCES EventType(event_type_id),
   event_description VARCHAR(255),
   event_name VARCHAR(255),
-  event_date DATE,
+  event_start_date DATE,
+  event_end_date DATE,
   event_location_id INTEGER REFERENCES Location(location_id),
+  /* event_objects INTEGER[] REFERENCES ArtObject(art_object_id), не работает*/
   event_price INTEGER
 );
 
@@ -45,6 +47,7 @@ CREATE TABLE IF NOT EXISTS Purchase (
   purchase_date DATE,
   purchase_price INTEGER,
   art_object_id INTEGER,
+  art_object_id INTEGER REFERENCES ArtObject(art_object_id),
   seller_id INTEGER REFERENCES Owner(owner_id),
   buyer_id INTEGER REFERENCES Owner(owner_id)
 );
@@ -56,5 +59,5 @@ CREATE TABLE IF NOT EXISTS ArtObject (
   author_id INTEGER REFERENCES Author(author_id),
   current_owner_id INTEGER REFERENCES Owner(owner_id),
   current_location_id INTEGER REFERENCES Location(location_id),
-  date_of_creation DATE
+  date_of_creation VARCHAR(255)
 );
