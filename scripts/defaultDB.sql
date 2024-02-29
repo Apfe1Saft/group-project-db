@@ -61,3 +61,6 @@ CREATE TABLE IF NOT EXISTS ArtObject (
   current_location_id INTEGER REFERENCES Location(location_id),
   date_of_creation VARCHAR(255)
 );
+
+CREATE INDEX idx_author_id ON Author(author_id);
+CREATE INDEX idx_location_name ON Location(location_name);

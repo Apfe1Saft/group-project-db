@@ -176,4 +176,28 @@ public interface ArtObjectSQL {
             manager.getLogger().severe("Error: " + e.getMessage());
         }
     }
+
+    default List<ArtObject> getArtObjectsByFilter(String filter, DBManager manager) {
+        List<ArtObject> artObjects = new ArrayList<>();
+        try {
+            manager.getLogger().info("RUN getArtObjectsByFilter.");
+
+            String sql = artObjectJOINQuery + " WHERE ao.art_object_name LIKE ? OR ao.art_object_description LIKE ?";
+            try (PreparedStatement preparedStatement = manager.getConnection().prepareStatement(sql)) {
+                preparedStatement.setString(1, "%" + filter + "%");
+                preparedStatement.setString(2, "%" + filter + "%");
+
+                ResultSet resultSet = preparedStatement.executeQuery();
+
+                while (resultSet.next()) {
+                    ArtObject artObject = manager.getMapper().mapResultSetToArtObject(resultSet);
+                    artObjects.add(artObject);
+                }
+            }
+        } catch (SQLException e) {
+            manager.getLogger().severe("Error: " + e.getMessage());
+        }
+
+        return artObjects;
+    }
 }

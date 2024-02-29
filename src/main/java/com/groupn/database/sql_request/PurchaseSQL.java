@@ -69,4 +69,27 @@ public interface PurchaseSQL {
 
         return purchases;
     }
+
+    default List<Purchase> getPurchasesByFilter(String filter, DBManager manager) {
+        List<Purchase> purchases = new ArrayList<>();
+        try {
+            manager.getLogger().info("RUN getPurchasesByFilter.");
+
+            String sql = "SELECT * FROM Purchase WHERE date_of_purchase LIKE ?";
+            try (PreparedStatement preparedStatement = manager.getConnection().prepareStatement(sql)) {
+                preparedStatement.setString(1, "%" + filter + "%");
+
+                ResultSet resultSet = preparedStatement.executeQuery();
+
+                while (resultSet.next()) {
+                    Purchase purchase = manager.getMapper().mapResultSetToPurchase(resultSet);
+                    purchases.add(purchase);
+                }
+            }
+        } catch (SQLException e) {
+            manager.getLogger().severe("Error: " + e.getMessage());
+        }
+
+        return purchases;
+    }
 }

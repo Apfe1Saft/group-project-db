@@ -47,4 +47,28 @@ public interface LocationSQL {
 
         return locations;
     }
+
+    default List<Location> getLocationsByFilter(String filter, DBManager manager) {
+        List<Location> locations = new ArrayList<>();
+        try {
+            manager.getLogger().info("RUN getLocationsByFilter.");
+
+            String sql = "SELECT * FROM Location WHERE location_name LIKE ? OR location_description LIKE ?";
+            try (PreparedStatement preparedStatement = manager.getConnection().prepareStatement(sql)) {
+                preparedStatement.setString(1, "%" + filter + "%");
+                preparedStatement.setString(2, "%" + filter + "%");
+
+                ResultSet resultSet = preparedStatement.executeQuery();
+
+                while (resultSet.next()) {
+                    Location location = manager.getMapper().mapResultSetToLocation(resultSet);
+                    locations.add(location);
+                }
+            }
+        } catch (SQLException e) {
+            manager.getLogger().severe("Error: " + e.getMessage());
+        }
+
+        return locations;
+    }
 }

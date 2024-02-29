@@ -89,4 +89,28 @@ public interface AuthorSQL {
             manager.getLogger().severe("Error: " + e.getMessage());
         }
     }
+
+    default List<Author> getAuthorsByFilter(String filter, DBManager manager) {
+        List<Author> authors = new ArrayList<>();
+        try {
+            manager.getLogger().info("RUN getAuthorsByFilter.");
+
+            String sql = "SELECT * FROM Author WHERE author_name LIKE ? OR author_description LIKE ?";
+            try (PreparedStatement preparedStatement = manager.getConnection().prepareStatement(sql)) {
+                preparedStatement.setString(1, "%" + filter + "%");
+                preparedStatement.setString(2, "%" + filter + "%");
+
+                ResultSet resultSet = preparedStatement.executeQuery();
+
+                while (resultSet.next()) {
+                    Author author = manager.getMapper().mapResultSetToAuthor(resultSet);
+                    authors.add(author);
+                }
+            }
+        } catch (SQLException e) {
+            manager.getLogger().severe("Error: " + e.getMessage());
+        }
+
+        return authors;
+    }
 }

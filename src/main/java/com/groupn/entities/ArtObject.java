@@ -17,4 +17,5 @@ public class ArtObject {
     private Author author;
     private Owner currentOwner;
     private Location currentLocation;
+
 }

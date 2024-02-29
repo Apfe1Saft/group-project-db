@@ -6,6 +6,9 @@ import lombok.Getter;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 @Getter
 public class EntityMapper {
@@ -35,11 +38,21 @@ public class EntityMapper {
     }
 
     public ArtObject mapResultSetToArtObject(ResultSet resultSet) throws SQLException {
+        LocalDate dateOfCreation = null;
+        String date = resultSet.getString("date_of_creation");
+        if (date != null) {
+            try {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                dateOfCreation = LocalDate.parse(date, formatter);
+            } catch (DateTimeParseException e) {
+                dbManager.getLogger().info(" Author date of birth cannot be converted into normal date.");
+            }
+        }
         return new ArtObject(
                 resultSet.getInt("art_object_id"),
                 resultSet.getString("art_object_name"),
                 resultSet.getString("art_object_description"),
-                resultSet.getDate("date_of_creation").toLocalDate(),
+                dateOfCreation,
                 mapResultSetToAuthor(resultSet),
                 mapResultSetToOwner(resultSet),
                 mapResultSetToLocation(resultSet)
@@ -58,11 +71,21 @@ public class EntityMapper {
     }
 
     public Author mapResultSetToAuthor(ResultSet resultSet) throws SQLException {
+        LocalDate dateOfCreation = null;
+        String date = resultSet.getString("author_date_of_birth");
+        if (date != null) {
+            try {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                dateOfCreation = LocalDate.parse(date, formatter);
+            } catch (DateTimeParseException e) {
+                dbManager.getLogger().info(" Author date of birth cannot be converted into normal date.");
+            }
+        }
         return new Author(
                 resultSet.getInt("author_id"),
                 resultSet.getString("author_name"),
                 resultSet.getString("author_description"),
-                resultSet.getDate("author_date_of_birth").toLocalDate()
+                dateOfCreation
         );
     }
 

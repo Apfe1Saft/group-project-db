@@ -75,4 +75,27 @@ public interface EventSQL {
             manager.getLogger().severe("Error: " + e.getMessage());
         }
     }
+
+    default List<Event> getEventsByFilter(String filter, DBManager manager) {
+        List<Event> events = new ArrayList<>();
+        try {
+            manager.getLogger().info("RUN getEventsByFilter.");
+
+            String sql = eventJOINQuery + " WHERE ev.event_description LIKE ?";
+            try (PreparedStatement preparedStatement = manager.getConnection().prepareStatement(sql)) {
+                preparedStatement.setString(1, "%" + filter + "%");
+
+                ResultSet resultSet = preparedStatement.executeQuery();
+
+                while (resultSet.next()) {
+                    Event event = manager.getMapper().mapResultSetToEvent(resultSet);
+                    events.add(event);
+                }
+            }
+        } catch (SQLException e) {
+            manager.getLogger().severe("Error: " + e.getMessage());
+        }
+
+        return events;
+    }
 }

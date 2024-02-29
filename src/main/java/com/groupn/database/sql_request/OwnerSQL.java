@@ -48,4 +48,28 @@ public interface OwnerSQL {
 
         return owners;
     }
+
+    default List<Owner> getOwnersByFilter(String filter, DBManager manager) {
+        List<Owner> owners = new ArrayList<>();
+        try {
+            manager.getLogger().info("RUN getOwnersByFilter.");
+
+            String sql = "SELECT * FROM Owner WHERE owner_name LIKE ? OR owner_description LIKE ?";
+            try (PreparedStatement preparedStatement = manager.getConnection().prepareStatement(sql)) {
+                preparedStatement.setString(1, "%" + filter + "%");
+                preparedStatement.setString(2, "%" + filter + "%");
+
+                ResultSet resultSet = preparedStatement.executeQuery();
+
+                while (resultSet.next()) {
+                    Owner owner = manager.getMapper().mapResultSetToOwner(resultSet);
+                    owners.add(owner);
+                }
+            }
+        } catch (SQLException e) {
+            manager.getLogger().severe("Error: " + e.getMessage());
+        }
+
+        return owners;
+    }
 }

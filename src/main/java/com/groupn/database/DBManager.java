@@ -77,6 +77,7 @@ public class DBManager implements // implementing interfaces with specific sql r
         return getLocationTypeById(locationTypeId, this);
     }
 
+
     //EventType queries
     public EventType getEventTypeById(int eventTypeId) {
         return getEventTypeById(eventTypeId, this);
@@ -93,6 +94,14 @@ public class DBManager implements // implementing interfaces with specific sql r
 
     public void addEvent(Event event) {
         addEvent(event, this);
+    }
+
+    public List<Event> getEventsByFilter(String filter) {
+        return getEventsByFilter(filter, this);
+    }
+
+    public List<Author> getAuthorsByFilter(String filter) {
+        return getAuthorsByFilter(filter, this);
     }
 
     //Author queries
@@ -121,6 +130,10 @@ public class DBManager implements // implementing interfaces with specific sql r
         return getAllLocation(this);
     }
 
+    public List<Location> getLocationsByFilter(String filter) {
+        return getLocationsByFilter(filter, this);
+    }
+
     //Purchases queries
     public Purchase getPurchaseById(int purchaseId) {
         return getPurchaseId(purchaseId, this);
@@ -134,6 +147,10 @@ public class DBManager implements // implementing interfaces with specific sql r
         addPurchase(purchase, this);
     }
 
+    public List<Purchase> getPurchasesByFilter(String filter ) {
+        return getPurchasesByFilter(filter, this);
+    }
+
     //Owner queries
     public Owner getOwnerById(int ownerId) {
         return getOwnerById(ownerId, this);
@@ -141,6 +158,10 @@ public class DBManager implements // implementing interfaces with specific sql r
 
     public List<Owner> getAllOwners() {
         return getAllOwners(this);
+    }
+
+    public List<Owner> getOwnersByFilter(String filter ) {
+        return getOwnersByFilter(filter, this);
     }
 
     //ArtObject queries
@@ -174,5 +195,9 @@ public class DBManager implements // implementing interfaces with specific sql r
 
     public void updateArtObject(ArtObject artObject) {
         updateArtObject(artObject, this);
+    }
+
+    public List<ArtObject> getArtObjectsByFilter(String filter ) {
+        return getArtObjectsByFilter(filter, this);
     }
 }
