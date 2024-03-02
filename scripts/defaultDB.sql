@@ -38,6 +38,7 @@ CREATE TABLE IF NOT EXISTS Event (
   event_start_date DATE,
   event_end_date DATE,
   event_location_id INTEGER REFERENCES Location(location_id),
+  event_objects INTEGER REFERENCES ArtObject(art_object_id)
   event_price INTEGER
 );
 
@@ -60,11 +61,6 @@ CREATE TABLE IF NOT EXISTS Purchase (
   buyer_id INTEGER REFERENCES Owner(owner_id)
 );
 
-CREATE TABLE IF NOT EXISTS EventObjects (
-  event_id int references Event(event_id),
-  art_object_id int references ArtObject(art_object_id),
-  primary key (event_id, art_object_id)
-);
 
 CREATE INDEX idx_author_id ON Author(author_id);
 CREATE INDEX idx_location_name ON Location(location_name);
