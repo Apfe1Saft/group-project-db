@@ -75,7 +75,6 @@ public interface PurchaseSQL {
         try {
             manager.getLogger().info("RUN getPurchasesByFilter.");
 
-            String sql = "SELECT * FROM Purchase WHERE date_of_purchase LIKE ?";
             String sql = "SELECT * FROM Purchase WHERE CAST(purchase_date AS VARCHAR) LIKE ?";
             try (PreparedStatement preparedStatement = manager.getConnection().prepareStatement(sql)) {
                 preparedStatement.setString(1, "%" + filter + "%");
