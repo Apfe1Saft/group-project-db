@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS Event (
   event_start_date DATE,
   event_end_date DATE,
   event_location_id INTEGER REFERENCES Location(location_id),
-  event_objects INTEGER REFERENCES ArtObject(art_object_id),
+  event_object INTEGER REFERENCES ArtObject(art_object_id),
   event_price INTEGER
 );
 
