@@ -44,7 +44,6 @@ CREATE TABLE IF NOT EXISTS Event (
   event_id SERIAL PRIMARY KEY,
   event_type_id INTEGER REFERENCES EventType(event_type_id),
   event_description VARCHAR(255),
-  event_name VARCHAR(255),
   event_start_date DATE,
   event_end_date DATE,
   event_location_id INTEGER REFERENCES Location(location_id),
