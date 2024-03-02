@@ -42,16 +42,6 @@ CREATE TABLE IF NOT EXISTS Event (
   event_price INTEGER
 );
 
-CREATE TABLE IF NOT EXISTS Purchase (
-  purchase_id SERIAL PRIMARY KEY,
-  purchase_date DATE,
-  purchase_price INTEGER,
-  art_object_id INTEGER,
-  art_object_id INTEGER REFERENCES ArtObject(art_object_id),
-  seller_id INTEGER REFERENCES Owner(owner_id),
-  buyer_id INTEGER REFERENCES Owner(owner_id)
-);
-
 CREATE TABLE IF NOT EXISTS ArtObject (
   art_object_id SERIAL PRIMARY KEY,
   art_object_name VARCHAR(255),
@@ -60,6 +50,15 @@ CREATE TABLE IF NOT EXISTS ArtObject (
   current_owner_id INTEGER REFERENCES Owner(owner_id),
   current_location_id INTEGER REFERENCES Location(location_id),
   date_of_creation VARCHAR(255)
+);
+
+CREATE TABLE IF NOT EXISTS Purchase (
+  purchase_id SERIAL PRIMARY KEY,
+  purchase_date DATE,
+  purchase_price INTEGER,
+  art_object_id INTEGER REFERENCES ArtObject(art_object_id),
+  seller_id INTEGER REFERENCES Owner(owner_id),
+  buyer_id INTEGER REFERENCES Owner(owner_id)
 );
 
 CREATE INDEX idx_author_id ON Author(author_id);

@@ -95,7 +95,8 @@ public class EntityMapper {
                 resultSet.getString("event_name"),
                 dbManager.getEventTypeById(resultSet.getInt("event_type_id")),
                 resultSet.getString("event_description"),
-                resultSet.getDate("event_date").toLocalDate(),
+                resultSet.getDate("event_start_date").toLocalDate(),
+                resultSet.getDate("event_end_date").toLocalDate(),
                 mapResultSetToLocation(resultSet),
                 resultSet.getInt("event_price")
         );

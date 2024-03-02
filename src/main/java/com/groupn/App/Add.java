@@ -63,7 +63,7 @@ public class Add extends JDialog {
             }
             if (allFilled) {
                 switch (selectedTabIndex) {
-                    case 1:
+                    case 1: {
                         Author author = new Author();
                         author.setName(textFields.get(0).getText());
                         if (textFields.get(0).getText().matches(".*\\d.*")) {
@@ -82,10 +82,11 @@ public class Add extends JDialog {
                             JOptionPane.showMessageDialog(TFPanel, "Please, input date in the form YYYY-MM-DD", "Incorrect format", JOptionPane.WARNING_MESSAGE);
                             break;
                         }
-                        //
                         dbManager.addAuthor(author);
+                        dispose();
                         break;
-                    case 2:
+                    } // Author
+                    case 2: {
                         ArtObject artObject = new ArtObject();
                         artObject.setName(textFields.get(0).getText());
                         if (textFields.get(0).getText().matches(".*\\d.*")) {
@@ -130,8 +131,10 @@ public class Add extends JDialog {
                             break;
                         }
                         dbManager.addArtObject(artObject);
+                        dispose();
                         break;
-                    case 3:
+                    } // Art
+                    case 3: {
                         Event event = new Event();
                         event.setName(textFields.get(0).getText());
                         if (textFields.get(0).getText().matches(".*\\d.*")) {
@@ -153,29 +156,31 @@ public class Add extends JDialog {
                             JOptionPane.showMessageDialog(TFPanel, "Please, input start date in the form YYYY-MM-DD", "Incorrect format", JOptionPane.WARNING_MESSAGE);
                             break;
                         }
-//                        String endDate = textFields.get(3).getText();
-//                        try {
-//                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-//                            LocalDate dateOfEnd = LocalDate.parse(endDate, formatter);
-//                            event.setStartDateOfEvent(dateOfEnd);
-//                        } catch (DateTimeParseException p) {
-//                            JOptionPane.showMessageDialog(TFPanel, "Please, input end date in the form YYYY-MM-DD", "Incorrect format", JOptionPane.WARNING_MESSAGE);
-//                            break;
-//                        }
-                        event.setLocation(dbManager.getLocationById(Integer.parseInt(textFields.get(4).getText())));
+                        String endDate = textFields.get(4).getText();
+                        try {
+                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                            LocalDate dateOfEnd = LocalDate.parse(endDate, formatter);
+                            event.setEndDateOfEvent(dateOfEnd);
+                        } catch (DateTimeParseException p) {
+                            JOptionPane.showMessageDialog(TFPanel, "Please, input end date in the form YYYY-MM-DD", "Incorrect format", JOptionPane.WARNING_MESSAGE);
+                            break;
+                        }
+                        event.setLocation(dbManager.getLocationById(Integer.parseInt(textFields.get(5).getText())));
                         if (event.getLocation() == null) {
                             JOptionPane.showMessageDialog(TFPanel, "Location id not found.", "Not found", JOptionPane.WARNING_MESSAGE);
                             break;
                         }
                         try {
-                            event.setPrice(Integer.parseInt(textFields.get(5).getText()));
+                            event.setPrice(Integer.parseInt(textFields.get(6).getText()));
                         } catch (Exception p) {
                             JOptionPane.showMessageDialog(TFPanel, "Please, input price integer value", "Incorrect format", JOptionPane.WARNING_MESSAGE);
                             break;
                         }
                         dbManager.addEvent(event);
+                        dispose();
                         break;
-                    case 4:
+                    } // Event
+                    case 4: {
                         Location location = new Location();
                         location.setName(textFields.get(0).getText());
                         if (textFields.get(0).getText().matches(".*\\d.*")) {
@@ -199,8 +204,10 @@ public class Add extends JDialog {
                             break;
                         }
 //                        dbManager.addLocation(location);
+                        dispose();
                         break;
-                    case 5:
+                    } // Location
+                    case 5: {
                         Owner owner = new Owner();
                         owner.setName(textFields.get(0).getText());
                         if (textFields.get(0).getText().matches(".*\\d.*")) {
@@ -217,8 +224,10 @@ public class Add extends JDialog {
                             break;
                         }
 //                        dbManager.addOwner(owner);
+                        dispose();
                         break;
-                    case 6:
+                    } // Owner
+                    case 6: {
                         Purchase purchase = new Purchase();
                         String purchaseDate = textFields.get(0).getText();
                         try {
@@ -251,7 +260,9 @@ public class Add extends JDialog {
                             break;
                         }
                         dbManager.addPurchase(purchase);
+                        dispose();
                         break;
+                    } // Purchase
 //                    case 7: EventTypeAdd
 //                    case 8: LocationTypeAdd
                 }
@@ -279,11 +290,11 @@ public class Add extends JDialog {
                label.setText(label.getText()+" (integer id)*");
             }
             if (columnName.equals("Price")) {
-                label.setText(label.getText()+"(integer)*");
+                label.setText(label.getText()+" (integer)*");
             }
             String[] dateFields = {"Start Date", "End Date", "Opening date", "Date of purchase"};
             if (Arrays.asList(dateFields).contains(columnName)) {
-                label.setText(label.getText()+"(YYYY-MM-DD)*");
+                label.setText(label.getText()+" (YYYY-MM-DD)*");
             }
             String[] mandatoryFields = {"Name", "Description", "Placement"};
             if (Arrays.asList(mandatoryFields).contains(columnName)) {
@@ -297,8 +308,8 @@ public class Add extends JDialog {
         }
         switch (selectedTabIndex) {
             case 1:
-                setPreferredSize(new Dimension(400, 170));
-                setMinimumSize(new Dimension(400, 170));
+                setPreferredSize(new Dimension(400, 180));
+                setMinimumSize(new Dimension(400, 180));
                 setMaximumSize(new Dimension(600, 200));
                 break;
             case 5:

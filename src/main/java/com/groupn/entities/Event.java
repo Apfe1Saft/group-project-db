@@ -15,6 +15,7 @@ public class Event {
     private EventType type;
     private String description;
     private LocalDate startDateOfEvent;
+    private LocalDate EndDateOfEvent;
     private Location location;
     private int price;
 }

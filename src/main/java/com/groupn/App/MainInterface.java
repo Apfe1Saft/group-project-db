@@ -11,6 +11,8 @@ import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class MainInterface extends JFrame {
@@ -123,6 +125,7 @@ public class MainInterface extends JFrame {
         searchAuthor.addActionListener(e -> {
             int searchOptionAuthor = AuthorCB.getSelectedIndex();
             System.out.println(searchOptionAuthor);
+            DefaultTableModel tableModel = (DefaultTableModel) AuthorTable.getModel();
             switch (searchOptionAuthor) {
                 case 0:
                     if (AuthorTF.getText().isEmpty()) {
@@ -136,12 +139,14 @@ public class MainInterface extends JFrame {
                                 JOptionPane.showMessageDialog(rootPanel, "Author not found.", "Not found", JOptionPane.WARNING_MESSAGE);
                                 break;
                             }
-                            DefaultTableModel tableModel = (DefaultTableModel) AuthorTable.getModel();
                             tableModel.setRowCount(0);
                             Object[] rowData = new Object[]{author.getId(), author.getName(), author.getDescription(), author.getDateOfBirth()};
                             tableModel.addRow(rowData);
                             tableModel.fireTableDataChanged();
-
+                            break;
+                        } else {
+                            JOptionPane.showMessageDialog(rootPanel, "Author not found.", "No input", JOptionPane.WARNING_MESSAGE);
+                            ArtTF.setText("");
                             break;
                         }
                     } catch (Exception r) {
@@ -151,18 +156,40 @@ public class MainInterface extends JFrame {
                     }
                 case 1:
                     if (AuthorTF.getText().isEmpty()) {
-                        JOptionPane.showMessageDialog(rootPanel, "Please, input Art object id into a text field to execute search.", "No input", JOptionPane.WARNING_MESSAGE);
+                        JOptionPane.showMessageDialog(rootPanel, "Please, input word into a text field to execute search.", "No input", JOptionPane.WARNING_MESSAGE);
+                        ArtTF.setText("");
+                        break;
+                    }
+                    List<Author> authors = dbManager.getAuthorsByFilter(AuthorTF.getText());
+                    if (authors.isEmpty()) {
+                        JOptionPane.showMessageDialog(rootPanel, "Authors not found by word: \""+AuthorTF+"\".", "Not found", JOptionPane.WARNING_MESSAGE);
+                        AuthorTF.setText("");
+                        break;
+                    }
+                    tableModel.setRowCount(0);
+                    for (Author author : authors) {
+                        Object[] rowData = new Object[]{author.getId(), author.getName(), author.getDescription(), author.getDateOfBirth()};
+                        tableModel.addRow(rowData);
+                    }
+                    tableModel.fireTableDataChanged();
+                    break;
+                case 2:
+                    if (AuthorTF.getText().isEmpty()) {
+                        JOptionPane.showMessageDialog(rootPanel, "Please, input art object id into a text field to execute search.", "No input", JOptionPane.WARNING_MESSAGE);
                     }
                     try {
                         if (Integer.parseInt(AuthorTF.getText()) > 0) {
 
                             int searchId = Integer.parseInt(AuthorTF.getText());
                             Author author = dbManager.getAuthorByArtObjectId(searchId);
-                            DefaultTableModel tableModel = (DefaultTableModel) AuthorTable.getModel();
                             tableModel.setRowCount(0);
                             Object[] rowData = new Object[]{author.getId(), author.getName(), author.getDescription(), author.getDateOfBirth()};
                             tableModel.addRow(rowData);
                             tableModel.fireTableDataChanged();
+                            break;
+                        } else {
+                            JOptionPane.showMessageDialog(rootPanel, "Author by art object not found.", "No input", JOptionPane.WARNING_MESSAGE);
+                            ArtTF.setText("");
                             break;
                         }
                     } catch (Exception b) {
@@ -174,8 +201,10 @@ public class MainInterface extends JFrame {
         });
         searchArt.addActionListener(e -> {
             int searchOptionArt = ArtCB.getSelectedIndex();
-            if (ArtTF.getText().isEmpty()) {
+            Integer[] idSearches= {0, 2, 3, 4};
+            if (Arrays.asList(idSearches).contains(searchOptionArt) && ArtTF.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(rootPanel, "Please, input id into a text field to execute search.", "No input", JOptionPane.WARNING_MESSAGE);
+                ArtTF.setText("");
             } else {
                 try {
                     switch (searchOptionArt) {
@@ -202,6 +231,28 @@ public class MainInterface extends JFrame {
                             break;
                         }
                         case 1: {
+                            if (ArtTF.getText().isEmpty()) {
+                                JOptionPane.showMessageDialog(rootPanel, "Please, input word into a text field to execute search.", "No input", JOptionPane.WARNING_MESSAGE);
+                                ArtTF.setText("");
+                                break;
+                            } else {
+                                List<ArtObject> artObjects = dbManager.getArtObjectsByFilter(ArtTF.getText());
+                                if (artObjects == null) {
+                                    JOptionPane.showMessageDialog(rootPanel, "Art objects not found by word: \"" + ArtTF.getText() + "\".", "Not found", JOptionPane.WARNING_MESSAGE);
+                                    ArtTF.setText("");
+                                    break;
+                                }
+                                DefaultTableModel tableModel = (DefaultTableModel) ArtObjectsTable.getModel();
+                                tableModel.setRowCount(0);
+                                for (ArtObject artObject : artObjects) {
+                                    Object[] rowData = new Object[]{artObject.getId(), artObject.getName(), artObject.getDescription(), artObject.getDateOfCreation(), artObject.getAuthor().getName(), artObject.getCurrentOwner().getName(), artObject.getCurrentLocation().getName()};
+                                    tableModel.addRow(rowData);
+                                }
+                                tableModel.fireTableDataChanged();
+                                break;
+                            }
+                        }
+                        case 2: {
                             if (ArtTF.getText().isEmpty()) {
                                 JOptionPane.showMessageDialog(rootPanel, "Please, input id into a text field to execute search.", "No input", JOptionPane.WARNING_MESSAGE);
                             } else {
@@ -231,7 +282,7 @@ public class MainInterface extends JFrame {
                                 }
                             }
                         }
-                        case 2: {
+                        case 3: {
                             if (ArtTF.getText().isEmpty()) {
                                 JOptionPane.showMessageDialog(rootPanel, "Please, input id into a text field to execute search.", "No input", JOptionPane.WARNING_MESSAGE);
                             } else {
@@ -261,7 +312,7 @@ public class MainInterface extends JFrame {
                                 }
                             }
                         }
-                        case 3: {
+                        case 4: {
                             if (ArtTF.getText().isEmpty()) {
                                 JOptionPane.showMessageDialog(rootPanel, "Please, input id into a text field to execute search.", "No input", JOptionPane.WARNING_MESSAGE);
                             } else {
@@ -303,29 +354,61 @@ public class MainInterface extends JFrame {
             }
         });
         searchEvent.addActionListener(e -> {
-            if (EventTF.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(rootPanel, "Please, input event id into a text field to execute search.", "No input", JOptionPane.WARNING_MESSAGE);
-            } else {
-                try {
-                    if (Integer.parseInt(EventTF.getText()) > 0) {
-
-                        int searchId = Integer.parseInt(EventTF.getText());
-                        Event event = dbManager.getEventById(searchId);
-                        if (event == null) {
-                            JOptionPane.showMessageDialog(rootPanel, "Event not found.", "Not found", JOptionPane.WARNING_MESSAGE);
+            int searchOptionEvent = EventCB.getSelectedIndex();
+                switch (searchOptionEvent) {
+                    case 0:
+                        if (EventTF.getText().isEmpty()) {
+                            JOptionPane.showMessageDialog(rootPanel, "Please, input event id into a text field to execute search.", "No input", JOptionPane.WARNING_MESSAGE);
+                            EventTF.setText("");
+                            break;
                         } else {
-                            DefaultTableModel tableModel = (DefaultTableModel) EventTable.getModel();
-                            tableModel.setRowCount(0);
-                            Object[] rowData = new Object[]{event.getId(), event.getName(), event.getType(), event.getDescription(), event.getStartDateOfEvent(), event.getLocation(), event.getPrice()};
-                            tableModel.addRow(rowData);
-                            tableModel.fireTableDataChanged();
+                            try {
+                                if (Integer.parseInt(EventTF.getText()) > 0) {
+
+                                    int searchId = Integer.parseInt(EventTF.getText());
+                                    Event event = dbManager.getEventById(searchId);
+                                    if (event == null) {
+                                        JOptionPane.showMessageDialog(rootPanel, "Event not found.", "Not found", JOptionPane.WARNING_MESSAGE);
+                                        EventTF.setText("");
+                                        break;
+                                    } else {
+                                        DefaultTableModel tableModel = (DefaultTableModel) EventTable.getModel();
+                                        tableModel.setRowCount(0);
+                                        Object[] rowData = new Object[]{event.getId(), event.getName(), event.getType(), event.getDescription(), event.getStartDateOfEvent(), event.getLocation(), event.getPrice()};
+                                        tableModel.addRow(rowData);
+                                        tableModel.fireTableDataChanged();
+                                    }
+                                }
+                            } catch (Exception a) {
+                                EventTF.setText("");
+                                JOptionPane.showMessageDialog(rootPanel, "Please, input integer value.", "Inappropriate input", JOptionPane.WARNING_MESSAGE);
+                                break;
+                            }
                         }
-                    }
-                } catch (Exception a) {
-                    EventTF.setText("");
-                    JOptionPane.showMessageDialog(rootPanel, "Please, input integer value.", "Inappropriate input", JOptionPane.WARNING_MESSAGE);
+                    case 1:
+                        if (EventTF.getText().isEmpty()) {
+                            JOptionPane.showMessageDialog(rootPanel, "Please, input word into a text field to execute search.", "No input", JOptionPane.WARNING_MESSAGE);
+                            EventTF.setText("");
+                            break;
+                        } else {
+                            List<Event> events = dbManager.getEventsByFilter(EventTF.getText());
+                            if (events.isEmpty()) {
+                                JOptionPane.showMessageDialog(rootPanel, "Events not found by word in description: \"" + EventTF.getText() + "\".", "Not found", JOptionPane.WARNING_MESSAGE);
+                                EventTF.setText("");
+                                break;
+                            } else {
+                                DefaultTableModel tableModel = (DefaultTableModel) EventTable.getModel();
+                                tableModel.setRowCount(0);
+                                for (Event event : events) {
+                                    Object[] rowData = new Object[]{event.getId(), event.getName(), event.getType(), event.getDescription(), event.getStartDateOfEvent(), event.getLocation(), event.getPrice()};
+                                    tableModel.addRow(rowData);
+                                    tableModel.fireTableDataChanged();
+                                }
+                            }
+                        }
+
                 }
-            }
+
 
         });
         searchEventType.addActionListener(e -> {
@@ -346,28 +429,55 @@ public class MainInterface extends JFrame {
             }
         });
         searchLocation.addActionListener(e -> {
-            if (LocationTF.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(rootPanel, "Please, input location id into a text field to execute search.", "No input", JOptionPane.WARNING_MESSAGE);
-            } else {
-                try {
-                    if (Integer.parseInt(LocationTF.getText()) > 0) {
+            int searchOptionLocation = LocationCB.getSelectedIndex();
+            switch (searchOptionLocation) {
+                case 0:
+                    if (LocationTF.getText().isEmpty()) {
+                        JOptionPane.showMessageDialog(rootPanel, "Please, input location id into a text field to execute search.", "No input", JOptionPane.WARNING_MESSAGE);
+                        break;
+                    } else {
+                        try {
+                            if (Integer.parseInt(LocationTF.getText()) > 0) {
 
-                        int searchId = Integer.parseInt(LocationTF.getText());
-                        Location location = dbManager.getLocationById(searchId);
-                        if (location == null) {
-                            JOptionPane.showMessageDialog(rootPanel, "Location not found.", "Not found", JOptionPane.WARNING_MESSAGE);
-                        } else {
-                            DefaultTableModel tableModel = (DefaultTableModel) LocationTable.getModel();
-                            tableModel.setRowCount(0);
-                            Object[] rowData = new Object[]{location.getId(), location.getName(), location.getDescription(), location.getDateOfOpening(), location.getPlacement(), location.getType()};
-                            tableModel.addRow(rowData);
-                            tableModel.fireTableDataChanged();
+                                int searchId = Integer.parseInt(LocationTF.getText());
+                                Location location = dbManager.getLocationById(searchId);
+                                if (location == null) {
+                                    JOptionPane.showMessageDialog(rootPanel, "Location not found.", "Not found", JOptionPane.WARNING_MESSAGE);
+                                    LocationTF.setText("");
+                                    break;
+                                } else {
+                                    DefaultTableModel tableModel = (DefaultTableModel) LocationTable.getModel();
+                                    tableModel.setRowCount(0);
+                                    Object[] rowData = new Object[]{location.getId(), location.getName(), location.getDescription(), location.getDateOfOpening(), location.getPlacement(), location.getType()};
+                                    tableModel.addRow(rowData);
+                                    tableModel.fireTableDataChanged();
+                                }
+                            }
+                        } catch (Exception a) {
+                            EventTF.setText("");
+                            JOptionPane.showMessageDialog(rootPanel, "Please, input integer value.", "Inappropriate input", JOptionPane.WARNING_MESSAGE);
+                            break;
                         }
                     }
-                } catch (Exception a) {
-                    EventTF.setText("");
-                    JOptionPane.showMessageDialog(rootPanel, "Please, input integer value.", "Inappropriate input", JOptionPane.WARNING_MESSAGE);
-                }
+                case 1:
+                    if (LocationTF.getText().isEmpty()) {
+                        JOptionPane.showMessageDialog(rootPanel, "Please, input word into a text field to execute search.", "No input", JOptionPane.WARNING_MESSAGE);
+                        break;
+                    }
+                    List<Location> locations = dbManager.getLocationsByFilter(LocationTF.getText());
+                    if (locations.isEmpty()) {
+                        JOptionPane.showMessageDialog(rootPanel, "Locations not found by name or word in description: \""+LocationTF.getText()+"\".", "Not found", JOptionPane.WARNING_MESSAGE);
+                        LocationTF.setText("");
+                        break;
+                    }
+                    DefaultTableModel tableModel = (DefaultTableModel) LocationTable.getModel();
+                    tableModel.setRowCount(0);
+                    for (Location location : locations) {
+                        Object[] rowData = new Object[]{location.getId(), location.getName(), location.getDescription(), location.getDateOfOpening(), location.getPlacement(), location.getType()};
+                        tableModel.addRow(rowData);
+                    }
+                    tableModel.fireTableDataChanged();
+                    break;
             }
         });
         searchLocationType.addActionListener(e -> {
@@ -388,53 +498,106 @@ public class MainInterface extends JFrame {
             }
         });
         searchOwner.addActionListener(e -> {
-            if (OwnerTF.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(rootPanel, "Please, input owner's id into a text field to execute search.", "No input", JOptionPane.WARNING_MESSAGE);
-            } else {
-                try {
-                    if (Integer.parseInt(OwnerTF.getText()) > 0) {
+            int searchOptionOwner = OwnerCB.getSelectedIndex();
+            DefaultTableModel tableModel = (DefaultTableModel) OwnerTable.getModel();
+            switch (searchOptionOwner) {
+                case 0:
+                    if (OwnerTF.getText().isEmpty()) {
+                        JOptionPane.showMessageDialog(rootPanel, "Please, input owner's id into a text field to execute search.", "No input", JOptionPane.WARNING_MESSAGE);
+                        break;
+                    } else {
+                        try {
+                            if (Integer.parseInt(OwnerTF.getText()) > 0) {
 
-                        int searchId = Integer.parseInt(OwnerTF.getText());
-                        Owner owner = dbManager.getOwnerById(searchId);
-                        if (owner == null) {
-                            JOptionPane.showMessageDialog(rootPanel, "Owner not found.", "Not found", JOptionPane.WARNING_MESSAGE);
-                        } else {
-                            DefaultTableModel tableModel = (DefaultTableModel) OwnerTable.getModel();
-                            tableModel.setRowCount(0);
-                            Object[] rowData = new Object[]{owner.getId(), owner.getName(), owner.getDescription()};
-                            tableModel.addRow(rowData);
-                            tableModel.fireTableDataChanged();
+                                int searchId = Integer.parseInt(OwnerTF.getText());
+                                Owner owner = dbManager.getOwnerById(searchId);
+                                if (owner == null) {
+                                    JOptionPane.showMessageDialog(rootPanel, "Owner not found.", "Not found", JOptionPane.WARNING_MESSAGE);
+                                    OwnerTF.setText("");
+                                    break;
+                                } else {
+                                    tableModel.setRowCount(0);
+                                    Object[] rowData = new Object[]{owner.getId(), owner.getName(), owner.getDescription()};
+                                    tableModel.addRow(rowData);
+                                    tableModel.fireTableDataChanged();
+                                }
+                            }
+                        } catch (Exception a) {
+                            EventTF.setText("");
+                            JOptionPane.showMessageDialog(rootPanel, "Please, input integer value.", "Inappropriate input", JOptionPane.WARNING_MESSAGE);
+                            break;
                         }
                     }
-                } catch (Exception a) {
-                    EventTF.setText("");
-                    JOptionPane.showMessageDialog(rootPanel, "Please, input integer value.", "Inappropriate input", JOptionPane.WARNING_MESSAGE);
-                }
+                case 1:
+                    if (OwnerTF.getText().isEmpty()) {
+                        JOptionPane.showMessageDialog(rootPanel, "Please, input owner's name or word in description into a text field to execute search.", "No input", JOptionPane.WARNING_MESSAGE);
+                        break;
+                    }
+                    List<Owner> owners = dbManager.getOwnersByFilter(OwnerTF.getText());
+                    if (owners.isEmpty()) {
+                        JOptionPane.showMessageDialog(rootPanel, "Owners not found by name or word in description: \""+OwnerTF.getText()+"\".", "Not found", JOptionPane.WARNING_MESSAGE);
+                        OwnerTF.setText("");
+                        break;
+                    }
+                    tableModel.setRowCount(0);
+                    for (Owner owner : owners) {
+                        Object[] rowData = new Object[]{owner.getId(), owner.getName(), owner.getDescription()};
+                        tableModel.addRow(rowData);
+                    }
+                    tableModel.fireTableDataChanged();
+                    break;
+
             }
         });
         searchPurchase.addActionListener(e -> {
-            if (PurchaseTF.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(rootPanel, "Please, input purchase id into a text field to execute search.", "No input", JOptionPane.WARNING_MESSAGE);
-            } else {
-                try {
-                    if (Integer.parseInt(PurchaseTF.getText()) > 0) {
+            int searchOptionPurchase = PurchaseCB.getSelectedIndex();
+            DefaultTableModel tableModel = (DefaultTableModel) PurchaseTable.getModel();
+            switch (searchOptionPurchase) {
+                case 0:
+                    if (PurchaseTF.getText().isEmpty()) {
+                        JOptionPane.showMessageDialog(rootPanel, "Please, input purchase id into a text field to execute search.", "No input", JOptionPane.WARNING_MESSAGE);
+                        break;
+                    } else {
+                        try {
+                            if (Integer.parseInt(PurchaseTF.getText()) > 0) {
 
-                        int searchId = Integer.parseInt(PurchaseTF.getText());
-                        Purchase purchase = dbManager.getPurchaseId(searchId, dbManager);
-                        if (purchase == null) {
-                            JOptionPane.showMessageDialog(rootPanel, "Purchase not found.", "Not found", JOptionPane.WARNING_MESSAGE);
-                        } else {
-                            DefaultTableModel tableModel = (DefaultTableModel) PurchaseTable.getModel();
-                            tableModel.setRowCount(0);
-                            Object[] rowData = new Object[]{purchase.getId(), purchase.getDateOfPurchase(), purchase.getPrice(), purchase.getArtObject().getName(), purchase.getSeller().getName(), purchase.getBuyer().getName()};
-                            tableModel.addRow(rowData);
-                            tableModel.fireTableDataChanged();
+                                int searchId = Integer.parseInt(PurchaseTF.getText());
+                                Purchase purchase = dbManager.getPurchaseId(searchId, dbManager);
+                                if (purchase == null) {
+                                    JOptionPane.showMessageDialog(rootPanel, "Purchase not found.", "Not found", JOptionPane.WARNING_MESSAGE);
+                                    EventTF.setText("");
+                                    break;
+                                } else {
+                                    tableModel.setRowCount(0);
+                                    Object[] rowData = new Object[]{purchase.getId(), purchase.getDateOfPurchase(), "€ "+purchase.getPrice(), purchase.getArtObject().getName(), purchase.getSeller().getName(), purchase.getBuyer().getName()};
+                                    tableModel.addRow(rowData);
+                                    tableModel.fireTableDataChanged();
+                                }
+                            }
+                        } catch (Exception a) {
+                            EventTF.setText("");
+                            JOptionPane.showMessageDialog(rootPanel, "Please, input integer value.", "Inappropriate input", JOptionPane.WARNING_MESSAGE);
+                            break;
                         }
                     }
-                } catch (Exception a) {
-                    EventTF.setText("");
-                    JOptionPane.showMessageDialog(rootPanel, "Please, input integer value.", "Inappropriate input", JOptionPane.WARNING_MESSAGE);
-                }
+                case 1:
+                    if (PurchaseTF.getText().isEmpty()) {
+                        JOptionPane.showMessageDialog(rootPanel, "Please, input approximate date (year, day, month) into a text field to execute search.", "No input", JOptionPane.WARNING_MESSAGE);
+                        break;
+                    }
+                    List<Purchase> purchases = dbManager.getPurchasesByFilter(PurchaseTF.getText());
+                    if (purchases.isEmpty()) {
+                        JOptionPane.showMessageDialog(rootPanel, "Purchases not found approximate date: \""+PurchaseTF.getText()+"\".", "Not found", JOptionPane.WARNING_MESSAGE);
+                        PurchaseTF.setText("");
+                        break;
+                    }
+                    tableModel.setRowCount(0);
+                    for (Purchase purchase : purchases) {
+                        Object[] rowData = new Object[]{purchase.getId(), purchase.getDateOfPurchase(), "€ "+purchase.getPrice(), purchase.getArtObject().getName(), purchase.getSeller().getName(), purchase.getBuyer().getName()};
+                        tableModel.addRow(rowData);
+                    }
+                    tableModel.fireTableDataChanged();
+                    break;
             }
         });
         // update handlers
@@ -527,6 +690,7 @@ public class MainInterface extends JFrame {
                     setAutoRequestFocus(true);
                     setEnabled(true);
                     requestFocus();
+                    showAuthors(true);
                 }
             });
         }); // Need to set date feature unnecessary
@@ -540,12 +704,12 @@ public class MainInterface extends JFrame {
                     setAutoRequestFocus(true);
                     setEnabled(true);
                     requestFocus();
+                    showArtObjects(true);
                 }
             });
         }); // Need to set date feature unnecessary
         addEvent.addActionListener(e -> {
-//          //addUI = new Add(this, dbManager, new String[]{"Name", "Type", "Description", "Start Date", "End Date", "Location", "Price"}, 3, rootPanel);
-            addUI = new Add(this, dbManager, new String[]{"Name", "Type", "Description", "Start Date", "Location", "Price"}, 3, rootPanel);
+            addUI = new Add(this, dbManager, new String[]{"Name", "Type", "Description", "Start Date", "End Date", "Location", "Price"}, 3, rootPanel);
             addUI.addWindowListener(new WindowAdapter() {
                 @Override
                 public void windowClosed(WindowEvent e) {
@@ -554,6 +718,7 @@ public class MainInterface extends JFrame {
                     setAutoRequestFocus(true);
                     setEnabled(true);
                     requestFocus();
+                    showEvents(true);
                 }
             });
         });
@@ -567,6 +732,7 @@ public class MainInterface extends JFrame {
                     setAutoRequestFocus(true);
                     setEnabled(true);
                     requestFocus();
+                    showLocations(true);
                 }
             });
         });
@@ -580,6 +746,7 @@ public class MainInterface extends JFrame {
                     setAutoRequestFocus(true);
                     setEnabled(true);
                     requestFocus();
+                    showOwners(true);
                 }
             });
         });
@@ -593,6 +760,7 @@ public class MainInterface extends JFrame {
                     setAutoRequestFocus(true);
                     setEnabled(true);
                     requestFocus();
+                    showPurchases(true);
                 }
             });
         });
@@ -753,11 +921,11 @@ public class MainInterface extends JFrame {
         if (tableModel.getRowCount() == 0 | refresh) {
             tableModel.setRowCount(0);
             List<Event> showEvents = dbManager.getAllEvents();
-            String[] columnNames = {"ID", "Name", "Type", "Description", "Start Date", "Location", "Price"};
+            String[] columnNames = {"ID", "Name", "Type", "Description", "Start Date", "End Date", "Location", "Price"};
             tableModel.setColumnIdentifiers(columnNames);
             for (int i = 0; i < showEvents.size(); i++) {
                 Event event = showEvents.get(i);
-                Object[] rowData = new Object[]{event.getId(), event.getName(), event.getType(), event.getDescription(), event.getStartDateOfEvent(), event.getLocation().getName(), "€ "+event.getPrice()};
+                Object[] rowData = new Object[]{event.getId(), event.getName(), event.getType(), event.getDescription(), event.getStartDateOfEvent(), event.getEndDateOfEvent(), event.getLocation().getName(), "€ "+event.getPrice()};
                 tableModel.addRow(rowData);
             }
             tableModel.fireTableDataChanged();

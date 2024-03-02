@@ -56,14 +56,16 @@ public interface EventSQL {
 
     default void addEvent(Event event, DBManager manager) {
         try {
-            manager.getLogger().info(" RUN addArtObject.");
-            String sql = "INSERT INTO ArtObject (event_type_id, event_description, event_date, event_location_id, event_price) VALUES (?, ?, ?, ?, ?)";
+            manager.getLogger().info(" RUN addEvent.");
+            String sql = "INSERT INTO Event (event_name, event_type_id, event_description, event_start_date, event_end_date, event_location_id, event_price) VALUES (?, ?, ?, ?, ?, ?, ?)";
             try (PreparedStatement preparedStatement = manager.getConnection().prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
                 preparedStatement.setString(1, event.getName());
-                preparedStatement.setString(2, event.getDescription());
-                preparedStatement.setDate(3, Date.valueOf(event.getStartDateOfEvent()));
-                preparedStatement.setInt(4, event.getLocation().getId());
-                preparedStatement.setInt(5, event.getPrice());
+                preparedStatement.setInt(2, event.getType().ordinal()+1);
+                preparedStatement.setString(3, event.getDescription());
+                preparedStatement.setDate(4, Date.valueOf(event.getStartDateOfEvent()));
+                preparedStatement.setDate(5, Date.valueOf(event.getEndDateOfEvent()));
+                preparedStatement.setInt(6, event.getLocation().getId());
+                preparedStatement.setInt(7, event.getPrice());
                 preparedStatement.executeUpdate();
 
                 ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
