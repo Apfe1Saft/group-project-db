@@ -22,10 +22,10 @@ INSERT INTO ArtObject (art_object_name, art_object_description, author_id, curre
   ('ArtObject2', 'Description2', 2, 2, 2, '2005-02-01'),
   ('ArtObject3', 'Description3', 3, 3, 3, '2010-03-01');
 
-INSERT INTO Event (event_name, event_type_id, event_description, event_start_date, event_end_date, event_location_id, event_object, event_price) VALUES
-  ('Event1', 1, 'Description1', '2022-01-01', '2022-01-05', 1, 1, 100),
-  ('Event2', 2, 'Description2', '2022-02-01', '2022-02-05', 2, 2, 150),
-  ('Event3', 1, 'Description3', '2022-03-01', '2022-03-05', 3, 3, 200);
+INSERT INTO Event (event_name, event_type_id, event_description, event_start_date, event_end_date, event_location_id, event_price) VALUES
+  ('Event1', 1, 'Description1', '2022-01-01', '2022-01-05', 1, 100),
+  ('Event2', 2, 'Description2', '2022-02-01', '2022-02-05', 2, 150),
+  ('Event3', 1, 'Description3', '2022-03-01', '2022-03-05', 3, 200);
 
 INSERT INTO Purchase (purchase_date, purchase_price, art_object_id, seller_id, buyer_id) VALUES
   ('2022-01-01', 1000, 1, 1, 2),
