@@ -92,4 +92,37 @@ public interface PurchaseSQL {
 
         return purchases;
     }
+
+    default void updatePurchase(Purchase purchase, DBManager manager) {
+        try {
+            manager.getLogger().info("RUN updatePurchase.");
+
+            String sql = "UPDATE Purchase " +
+                    "SET date_of_purchase = ?, price = ?, art_object_id = ?, seller_id = ?, buyer_id = ? " +
+                    "WHERE purchase_id = ?";
+            try (PreparedStatement preparedStatement = manager.getConnection().prepareStatement(sql)) {
+                preparedStatement.setDate(1, java.sql.Date.valueOf(purchase.getDateOfPurchase()));
+                preparedStatement.setInt(2, purchase.getPrice());
+                preparedStatement.setInt(3, purchase.getArtObject().getId());
+                preparedStatement.setInt(4, purchase.getSeller().getId());
+                preparedStatement.setInt(5, purchase.getBuyer().getId());
+                preparedStatement.setInt(6, purchase.getId());
+            }
+        } catch (SQLException e) {
+            manager.getLogger().severe("Error: " + e.getMessage());
+        }
+    }
+
+    default void removePurchase(int purchaseId, DBManager manager) {
+        try {
+            manager.getLogger().info("RUN removePurchase.");
+
+            String sql = "DELETE FROM Purchase WHERE purchase_id = ?";
+            try (PreparedStatement preparedStatement = manager.getConnection().prepareStatement(sql)) {
+                preparedStatement.setInt(1, purchaseId);
+            }
+        } catch (SQLException e) {
+            manager.getLogger().severe("Error: " + e.getMessage());
+        }
+    }
 }

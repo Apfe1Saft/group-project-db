@@ -3,26 +3,36 @@ INSERT INTO LocationType (location_type_name) VALUES ('Museum'), ('Private Colle
 INSERT INTO EventType (event_name) VALUES ('Exhibition'), ('Wrongdoor');
 
 INSERT INTO Location (location_name, location_description, placement, date_of_opening, location_type_id) VALUES
-('National Museum', 'Largest museum in the country', '123 Main Street','1900-01-01', 1),
-('Art Object Gallery', 'Public art gallery', '456 Art Avenue','1990-01-01', 2);
+  ('Location1', 'Description1', 'Placement1', '2022-01-01', 1),
+  ('Location2', 'Description2', 'Placement2', '2022-02-01', 2),
+  ('Location3', 'Description3', 'Placement3', '2022-03-01', 1);
 
 INSERT INTO Owner (owner_name, owner_description) VALUES
-('Art Collector', 'Private collector with a diverse art collection'),
-('National Museum', 'Largest museum in the country');
+  ('Owner1', 'Description1'),
+  ('Owner2', 'Description2'),
+  ('Owner3', 'Description3');
 
 INSERT INTO Author (author_name, author_description, author_date_of_birth) VALUES
-('John Artist', 'Renowned painter', '1990-05-15'),
-('Jane Sculptor', 'Famous sculptor', '1985-12-10');
+  ('Author1', 'Description1', '1990-01-01'),
+  ('Author2', 'Description2', '1985-02-01'),
+  ('Author3', 'Description3', '1980-03-01');
 
-INSERT INTO Event (event_type_id, event_name, event_description, event_start_date, event_end_date, event_location_id, event_price) VALUES
-(1, 'NAME 1', 'Impressionist Art Exhibition', '2024-03-01', '2024-03-08', 1, 20),
-(2, 'NAME 2', 'Wrongdoor happened...', '2023-12-01','2023-12-08', 1, 20),
-(1, 'NAME 3', 'Abstract Art Workshop', '2024-04-15','2024-04-22', 2, 10);
+INSERT INTO ArtObject (art_object_name, art_object_description, author_id, current_owner_id, current_location_id, date_of_creation) VALUES
+  ('ArtObject1', 'Description1', 1, 1, 1, '2000-01-01'),
+  ('ArtObject2', 'Description2', 2, 2, 2, '2005-02-01'),
+  ('ArtObject3', 'Description3', 3, 3, 3, '2010-03-01');
 
-INSERT INTO ArtObject (author_id, art_object_name, art_object_description, current_owner_id, current_location_id, date_of_creation) VALUES
-(1, 'Art #1', 'this is description of Art #1', 1, 1, '2023-06-22'),
-(2, 'Art #2', 'this is description of Art #2', 2, 2, '2024-01-08');
+INSERT INTO Event (event_name, event_type_id, event_description, event_start_date, event_end_date, event_location_id, event_object, event_price) VALUES
+  ('Event1', 1, 'Description1', '2022-01-01', '2022-01-05', 1, 1, 100),
+  ('Event2', 2, 'Description2', '2022-02-01', '2022-02-05', 2, 2, 150),
+  ('Event3', 1, 'Description3', '2022-03-01', '2022-03-05', 3, 3, 200);
 
-INSERT INTO Purchase (purchase_date, art_object_id, purchase_price, seller_id, buyer_id) VALUES
-('2024-02-10',1, 5000, 1, 2),
-('2024-03-20',2, 300, 2, 1);
+INSERT INTO Purchase (purchase_date, purchase_price, art_object_id, seller_id, buyer_id) VALUES
+  ('2022-01-01', 1000, 1, 1, 2),
+  ('2022-02-01', 1500, 2, 2, 3),
+  ('2022-03-01', 2000, 3, 3, 1);
+
+INSERT INTO EventObjects (event_id, art_object_id) VALUES
+  (1, 1),
+  (2, 2),
+  (3, 3);

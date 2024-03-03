@@ -99,4 +99,43 @@ public interface EventSQL {
 
         return events;
     }
+
+    default void updateEvent(Event event, DBManager manager) {
+        try {
+            manager.getLogger().info("RUN updateEvent.");
+
+            String sql = "UPDATE Event " +
+                    "SET event_name = ?, event_type_id = ?, event_description = ?, " +
+                    "event_start_date = ?, event_end_date = ?, event_location_id = ?, event_price = ? " +
+                    "WHERE event_id = ?";
+            try (PreparedStatement preparedStatement = manager.getConnection().prepareStatement(sql)) {
+                preparedStatement.setString(1, event.getName());
+                preparedStatement.setInt(2, event.getType().ordinal() + 1);
+                preparedStatement.setString(3, event.getDescription());
+                preparedStatement.setDate(4, Date.valueOf(event.getStartDateOfEvent()));
+                preparedStatement.setDate(5, Date.valueOf(event.getEndDateOfEvent()));
+                preparedStatement.setInt(6, event.getLocation().getId());
+                preparedStatement.setInt(7, event.getPrice());
+                preparedStatement.setInt(8, event.getId());
+
+            }
+        } catch (SQLException e) {
+            manager.getLogger().severe("Error: " + e.getMessage());
+        }
+    }
+
+    default void removeEvent(int eventId, DBManager manager) {
+        try {
+            manager.getLogger().info("RUN removeEvent.");
+
+            String sql = "DELETE FROM Event WHERE event_id = ?";
+            try (PreparedStatement preparedStatement = manager.getConnection().prepareStatement(sql)) {
+                preparedStatement.setInt(1, eventId);
+
+            }
+        } catch (SQLException e) {
+            manager.getLogger().severe("Error: " + e.getMessage());
+        }
+    }
+
 }

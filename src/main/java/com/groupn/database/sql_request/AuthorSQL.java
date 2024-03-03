@@ -3,6 +3,7 @@ package com.groupn.database.sql_request;
 import com.groupn.database.DBManager;
 import com.groupn.entities.ArtObject;
 import com.groupn.entities.Author;
+import com.groupn.entities.Purchase;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -10,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public interface AuthorSQL {
     default Author getAuthorById(int authorId, DBManager manager) {
@@ -112,5 +114,42 @@ public interface AuthorSQL {
         }
 
         return authors;
+    }
+    default void updateAuthor(Author author, DBManager manager) {
+        try {
+            manager.getLogger().info("RUN updateAuthor.");
+
+            String sql = "UPDATE Author " +
+                    "SET author_name = ?, author_description = ?, author_date_of_birth = ? " +
+                    "WHERE author_id = ?";
+            try (PreparedStatement preparedStatement = manager.getConnection().prepareStatement(sql)) {
+                preparedStatement.setString(1, author.getName());
+                preparedStatement.setString(2, author.getDescription());
+                preparedStatement.setDate(3, Date.valueOf(author.getDateOfBirth()));
+                preparedStatement.setInt(4, author.getId());
+            }
+        } catch (SQLException e) {
+            manager.getLogger().severe("Error: " + e.getMessage());
+        }
+    }
+
+    default void removeAuthor(int authorId, DBManager manager) {
+        try {
+            //! update ArtObject
+            manager.getLogger().info("RUN removeAuthor.");
+
+            String sql = "DELETE FROM Author WHERE author_id = ?";
+            try (PreparedStatement preparedStatement = manager.getConnection().prepareStatement(sql)) {
+                preparedStatement.setInt(1, authorId);
+
+            for (ArtObject artObject : manager.getAllArtObjects().stream().filter(x -> x.getAuthor().getId() == authorId).collect(Collectors.toList())) {
+                artObject.setAuthor(null);
+                manager.updateArtObject(artObject);
+            }
+
+        }
+        } catch (SQLException e) {
+            manager.getLogger().severe("Error: " + e.getMessage());
+        }
     }
 }

@@ -3,6 +3,7 @@ package com.groupn.entities;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @Getter
@@ -18,4 +19,5 @@ public class Event {
     private LocalDate EndDateOfEvent;
     private Location location;
     private int price;
+    private List<ArtObject> artObjects;
 }

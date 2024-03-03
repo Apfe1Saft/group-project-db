@@ -9,6 +9,10 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.EventObject;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 public class EntityMapper {
@@ -90,7 +94,18 @@ public class EntityMapper {
     }
 
     public Event mapResultSetToEvent(ResultSet resultSet) throws SQLException {
-        dbManager.getLogger().severe("WORK HERE");
+        List<EventObjects> eventObjectsList = dbManager.getAllEventObjects().stream().filter(x -> {
+            try {
+                return x.getEventId() == resultSet.getInt("event_id");
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }).collect(Collectors.toList());
+
+        List<ArtObject> artObjectList = new ArrayList<>();
+        for(EventObjects eventObjects1: eventObjectsList){
+            artObjectList.add(dbManager.getArtObjectById(eventObjects1.getArtObjectId()));
+        }
         return new Event(
                 resultSet.getInt("event_id"),
                 resultSet.getString("event_name"),
@@ -99,7 +114,9 @@ public class EntityMapper {
                 resultSet.getDate("event_start_date").toLocalDate(),
                 resultSet.getDate("event_end_date").toLocalDate(),
                 mapResultSetToLocation(resultSet),
-                resultSet.getInt("event_price")
+                resultSet.getInt("event_price"),
+                artObjectList
         );
     }
+
 }

@@ -62,6 +62,12 @@ CREATE TABLE IF NOT EXISTS Purchase (
   buyer_id INTEGER REFERENCES Owner(owner_id)
 );
 
+CREATE TABLE IF NOT EXISTS EventObjects (
+  event_id int references Event(event_id),
+  art_object_id int references ArtObject(art_object_id),
+  primary key (event_id, art_object_id)
+);
+
 
 CREATE INDEX idx_author_id ON Author(author_id);
 CREATE INDEX idx_location_name ON Location(location_name);

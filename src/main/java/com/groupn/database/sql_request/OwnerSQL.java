@@ -1,14 +1,17 @@
 package com.groupn.database.sql_request;
 
 import com.groupn.database.DBManager;
+import com.groupn.entities.ArtObject;
 import com.groupn.entities.Event;
 import com.groupn.entities.Owner;
+import com.groupn.entities.Purchase;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public interface OwnerSQL {
     default Owner getOwnerById(int ownerId, DBManager manager) {
@@ -72,4 +75,65 @@ public interface OwnerSQL {
 
         return owners;
     }
+
+    default void updateOwner(Owner owner, DBManager manager) {
+        try {
+            manager.getLogger().info("RUN updateOwner.");
+
+            String sql = "UPDATE Owner " +
+                    "SET owner_name = ?, owner_description = ? " +
+                    "WHERE owner_id = ?";
+            try (PreparedStatement preparedStatement = manager.getConnection().prepareStatement(sql)) {
+                preparedStatement.setString(1, owner.getName());
+                preparedStatement.setString(2, owner.getDescription());
+                preparedStatement.setInt(3, owner.getId());
+            }
+        } catch (SQLException e) {
+            manager.getLogger().severe("Error: " + e.getMessage());
+        }
+    }
+
+    default void addOwner(Owner owner, DBManager manager) {
+        try {
+            manager.getLogger().info("RUN addOwner.");
+
+            String sql = "INSERT INTO Owner (owner_name, owner_description) VALUES (?, ?)";
+            try (PreparedStatement preparedStatement = manager.getConnection().prepareStatement(sql)) {
+                preparedStatement.setString(1, owner.getName());
+                preparedStatement.setString(2, owner.getDescription());
+            }
+        } catch (SQLException e) {
+            manager.getLogger().severe("Error: " + e.getMessage());
+        }
+    }
+
+    default void removeOwner(int ownerId, DBManager manager) {
+        try {
+            //! update Purchase, update ArtObject
+            manager.getLogger().info("RUN removeOwner.");
+
+            String sql = "DELETE FROM Owner WHERE owner_id = ?";
+            try (PreparedStatement preparedStatement = manager.getConnection().prepareStatement(sql)) {
+                preparedStatement.setInt(1, ownerId);
+
+                for (Purchase purchase : manager.getAllPurchases().stream().filter(x -> x.getSeller().getId() == ownerId).collect(Collectors.toList())) {
+                    purchase.setSeller(null);
+                    manager.updatePurchase(purchase);
+                }
+
+                for (Purchase purchase : manager.getAllPurchases().stream().filter(x -> x.getBuyer().getId() == ownerId).collect(Collectors.toList())) {
+                    purchase.setBuyer(null);
+                    manager.updatePurchase(purchase);
+                }
+
+                for (ArtObject artObject : manager.getAllArtObjects().stream().filter(x -> x.getCurrentOwner().getId() == ownerId).collect(Collectors.toList())) {
+                    artObject.setCurrentOwner(null);
+                    manager.updateArtObject(artObject);
+                }
+            }
+        } catch (SQLException e) {
+            manager.getLogger().severe("Error: " + e.getMessage());
+        }
+    }
+
 }

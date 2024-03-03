@@ -10,11 +10,12 @@ import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 @Getter
 public class DBManager implements // implementing interfaces with specific sql requests for each entity
-        ArtObjectSQL, OwnerSQL, AuthorSQL, PurchaseSQL, LocationSQL, EventTypeSQL, LocationTypeSQL, EventSQL {
+        ArtObjectSQL, OwnerSQL, AuthorSQL, PurchaseSQL, LocationSQL, EventTypeSQL, LocationTypeSQL, EventSQL,EventObjectsSQL {
 
     private EntityMapper mapper; // class which converts from ResultSet to Entity classes
 
@@ -134,6 +135,13 @@ public class DBManager implements // implementing interfaces with specific sql r
         return getLocationsByFilter(filter, this);
     }
 
+    public void addLocation(Location location){
+        addLocation( location, this);
+    }
+    public void updateLocation(Location location){
+        updateLocation( location, this);
+    }
+
     //Purchases queries
     public Purchase getPurchaseById(int purchaseId) {
         return getPurchaseId(purchaseId, this);
@@ -200,4 +208,50 @@ public class DBManager implements // implementing interfaces with specific sql r
     public List<ArtObject> getArtObjectsByFilter(String filter ) {
         return getArtObjectsByFilter(filter, this);
     }
+
+    // new methods
+    public void updateOwner(Owner owner) {
+        updateOwner(owner, this);
+    }
+
+
+    public void removeLocation(int locationId) {
+        removeLocation(locationId, this);
+    }
+
+    public void updateAuthor(Author author) {
+        updateAuthor(author, this);
+    }
+
+    public void removeAuthor(int authorId) {
+        removeAuthor(authorId, this);
+    }
+
+    public void removeEvent(int eventId) {
+        removeEvent(eventId, this);
+    }
+
+    public void removePurchase(int purchaseId) {
+        removePurchase(purchaseId, this);
+    }
+
+    public void updatePurchase(Purchase purchase) {
+        updatePurchase(purchase, this);
+    }
+
+    public void removeOwner(int ownerId) {
+        removeOwner(ownerId, this);
+    }
+
+    public void addOwner(Owner owner) {
+        addOwner(owner, this);
+    }
+
+    public void updateEvent(Event event) {
+        updateEvent(event, this);
+    }
+
+    public List<EventObjects> getAllEventObjects(){ return getAllEventObjects(this);}
+
+    public void deleteEventObject(int eventId, int artObjectId) {deleteEventObject(eventId,artObjectId,this);}
 }
