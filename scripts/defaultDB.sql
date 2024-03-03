@@ -42,6 +42,7 @@ CREATE TABLE IF NOT EXISTS ArtObject (
 
 CREATE TABLE IF NOT EXISTS Event (
   event_id SERIAL PRIMARY KEY,
+  event_name VARCHAR(255),
   event_type_id INTEGER REFERENCES EventType(event_type_id),
   event_description VARCHAR(255),
   event_start_date DATE,

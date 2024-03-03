@@ -24,7 +24,6 @@ public interface EventSQL {
                 preparedStatement.setInt(1, eventId);
                 ResultSet resultSet = preparedStatement.executeQuery();
                 if (resultSet.next()) {
-
                     return manager.getMapper().mapResultSetToEvent(resultSet);
                 }
             }

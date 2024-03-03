@@ -90,6 +90,7 @@ public class EntityMapper {
     }
 
     public Event mapResultSetToEvent(ResultSet resultSet) throws SQLException {
+        dbManager.getLogger().severe("WORK HERE");
         return new Event(
                 resultSet.getInt("event_id"),
                 resultSet.getString("event_name"),
