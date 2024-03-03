@@ -114,6 +114,7 @@ public interface LocationSQL {
                 preparedStatement.setDate(4, java.sql.Date.valueOf(location.getDateOfOpening()));
                 preparedStatement.setInt(5, locationType);
                 preparedStatement.setInt(6, location.getId());
+                preparedStatement.executeUpdate();
             }
         } catch (SQLException e) {
             manager.getLogger().severe("Error: " + e.getMessage());
@@ -132,6 +133,7 @@ public interface LocationSQL {
                     event.setLocation(null);
                     manager.updateEvent(event);
                 }
+                preparedStatement.executeUpdate();
             }
         } catch (SQLException e) {
             manager.getLogger().severe("Error: " + e.getMessage());

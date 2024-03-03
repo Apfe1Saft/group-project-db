@@ -49,7 +49,7 @@ public class Add extends JDialog {
         mainInterface.setEnabled(false);
         confirmAdd.addActionListener(e -> {
             boolean allFilled = false;
-            String[] unnecessaryFields = {"Date of Birth", "Creation date", "Start Date", "End Date", "Opening date"};
+            String[] unnecessaryFields = {"Date of Birth", "Creation date", "Start Date", "End Date", "Opening date", "Price"};
             int i = 0;
             for (JTextField textField : textFields) {
                 if (textField.getText().isEmpty() && !Arrays.asList(unnecessaryFields).contains(labels.get(i).getText())) {
@@ -294,7 +294,7 @@ public class Add extends JDialog {
             }
             String[] dateFields = {"Start Date", "End Date", "Opening date", "Date of purchase"};
             if (Arrays.asList(dateFields).contains(columnName)) {
-                label.setText(label.getText()+" (YYYY-MM-DD)*");
+                label.setText("<html>"+label.getText()+" (YYYY-MM-DD)*<html>");
             }
             String[] mandatoryFields = {"Name", "Description", "Placement"};
             if (Arrays.asList(mandatoryFields).contains(columnName)) {
@@ -308,14 +308,34 @@ public class Add extends JDialog {
         }
         switch (selectedTabIndex) {
             case 1:
-                setPreferredSize(new Dimension(400, 180));
-                setMinimumSize(new Dimension(400, 180));
-                setMaximumSize(new Dimension(600, 200));
+                setPreferredSize(new Dimension(400, 175));
+                setMinimumSize(new Dimension(400, 175));
+                setMaximumSize(new Dimension(400, 175));
+                break;
+            case 2:
+                setPreferredSize(new Dimension(600, 270));
+                setMinimumSize(new Dimension(600, 270));
+                setMaximumSize(new Dimension(600, 270));
+                break;
+            case 3:
+                setPreferredSize(new Dimension(600, 295));
+                setMinimumSize(new Dimension(600, 295));
+                setMaximumSize(new Dimension(600, 295));
+                break;
+            case 4:
+                setPreferredSize(new Dimension(500, 235));
+                setMinimumSize(new Dimension(500, 235));
+                setMaximumSize(new Dimension(500, 235));
                 break;
             case 5:
                 setPreferredSize(new Dimension(400, 150));
                 setMinimumSize(new Dimension(300, 135));
                 setMaximumSize(new Dimension(600, 200));
+                break;
+            case 6:
+                setPreferredSize(new Dimension(500, 235));
+                setMinimumSize(new Dimension(500, 235));
+                setMaximumSize(new Dimension(500, 235));
                 break;
         }
         return textFields;

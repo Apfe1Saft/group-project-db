@@ -5,6 +5,8 @@ import com.groupn.entities.Event;
 import com.groupn.entities.*;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.lang.reflect.Method;
 import java.time.LocalDate;
@@ -46,6 +48,7 @@ public class UpdateUI extends JDialog {
         mainInterface.setFocusableWindowState(false);
         mainInterface.setAutoRequestFocus(false);
         mainInterface.setEnabled(false);
+        confirmUpdate.setEnabled(false);
         confirmUpdate.addActionListener(e -> {
             boolean allFilled = false;
             for (JTextField textField : textFields) {
@@ -60,10 +63,25 @@ public class UpdateUI extends JDialog {
             }
             if (allFilled) {
                 switch (selectedTabIndex) {
-                    case 2:
+                    case 1: {
+                        Author author = new Author();
+                        try {
+                            author.setId(Integer.parseInt(textFields.getFirst().getText()));
+                        } catch (Exception i) {
+                            JOptionPane.showMessageDialog(TFPanel, "Please, input id as integer value.", "Incorrect format", JOptionPane.WARNING_MESSAGE);
+                            break;
+                        }
+                        author.setName(textFields.get(1).getText());
+                        author.setDescription(textFields.get(2).getText());
+                        author.setDateOfBirth(LocalDate.parse(textFields.get(3).getText())); // Do we need check on correct date format?
+                        dbManager.updateAuthor(author);
+                        mainInterface.showAuthors(true);
+                        break;
+                    }
+                    case 2: {
                         ArtObject artObject = new ArtObject();
                         try {
-                            artObject.setId(Integer.parseInt(textFields.get(0).getText()));
+                            artObject.setId(Integer.parseInt(textFields.getFirst().getText()));
                         } catch (Exception i) {
                             JOptionPane.showMessageDialog(TFPanel, "Please, input id as integer value.", "Incorrect format", JOptionPane.WARNING_MESSAGE);
                             break;
@@ -84,6 +102,74 @@ public class UpdateUI extends JDialog {
                         artObject.setCurrentLocation(dbManager.getLocationById(Integer.parseInt(textFields.get(6).getText())));
                         dbManager.updateArtObject(artObject);
                         mainInterface.showArtObjects(true);
+                        break;
+                    }
+                    case 3: {
+                        Event event = new Event();
+                        try {
+                            event.setId(Integer.parseInt(textFields.getFirst().getText()));
+                        } catch (Exception i) {
+                            JOptionPane.showMessageDialog(TFPanel, "Please, input id as integer value.", "Incorrect format", JOptionPane.WARNING_MESSAGE);
+                            break;
+                        }
+                        event.setName(textFields.get(1).getText());
+                        event.setType(dbManager.getEventTypeById(Integer.parseInt(textFields.get(2).getText())));
+                        event.setDescription(textFields.get(3).getText());
+                        event.setStartDateOfEvent(LocalDate.parse(textFields.get(4).getText()));
+                        event.setEndDateOfEvent(LocalDate.parse(textFields.get(5).getText()));
+                        event.setLocation(dbManager.getLocationById(Integer.parseInt(textFields.get(6).getText())));
+                        event.setPrice(Integer.parseInt(textFields.get(7).getText()));
+                        dbManager.updateEvent(event);
+                        mainInterface.showEvents(true);
+                        break;
+                    }
+                    case 4: {
+                        Location location = new Location();
+                        try {
+                            location.setId(Integer.parseInt(textFields.getFirst().getText()));
+                        } catch (Exception i) {
+                            JOptionPane.showMessageDialog(TFPanel, "Please, input id as integer value.", "Incorrect format", JOptionPane.WARNING_MESSAGE);
+                            break;
+                        }
+                        location.setName(textFields.get(1).getText());
+                        location.setDescription(textFields.get(2).getText());
+                        location.setDateOfOpening(LocalDate.parse(textFields.get(3).getText()));
+                        location.setPlacement(textFields.get(4).getText());
+                        location.setType(dbManager.getLocationTypeById(Integer.parseInt(textFields.get(5).getText())));
+                        dbManager.updateLocation(location);
+                        mainInterface.showLocations(true);
+                        break;
+                    }
+                    case 5: {
+                        Owner owner = new Owner();
+                        try {
+                            owner.setId(Integer.parseInt(textFields.getFirst().getText()));
+                        } catch (Exception i) {
+                            JOptionPane.showMessageDialog(TFPanel, "Please, input id as integer value.", "Incorrect format", JOptionPane.WARNING_MESSAGE);
+                            break;
+                        }
+                        owner.setName(textFields.get(1).getText());
+                        owner.setDescription(textFields.get(2).getText());
+                        dbManager.updateOwner(owner);
+                        mainInterface.showOwners(true);
+                        break;
+                    }
+                    case 6: {
+                        Purchase purchase = new Purchase();
+                        try {
+                            purchase.setId(Integer.parseInt(textFields.getFirst().getText()));
+                        } catch (Exception i) {
+                            JOptionPane.showMessageDialog(TFPanel, "Please, input id as integer value.", "Incorrect format", JOptionPane.WARNING_MESSAGE);
+                            break;
+                        }
+                        purchase.setDateOfPurchase(LocalDate.parse(textFields.get(1).getText()));
+                        purchase.setArtObject(dbManager.getArtObjectById(Integer.parseInt(textFields.get(2).getText())));
+                        purchase.setSeller(dbManager.getOwnerById(Integer.parseInt(textFields.get(3).getText())));
+                        purchase.setBuyer(dbManager.getOwnerById(Integer.parseInt(textFields.get(4).getText())));
+                        dbManager.updatePurchase(purchase);
+                        mainInterface.showPurchases(true);
+                        break;
+                    }
                 }
             }
 
@@ -96,22 +182,62 @@ public class UpdateUI extends JDialog {
         ArrayList<JTextField> textFields= new ArrayList<>();
         for (String columnName : columnNames) {
             JTextField textField = new JTextField();
-            textField.setSize(100, 50);
-            textField.setPreferredSize(new Dimension(100, 30));
-            textField.setMaximumSize(new Dimension(100, 30));
+            textField.setSize(100, 20);
+            textField.setPreferredSize(new Dimension(100, 20));
+            textField.setMaximumSize(new Dimension(100, 20));
             textField.setName(columnName);
             textField.setAlignmentX(JTextField.LEFT_ALIGNMENT);
             textField.setHorizontalAlignment(JTextField.LEFT);
             JLabel label = new JLabel("<html>"+columnName+"<html>");
-            label.setMinimumSize(new Dimension(200, 30));
-            label.setMaximumSize(new Dimension(200, 30));
-            if (columnName.equals("Author") || columnName.equals("Current owner") || columnName.equals("Location")) {
+            switch (selectedTabIndex) {
+                case 1: {
+                    label.setMinimumSize(new Dimension(60, 20));
+                    label.setMaximumSize(new Dimension(60, 20));
+                    break;
+                }
+                case 2: {
+                    label.setMinimumSize(new Dimension(60, 20));
+                    label.setMaximumSize(new Dimension(60, 20));
+                    break;
+                    }
+                case 3: {
+                    label.setMinimumSize(new Dimension(60, 20));
+                    label.setMaximumSize(new Dimension(60, 20));
+                    break;
+                    }
+                case 4: {
+                    label.setMinimumSize(new Dimension(60, 20));
+                    label.setMaximumSize(new Dimension(60, 20));
+                    break;
+                    }
+                case 5: {
+                    label.setMinimumSize(new Dimension(60, 20));
+                    label.setMaximumSize(new Dimension(60, 20));
+                    break;
+                    }
+                case 6: {
+                    label.setMinimumSize(new Dimension(60, 20));
+                    label.setMaximumSize(new Dimension(60, 20));
+                    break;
+                    }
+            }
+            label.setMinimumSize(new Dimension(100, 30));
+            label.setMaximumSize(new Dimension(100, 30));
+            if (columnName.equals("Author") || columnName.equals("Current owner") || columnName.equals("Location") || columnName.equals("Type") || columnName.equals("Art object") || columnName.equals("Seller") || columnName.equals("Buyer")) {
                 if (columnName.equals("Author")) {
                     label.setText("<html>Initial author:<html>");
                 } else if (columnName.equals("Current owner")) {
                     label.setText("<html>Initial owner:<html>");
-                } else {
+                } else if (columnName.equals("Location")){
                     label.setText("<html>Initial location:<html>");
+                } else if (columnName.equals("Type")){
+                    label.setText("<html>Initial type:<html>");
+                } else if (columnName.equals("Art object")) {
+                    label.setText("<html>Initial art object:<html>");
+                } else if (columnName.equals("Seller")) {
+                    label.setText("<html>Initial seller:<html>");
+                } else {
+                    label.setText("<html>Initial buyer:<html>");
                 }
                 labels.add(label);
             }
@@ -122,14 +248,27 @@ public class UpdateUI extends JDialog {
             if (isFirstField) {
                 JButton find = new JButton();
                 find.setText("Find");
-                find.setMaximumSize(new Dimension(100, 30));
-                find.setMinimumSize(new Dimension(100, 30));
                 TFPanel.add(find);
+                textField.getDocument().addDocumentListener(new DocumentListener() {
+                    @Override
+                    public void insertUpdate(DocumentEvent e) {
+                        confirmUpdate.setEnabled(false);
+                    }
+                    @Override
+                    public void removeUpdate(DocumentEvent e) {
+                        confirmUpdate.setEnabled(false);
+                    }
+                    @Override
+                    public void changedUpdate(DocumentEvent e) {
+                        confirmUpdate.setEnabled(false);
+                    }
+                });
                 isFirstField = false;
                 find.addActionListener(e -> {
                     JTextField idTextField = (JTextField) TFPanel.getComponent(0);
                     try {
                         int id = Integer.parseInt(idTextField.getText());
+                        confirmUpdate.setEnabled(true);
                         inputFoundData(id, idTextField, textFields);
                     } catch (Exception a){
                         JOptionPane.showMessageDialog(TFPanel, "Please, input author id into a text field to execute search.", "No input", JOptionPane.WARNING_MESSAGE);
@@ -139,13 +278,50 @@ public class UpdateUI extends JDialog {
                 TFPanel.add(new JPanel());
             }
         }
+        switch (selectedTabIndex) {
+            case 1: {
+                setPreferredSize(new Dimension(400, 205));
+                setMinimumSize(new Dimension(400, 205));
+                setMaximumSize(new Dimension(400, 205));
+                break;
+            } // Author window size
+            case 2: {
+                setPreferredSize(new Dimension(600, 300));
+                setMinimumSize(new Dimension(600, 300));
+                setMaximumSize(new Dimension(600, 300));
+                break;
+            } // Art window size
+            case 3: {
+                setPreferredSize(new Dimension(600, 325));
+                setMinimumSize(new Dimension(600, 325));
+                setMaximumSize(new Dimension(600, 325));
+                break;
+            } // Event window size
+            case 4: {
+                setPreferredSize(new Dimension(550, 265));
+                setMinimumSize(new Dimension(550, 265));
+                setMaximumSize(new Dimension(550, 265));
+                break;} // Location window size
+            case 5: {
+                setPreferredSize(new Dimension(400, 175));
+                setMinimumSize(new Dimension(400, 175));
+                setMaximumSize(new Dimension(400, 175));
+                break;
+            } // Owner window size
+            case 6: {
+                setPreferredSize(new Dimension(650, 275));
+                setMinimumSize(new Dimension(650, 275));
+                setMaximumSize(new Dimension(650, 275));
+                break;
+            } // Purchase window size
+        } // Window sizes for updates of different entities
         return textFields;
     }
 
     public void inputFoundData(int id, JTextField idField, ArrayList<JTextField> textFields) {
         try {
             switch (selectedTabIndex) {
-                case 1:
+                case 1: {
                     Author author = new Author(); // not reduntant
                     author = dbManager.getAuthorById(id);
 
@@ -158,7 +334,7 @@ public class UpdateUI extends JDialog {
                         methods.add(author.getClass().getMethod("getDateOfBirth"));
                         int i = 0;
                         while (i < 3) {
-                            JTextField textField = textFields.get(i+1);
+                            JTextField textField = textFields.get(i + 1);
                             Method method = methods.get(i);
                             Object value = method.invoke(author);
                             textField.setText(value == null ? "" : value.toString());
@@ -167,7 +343,8 @@ public class UpdateUI extends JDialog {
                         }
                     }
                     break;
-                case 2:
+                }
+                case 2: {
                     ArtObject artObject = new ArtObject(); // not reduntant
                     artObject = dbManager.getArtObjectById(id);
 
@@ -198,15 +375,15 @@ public class UpdateUI extends JDialog {
                                     switch (j) {
                                         case 0:
                                             labelAdd = (String) getNameMethod.invoke(value);
-                                            labels.get(j).setText("<html>Initial author: "+labelAdd+"<html>");
+                                            labels.get(j).setText("<html>Initial author: " + labelAdd + "<html>");
                                             break;
                                         case 1:
                                             labelAdd = (String) getNameMethod.invoke(value);
-                                            labels.get(j).setText("<html>Initial owner: "+labelAdd+"<html>");
+                                            labels.get(j).setText("<html>Initial owner: " + labelAdd + "<html>");
                                             break;
                                         case 2:
                                             labelAdd = (String) getNameMethod.invoke(value);
-                                            labels.get(j).setText("<html>Initial location: "+labelAdd+"<html>");
+                                            labels.get(j).setText("<html>Initial location: " + labelAdd + "<html>");
                                             break;
                                     }
                                     j++;
@@ -221,11 +398,12 @@ public class UpdateUI extends JDialog {
                         }
                     }
                     break;
-                case 3:
+                }
+                case 3: {
                     Event event = new Event(); // not reduntant
                     event = dbManager.getEventById(id);
 
-                    if (event.getName() == null) {
+                    if (event == null) {
                         idField.setText("ID not found.");
                     } else {
                         ArrayList<Method> methods = new ArrayList<>();
@@ -234,21 +412,30 @@ public class UpdateUI extends JDialog {
                         methods.add(event.getClass().getMethod("getType"));
                         methods.add(event.getClass().getMethod("getDescription"));
                         methods.add(event.getClass().getMethod("getStartDateOfEvent"));
+                        methods.add(event.getClass().getMethod("getEndDateOfEvent"));
                         methods.add(event.getClass().getMethod("getLocation"));
                         methods.add(event.getClass().getMethod("getPrice"));
                         int i = 1;
-                        while (i < 7) {
-                            JTextField textField = textFields.get(i+1);
+                        int j = 0;
+                        while (i < 8) {
+                            JTextField textField = textFields.get(i);
                             Method method = methods.get(i);
                             Object value = method.invoke(event);
                             if (value != null) {
-                                if (method.getName().equals("getCurrentLocation")) {
+                                if (method.getName().equals("getLocation")) {
                                     // Get the nested object's name
                                     Method getNameMethod = value.getClass().getMethod("getId");
                                     int id2 = (int) getNameMethod.invoke(value);
                                     textField.setText(Integer.toString(id2));
+                                    labels.get(j).setText("<html>Initial location: "+event.getLocation().getName()+"<html>");
+                                    j++;
+                                } else if (method.getName().equals("getType")) {
+                                    Method getNameMethod = value.getClass().getMethod("ordinal");
+                                    int id2 = (int) getNameMethod.invoke(value);
+                                    textField.setText(Integer.toString(id2)+1);
+                                    labels.get(j).setText("<html>Initial type: "+event.getType()+"<html>");
+                                    j++;
                                 } else {
-                                    // Handle other data types (e.g., DateOfCreation)
                                     textField.setText(value.toString());
                                 }
                                 textField.setCaretPosition(0);
@@ -259,7 +446,8 @@ public class UpdateUI extends JDialog {
                         }
                     }
                     break;
-                case 4:
+                }
+                case 4: {
                     Location location = new Location(); // not reduntant
                     location = dbManager.getLocationById(id);
                     if (location.getName() == null) {
@@ -272,12 +460,20 @@ public class UpdateUI extends JDialog {
                         methods.add(location.getClass().getMethod("getPlacement"));
                         methods.add(location.getClass().getMethod("getType"));
                         int i = 0;
+                        int j = 0;
                         while (i < 5) {
-                            JTextField textField = textFields.get(i+1);
+                            JTextField textField = textFields.get(i + 1);
                             Method method = methods.get(i);
                             Object value = method.invoke(location);
                             if (value != null) {
-                                textField.setText(value.toString());
+                                if (method.getName().equals("getType")) {
+                                    Method getNameMethod = value.getClass().getMethod("ordinal");
+                                    int id2 = (int) getNameMethod.invoke(value);
+                                    textField.setText(Integer.toString(id2+1));
+                                    labels.get(j).setText("<html>Initial type: "+location.getType()+"<html>");
+                                } else {
+                                    textField.setText(value.toString());
+                                }
                                 textField.setCaretPosition(0);
                             } else {
                                 textField.setText("");
@@ -286,7 +482,8 @@ public class UpdateUI extends JDialog {
                         }
                     }
                     break;
-                case 5:
+                }
+                case 5: {
                     Owner owner = new Owner(); // not reduntant
                     owner = dbManager.getOwnerById(id);
 
@@ -298,7 +495,7 @@ public class UpdateUI extends JDialog {
                         methods.add(owner.getClass().getMethod("getDescription"));
                         int i = 0;
                         while (i < 2) {
-                            JTextField textField = textFields.get(i+1);
+                            JTextField textField = textFields.get(i + 1);
                             Method method = methods.get(i);
                             Object value = method.invoke(owner);
                             if (value != null) {
@@ -311,7 +508,8 @@ public class UpdateUI extends JDialog {
                         }
                     }
                     break;
-                case 6:
+                }
+                case 6: {
                     Purchase purchase = new Purchase(); // not reduntant
                     purchase = dbManager.getPurchaseId(id, dbManager);
 
@@ -326,8 +524,9 @@ public class UpdateUI extends JDialog {
                         methods.add(purchase.getClass().getMethod("getSeller"));
                         methods.add(purchase.getClass().getMethod("getBuyer"));
                         int i = 1;
+                        int j = 0;
                         while (i < 6) {
-                            JTextField textField = textFields.get(i+1);
+                            JTextField textField = textFields.get(i);
                             Method method = methods.get(i);
                             Object value = method.invoke(purchase);
                             if (value != null) {
@@ -336,6 +535,15 @@ public class UpdateUI extends JDialog {
                                     Method getNameMethod = value.getClass().getMethod("getId");
                                     int id2 = (int) getNameMethod.invoke(value);
                                     textField.setText(Integer.toString(id2));
+                                    if (method.getName().equals("getArtObject")) {
+                                        labels.get(j).setText("<html>Initial art object (id: "+purchase.getArtObject().getId()+"): "+purchase.getArtObject().getName()+"<html>");
+                                        j++;
+                                    } else if (method.getName().equals("getSeller")) {
+                                        labels.get(j).setText("<html>Initial seller (id: "+purchase.getSeller().getId()+"): "+purchase.getSeller().getName()+"<html>");
+                                        j++;
+                                    } else {
+                                        labels.get(j).setText("<html>Initial buyer (id: "+purchase.getBuyer().getId()+"): "+purchase.getBuyer().getName()+"<html>");
+                                    }
                                 } else {
                                     // Handle other data types (e.g., DateOfCreation)
                                     textField.setText(value.toString());
@@ -348,6 +556,7 @@ public class UpdateUI extends JDialog {
                         }
                     }
                     break;
+                }
             }
         } catch (Exception e) {
             for(JTextField textField : textFields) {
@@ -373,6 +582,7 @@ public class UpdateUI extends JDialog {
                     idField.setText("Purchase ID not found...");
                     break;
             }
+            confirmUpdate.setEnabled(false);
         }
     }
 }

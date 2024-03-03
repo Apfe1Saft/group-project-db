@@ -107,6 +107,7 @@ public interface PurchaseSQL {
                 preparedStatement.setInt(4, purchase.getSeller().getId());
                 preparedStatement.setInt(5, purchase.getBuyer().getId());
                 preparedStatement.setInt(6, purchase.getId());
+                preparedStatement.executeUpdate();
             }
         } catch (SQLException e) {
             manager.getLogger().severe("Error: " + e.getMessage());
@@ -120,6 +121,7 @@ public interface PurchaseSQL {
             String sql = "DELETE FROM Purchase WHERE purchase_id = ?";
             try (PreparedStatement preparedStatement = manager.getConnection().prepareStatement(sql)) {
                 preparedStatement.setInt(1, purchaseId);
+                preparedStatement.executeUpdate();
             }
         } catch (SQLException e) {
             manager.getLogger().severe("Error: " + e.getMessage());

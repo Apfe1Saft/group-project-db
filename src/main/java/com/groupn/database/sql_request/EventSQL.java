@@ -118,6 +118,7 @@ public interface EventSQL {
                 preparedStatement.setInt(7, event.getPrice());
                 preparedStatement.setInt(8, event.getId());
 
+                preparedStatement.executeUpdate();
             }
         } catch (SQLException e) {
             manager.getLogger().severe("Error: " + e.getMessage());

@@ -146,6 +146,7 @@ public interface AuthorSQL {
                 artObject.setAuthor(null);
                 manager.updateArtObject(artObject);
             }
+            preparedStatement.executeUpdate();
 
         }
         } catch (SQLException e) {

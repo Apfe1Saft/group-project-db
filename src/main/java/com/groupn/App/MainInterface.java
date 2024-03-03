@@ -9,6 +9,8 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
@@ -95,16 +97,22 @@ public class MainInterface extends JFrame {
             int selectedTabIndex = tabbedPane1.getSelectedIndex();
             // Call appropriate methods based on the selected tab index
             if (selectedTabIndex == 1) {
+                AuthorTF.setText("");
                 showAuthors(false);
             } else if (selectedTabIndex == 2) {
+                ArtTF.setText("");
                 showArtObjects(false);
             } else if (selectedTabIndex == 3) {
+                EventTF.setText("");
                 showEvents(false);
             } else if (selectedTabIndex == 4) {
+                LocationTF.setText("");
                 showLocations(false);
             } else if (selectedTabIndex == 5) {
+                OwnerTF.setText("");
                 showOwners(false);
             } else if (selectedTabIndex == 6) {
+                PurchaseTF.setText("");
                 showPurchases(false);
             }
         });
@@ -342,10 +350,42 @@ public class MainInterface extends JFrame {
                                 }
                             }
                         }
-//                        case 4:
-//                            TableRowSorter<TableModel> rowSorter = new TableRowSorter<>(ArtObjectsTable.getModel());
-//                            ArtObjectsTable.setRowSorter(rowSorter);
-//                            updateFilter(rowSorter);
+                        case 5: {
+                            if (ArtTF.getText().isEmpty()) {
+                                JOptionPane.showMessageDialog(rootPanel, "Please, input id into a text field to execute search.", "No input", JOptionPane.WARNING_MESSAGE);
+                            } else {
+                                try {
+                                    if (Integer.parseInt(ArtTF.getText()) > 0) {
+                                        int searchId = Integer.parseInt(ArtTF.getText());
+                                        List<ArtObject> artObject;
+                                        try {
+                                            artObject = dbManager.getArtObjectsByEventId(searchId, dbManager);
+                                        } catch (Exception k){
+                                            JOptionPane.showMessageDialog(rootPanel, "Event not found.", "Not found", JOptionPane.WARNING_MESSAGE);
+                                            break;
+                                        }
+                                        if (artObject.isEmpty()) {
+                                            JOptionPane.showMessageDialog(rootPanel, "No art objects are found for the event.", "Not found", JOptionPane.WARNING_MESSAGE);
+                                            ArtTF.setText("");
+                                            break;
+                                        }
+                                        DefaultTableModel tableModel = (DefaultTableModel) ArtObjectsTable.getModel();
+                                        tableModel.setRowCount(0);
+                                        int i = 0;
+                                        while (i < artObject.size()) {
+                                            Object[] rowData = new Object[]{artObject.get(i).getId(), artObject.get(i).getName(), artObject.get(i).getDescription(), artObject.get(i).getDateOfCreation(), artObject.get(i).getAuthor().getName(), artObject.get(i).getCurrentOwner().getName(), artObject.get(i).getCurrentLocation().getName()};
+                                            tableModel.addRow(rowData);
+                                            tableModel.fireTableDataChanged();
+                                            i++;
+                                        }
+                                        break;
+                                    }
+                                } catch (Exception r) {
+                                    JOptionPane.showMessageDialog(rootPanel, "Please, input integer value.", "Inappropriate input", JOptionPane.WARNING_MESSAGE);
+                                    break;
+                                }
+                            }
+                        }
 
                 }} catch (Exception a) {
                     ArtTF.setText("");
@@ -400,7 +440,7 @@ public class MainInterface extends JFrame {
                                 DefaultTableModel tableModel = (DefaultTableModel) EventTable.getModel();
                                 tableModel.setRowCount(0);
                                 for (Event event : events) {
-                                    Object[] rowData = new Object[]{event.getId(), event.getName(), event.getType(), event.getDescription(), event.getStartDateOfEvent(), event.getLocation(), event.getPrice()};
+                                    Object[] rowData = new Object[]{event.getId(), event.getName(), event.getType(), event.getDescription(), event.getStartDateOfEvent(), event.getEndDateOfEvent(), event.getLocation().getName(), event.getPrice()};
                                     tableModel.addRow(rowData);
                                     tableModel.fireTableDataChanged();
                                 }
@@ -628,7 +668,7 @@ public class MainInterface extends JFrame {
             });
         });
         updateEvent.addActionListener(e -> {
-            updateUI = new UpdateUI(this, dbManager, new String[]{"ID", "Name", "Type", "Description", "Start Date", "Location", "Price"}, 3, rootPanel);
+            updateUI = new UpdateUI(this, dbManager, new String[]{"ID", "Name", "Type", "Description", "Start Date", "Event Date", "Location", "Price"}, 3, rootPanel);
             updateUI.addWindowListener(new WindowAdapter() {
                 @Override
                 public void windowClosed(WindowEvent e) {
@@ -771,14 +811,14 @@ public class MainInterface extends JFrame {
                 int idData = Integer.parseInt(AuthorTable.getValueAt(selectedRow, 0).toString());
                 int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure to delete author with the following id: " + idData, "Confirm", JOptionPane.YES_NO_OPTION);
                 if (dialogResult == JOptionPane.YES_OPTION) {
-//                    dbManager.removeAuthor(idData);
+                    dbManager.removeAuthor(idData);
                     showAuthors(true);
                     AuthorTable.clearSelection();
                 } else {
                     AuthorTable.clearSelection();
                 }
             }
-        }); // Delete Author feature - waiting
+        });
         deleteArt.addActionListener(e -> {
             int selectedRow = ArtObjectsTable.getSelectedRow();
             if (selectedRow != -1) {
@@ -799,53 +839,53 @@ public class MainInterface extends JFrame {
                 int idData = Integer.parseInt(EventTable.getValueAt(selectedRow, 0).toString());
                 int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure to delete event with the following id: " + idData, "Confirm", JOptionPane.YES_NO_OPTION);
                 if (dialogResult == JOptionPane.YES_OPTION) {
-//                    dbManager.removeEvent(idData);
+                    dbManager.removeEvent(idData);
                     showEvents(true);
                     EventTable.clearSelection();
                 } else {
                     EventTable.clearSelection();
                 }
             }
-        }); // Delete Event feature - waiting
+        });
         deleteLocation.addActionListener(e -> {
             int selectedRow = LocationTable.getSelectedRow();
             if (selectedRow != -1) {
                 int idData = Integer.parseInt(LocationTable.getValueAt(selectedRow, 0).toString());
                 int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure to delete location with the following id: " + idData, "Confirm", JOptionPane.YES_NO_OPTION);
                 if (dialogResult == JOptionPane.YES_OPTION) {
-//                    dbManager.removeLocation(idData);
+                    dbManager.removeLocation(idData);
                     showLocations(true);
                 } else {
                     LocationTable.clearSelection();
                 }
             }
-        }); // Delete Location feature - waiting
+        });
         deleteOwner.addActionListener(e -> {
             int selectedRow = OwnerTable.getSelectedRow();
             if (selectedRow != -1) {
                 int idData = Integer.parseInt(OwnerTable.getValueAt(selectedRow, 0).toString());
                 int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure to delete owner with the following id: " + idData, "Confirm", JOptionPane.YES_NO_OPTION);
                 if (dialogResult == JOptionPane.YES_OPTION) {
-//                    dbManager.removeOwner(idData);
+                    dbManager.removeOwner(idData);
                     showOwners(true);
                 } else {
                     OwnerTable.clearSelection();
                 }
             }
-        }); // Delete owner feature - waiting
+        });
         deletePurchase.addActionListener(e -> {
             int selectedRow = PurchaseTable.getSelectedRow();
             if (selectedRow != -1) {
                 int idData = Integer.parseInt(PurchaseTable.getValueAt(selectedRow, 0).toString());
                 int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure to delete purchase with the following id: " + idData, "Confirm", JOptionPane.YES_NO_OPTION);
                 if (dialogResult == JOptionPane.YES_OPTION) {
-//                    dbManager.removePurchase(idData);
+                    dbManager.removePurchase(idData);
                     showPurchases(true);
                 } else {
                     PurchaseTable.clearSelection();
                 }
             }
-        }); // Remove purchase feature - waiting
+        });
     }
 
     // table handlers
@@ -1017,22 +1057,4 @@ public class MainInterface extends JFrame {
         table.setPreferredSize(new Dimension(table.getPreferredSize().width, preferredHeight));
         tableModel.fireTableDataChanged();
     }
-
-    // Next is the filter on column, but for now let's leave it as it is
-//    private void updateFilter(TableRowSorter<TableModel> rowSorter) {
-//        String text = ArtTF.getText();
-//        if (text.trim().length() == 0) {
-//            rowSorter.setRowFilter(null);
-//            JOptionPane.showMessageDialog(rootPanel, "Please, input word to find.", "Inappropriate input", JOptionPane.WARNING_MESSAGE);
-//        } else {
-//            try {
-//                Integer.parseInt(text);
-//                JOptionPane.showMessageDialog(rootPanel, "Please, input word to find.", "Inappropriate input", JOptionPane.WARNING_MESSAGE);
-//            } catch (Exception e) {
-//                int[] columnsForFilter = {1,2,4,5,6};
-//                RowFilter<Object, Object>
-//                rowSorter.setRowFilter(RowFilter.regexFilter("(?i)"+text));
-//            }
-//        }
-//    }
 }

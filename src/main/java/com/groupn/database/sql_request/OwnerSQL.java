@@ -87,6 +87,7 @@ public interface OwnerSQL {
                 preparedStatement.setString(1, owner.getName());
                 preparedStatement.setString(2, owner.getDescription());
                 preparedStatement.setInt(3, owner.getId());
+                preparedStatement.executeUpdate();
             }
         } catch (SQLException e) {
             manager.getLogger().severe("Error: " + e.getMessage());
@@ -130,6 +131,7 @@ public interface OwnerSQL {
                     artObject.setCurrentOwner(null);
                     manager.updateArtObject(artObject);
                 }
+                preparedStatement.executeUpdate();
             }
         } catch (SQLException e) {
             manager.getLogger().severe("Error: " + e.getMessage());
