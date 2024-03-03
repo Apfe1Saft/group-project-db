@@ -30,6 +30,17 @@ CREATE TABLE IF NOT EXISTS Author (
   author_date_of_birth VARCHAR(255)
 );
 
+CREATE TABLE IF NOT EXISTS Event (
+  event_id SERIAL PRIMARY KEY,
+  event_type_id INTEGER REFERENCES EventType(event_type_id),
+  event_description VARCHAR(255),
+  event_name VARCHAR(255),
+  event_start_date DATE,
+  event_end_date DATE,
+  event_location_id INTEGER REFERENCES Location(location_id),
+  event_price INTEGER
+);
+
 CREATE TABLE IF NOT EXISTS ArtObject (
   art_object_id SERIAL PRIMARY KEY,
   art_object_name VARCHAR(255),
@@ -40,19 +51,6 @@ CREATE TABLE IF NOT EXISTS ArtObject (
   date_of_creation VARCHAR(255)
 );
 
-CREATE TABLE IF NOT EXISTS Event (
-  event_id SERIAL PRIMARY KEY,
-  event_name VARCHAR(255),
-  event_type_id INTEGER REFERENCES EventType(event_type_id),
-  event_description VARCHAR(255),
-  event_start_date DATE,
-  event_end_date DATE,
-  event_location_id INTEGER REFERENCES Location(location_id),
-  event_object INTEGER REFERENCES ArtObject(art_object_id),
-  event_price INTEGER
-);
-
-
 CREATE TABLE IF NOT EXISTS Purchase (
   purchase_id SERIAL PRIMARY KEY,
   purchase_date DATE,
@@ -60,6 +58,12 @@ CREATE TABLE IF NOT EXISTS Purchase (
   art_object_id INTEGER REFERENCES ArtObject(art_object_id),
   seller_id INTEGER REFERENCES Owner(owner_id),
   buyer_id INTEGER REFERENCES Owner(owner_id)
+);
+
+CREATE TABLE IF NOT EXISTS EventObjects (
+  event_id int references Event(event_id),
+  art_object_id int references ArtObject(art_object_id),
+  primary key (event_id, art_object_id)
 );
 
 
