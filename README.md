@@ -2,28 +2,15 @@
 папку ./db, чтобы изменения вступили в силу при запуске программы.
 
 
-
 Готово:
 
 all getById methods
 all add methods
+all update methods
+all remove methods
+all get_FilterBy methods
 
-Необходимо сделать:
-
-addLocation
-addOwner
-
-updateLocation
-updateOwner
-updateAuthor
-updateEvent
-updatePurchase
-
-removeLocation
-removeOwner
-removeAuthor
-removeEvent
-removePurchase
+Под вопросом:
 
 get{1}By{2}Filter()
 {1} - entity name
@@ -33,4 +20,5 @@ clear() - чистка всей базы данных
 
 Комментарий:
 - Сделать даты в add и в сущностях (автора и арт объекта) не обязательным параметром, в т.ч. без сторогой проверки на дату
-- Id сбивается (вроде во всех случаях добавления данных), если запустить уже один раз запущенную программу.(ответ: Это так работать и должно, в противном случае id был бы не уникален.)
+- Id сбивается (вроде во всех случаях добавления данных), если запустить уже один раз запущенную программу.
+(ответ: Это так работать и должно, в противном случае id был бы не уникален.)
