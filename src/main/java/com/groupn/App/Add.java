@@ -44,9 +44,9 @@ public class Add extends JDialog {
         setResizable(true);
         pack();
         setAlwaysOnTop(true);
-        mainInterface.setFocusableWindowState(false);
+//        mainInterface.setFocusableWindowState(true);
         mainInterface.setAutoRequestFocus(false);
-        mainInterface.setEnabled(false);
+//        mainInterface.setEnabled(true);
         confirmAdd.addActionListener(e -> {
             boolean allFilled = false;
             String[] unnecessaryFields = {"Date of Birth", "Creation date", "Start Date", "End Date", "Opening date", "Price"};
@@ -54,6 +54,10 @@ public class Add extends JDialog {
             for (JTextField textField : textFields) {
                 if (textField.getText().isEmpty() && !Arrays.asList(unnecessaryFields).contains(labels.get(i).getText())) {
                     JOptionPane.showMessageDialog(TFPanel, "Please, do not leave mandatory fields empty. Those are required to add data.\n", "Lack of data", JOptionPane.WARNING_MESSAGE);
+                    allFilled = false;
+                    break;
+                } else if (!dbManager.checkInjectionSafety(textField.getText())) {
+                    JOptionPane.showMessageDialog(TFPanel, "The input data is unsafe to add.\nPlease, don't use symbols such as double/single quotes or round brackets", "Lack of data", JOptionPane.WARNING_MESSAGE);
                     allFilled = false;
                     break;
                 } else {
