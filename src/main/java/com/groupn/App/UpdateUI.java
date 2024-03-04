@@ -45,9 +45,9 @@ public class UpdateUI extends JDialog {
         setResizable(false);
         pack();
         setAlwaysOnTop(true);
-        mainInterface.setFocusableWindowState(false);
+//        mainInterface.setFocusableWindowState(false);
         mainInterface.setAutoRequestFocus(false);
-        mainInterface.setEnabled(false);
+//        mainInterface.setEnabled(false);
         confirmUpdate.setEnabled(false);
         confirmUpdate.addActionListener(e -> {
             boolean allFilled = false;
@@ -57,7 +57,11 @@ public class UpdateUI extends JDialog {
                             "To refresh data push \"Find\" button and continue editing.", "Lack of data", JOptionPane.WARNING_MESSAGE);
                     allFilled = false;
                     break;
-                } else {
+                } else if (!dbManager.checkInjectionSafety(textField.getText())) {
+                    JOptionPane.showMessageDialog(TFPanel, "The input data is unsafe to add.\nPlease, don't use symbols such as double/single quotes or round brackets", "Lack of data", JOptionPane.WARNING_MESSAGE);
+                    allFilled = false;
+                    break;
+                }else {
                     allFilled = true;
                 }
             }
@@ -73,9 +77,15 @@ public class UpdateUI extends JDialog {
                         }
                         author.setName(textFields.get(1).getText());
                         author.setDescription(textFields.get(2).getText());
-                        author.setDateOfBirth(LocalDate.parse(textFields.get(3).getText())); // Do we need check on correct date format?
+                        try {
+                            author.setDateOfBirth(LocalDate.parse(textFields.get(3).getText())); // Do we need check on correct date format?
+                        } catch (DateTimeParseException p) {
+                            JOptionPane.showMessageDialog(TFPanel, "Please, input date in the form YYYY-MM-DD", "Incorrect format", JOptionPane.WARNING_MESSAGE);
+                            break;
+                        }
                         dbManager.updateAuthor(author);
                         mainInterface.showAuthors(true);
+                        dispose();
                         break;
                     }
                     case 2: {
@@ -97,11 +107,30 @@ public class UpdateUI extends JDialog {
                             JOptionPane.showMessageDialog(TFPanel, "Please, input date in the form YYYY-MM-DD", "Incorrect format", JOptionPane.WARNING_MESSAGE);
                             break;
                         }
-                        artObject.setAuthor(dbManager.getAuthorById(Integer.parseInt(textFields.get(4).getText())));
-                        artObject.setCurrentOwner(dbManager.getOwnerById(Integer.parseInt(textFields.get(5).getText())));
-                        artObject.setCurrentLocation(dbManager.getLocationById(Integer.parseInt(textFields.get(6).getText())));
+                        try {
+                            artObject.setAuthor(dbManager.getAuthorById(Integer.parseInt(textFields.get(4).getText())));
+                            artObject.getAuthor().toString();
+                        } catch (Exception p) {
+                            JOptionPane.showMessageDialog(TFPanel, "Please, input existing author id as integer", "Not found", JOptionPane.WARNING_MESSAGE);
+                            break;
+                        }
+                        try {
+                            artObject.setCurrentOwner(dbManager.getOwnerById(Integer.parseInt(textFields.get(5).getText())));
+                            artObject.getCurrentOwner().toString();
+                        } catch (Exception p) {
+                            JOptionPane.showMessageDialog(TFPanel, "Please, input existing owner id as integer", "Not found", JOptionPane.WARNING_MESSAGE);
+                            break;
+                        }
+                        try {
+                            artObject.setCurrentLocation(dbManager.getLocationById(Integer.parseInt(textFields.get(6).getText())));
+                            artObject.getCurrentLocation().toString();
+                        } catch (Exception p) {
+                            JOptionPane.showMessageDialog(TFPanel, "Please, input existing location id as integer", "Not found", JOptionPane.WARNING_MESSAGE);
+                            break;
+                        }
                         dbManager.updateArtObject(artObject);
                         mainInterface.showArtObjects(true);
+                        dispose();
                         break;
                     }
                     case 3: {
@@ -113,14 +142,37 @@ public class UpdateUI extends JDialog {
                             break;
                         }
                         event.setName(textFields.get(1).getText());
-                        event.setType(dbManager.getEventTypeById(Integer.parseInt(textFields.get(2).getText())));
+                        try {
+                            event.setType(dbManager.getEventTypeById(Integer.parseInt(textFields.get(2).getText())));
+                            event.getType().toString();
+                        } catch (Exception p) {
+                            JOptionPane.showMessageDialog(TFPanel, "Please, input existing event type id as integer", "Not found", JOptionPane.WARNING_MESSAGE);
+                            break;
+                        }
                         event.setDescription(textFields.get(3).getText());
-                        event.setStartDateOfEvent(LocalDate.parse(textFields.get(4).getText()));
-                        event.setEndDateOfEvent(LocalDate.parse(textFields.get(5).getText()));
-                        event.setLocation(dbManager.getLocationById(Integer.parseInt(textFields.get(6).getText())));
-                        event.setPrice(Integer.parseInt(textFields.get(7).getText()));
+                        try {
+                            event.setStartDateOfEvent(LocalDate.parse(textFields.get(4).getText()));
+                            event.setEndDateOfEvent(LocalDate.parse(textFields.get(5).getText()));
+                        } catch (DateTimeParseException p) {
+                            JOptionPane.showMessageDialog(TFPanel, "Please, input date in the form YYYY-MM-DD", "Incorrect format", JOptionPane.WARNING_MESSAGE);
+                            break;
+                        }
+                        try {
+                            event.setLocation(dbManager.getLocationById(Integer.parseInt(textFields.get(6).getText())));
+                            event.getLocation().toString();
+                        } catch (Exception p) {
+                            JOptionPane.showMessageDialog(TFPanel, "Please, input existing location id as integer", "Not found", JOptionPane.WARNING_MESSAGE);
+                            break;
+                        }
+                        try {
+                            event.setPrice(Integer.parseInt(textFields.get(7).getText()));
+                        } catch (Exception p) {
+                            JOptionPane.showMessageDialog(TFPanel, "Please, input the price as integer and without currency signs", "Not found", JOptionPane.WARNING_MESSAGE);
+                            break;
+                        }
                         dbManager.updateEvent(event);
                         mainInterface.showEvents(true);
+                        dispose();
                         break;
                     }
                     case 4: {
@@ -133,11 +185,23 @@ public class UpdateUI extends JDialog {
                         }
                         location.setName(textFields.get(1).getText());
                         location.setDescription(textFields.get(2).getText());
-                        location.setDateOfOpening(LocalDate.parse(textFields.get(3).getText()));
+                        try {
+                            location.setDateOfOpening(LocalDate.parse(textFields.get(3).getText()));
+                        } catch (Exception p) {
+                            JOptionPane.showMessageDialog(TFPanel, "Please, input date in the form YYYY-MM-DD", "Incorrect format", JOptionPane.WARNING_MESSAGE);
+                            break;
+                        }
                         location.setPlacement(textFields.get(4).getText());
-                        location.setType(dbManager.getLocationTypeById(Integer.parseInt(textFields.get(5).getText())));
+                        try {
+                            location.setType(dbManager.getLocationTypeById(Integer.parseInt(textFields.get(5).getText())));
+                            location.getType().toString();
+                        } catch (Exception p) {
+                            JOptionPane.showMessageDialog(TFPanel, "Please, input existing location type id as integer", "Not found", JOptionPane.WARNING_MESSAGE);
+                            break;
+                        }
                         dbManager.updateLocation(location);
                         mainInterface.showLocations(true);
+                        dispose();
                         break;
                     }
                     case 5: {
@@ -152,6 +216,7 @@ public class UpdateUI extends JDialog {
                         owner.setDescription(textFields.get(2).getText());
                         dbManager.updateOwner(owner);
                         mainInterface.showOwners(true);
+                        dispose();
                         break;
                     }
                     case 6: {
@@ -162,18 +227,50 @@ public class UpdateUI extends JDialog {
                             JOptionPane.showMessageDialog(TFPanel, "Please, input id as integer value.", "Incorrect format", JOptionPane.WARNING_MESSAGE);
                             break;
                         }
-                        purchase.setDateOfPurchase(LocalDate.parse(textFields.get(1).getText()));
-                        purchase.setArtObject(dbManager.getArtObjectById(Integer.parseInt(textFields.get(2).getText())));
-                        purchase.setSeller(dbManager.getOwnerById(Integer.parseInt(textFields.get(3).getText())));
-                        purchase.setBuyer(dbManager.getOwnerById(Integer.parseInt(textFields.get(4).getText())));
+                        try {
+                            purchase.setDateOfPurchase(LocalDate.parse(textFields.get(1).getText()));
+                        } catch (Exception p) {
+                            JOptionPane.showMessageDialog(TFPanel, "Please, input date in the form YYYY-MM-DD", "Incorrect format", JOptionPane.WARNING_MESSAGE);
+                            break;
+                        }
+                        try {
+                            purchase.setPrice(Integer.parseInt(textFields.get(2).getText()));
+                        } catch (Exception p) {
+                            JOptionPane.showMessageDialog(TFPanel, "Please, input price as integer without currency signs.", "Incorrect format", JOptionPane.WARNING_MESSAGE);
+                            break;
+                        }
+                        try {
+                            purchase.setArtObject(dbManager.getArtObjectById(Integer.parseInt(textFields.get(3).getText())));
+                            purchase.getArtObject().toString();
+                        } catch (Exception p) {
+                            JOptionPane.showMessageDialog(TFPanel, "Please, input existing art object id as integer", "Not found", JOptionPane.WARNING_MESSAGE);
+                            break;
+                        }
+                        try {
+                            purchase.setSeller(dbManager.getOwnerById(Integer.parseInt(textFields.get(4).getText())));
+                            purchase.getSeller().toString();
+                        } catch (Exception p) {
+                            JOptionPane.showMessageDialog(TFPanel, "Please, input existing initial owner (seller) id as integer", "Not found", JOptionPane.WARNING_MESSAGE);
+                            break;
+                        }
+                        try {
+                            purchase.setBuyer(dbManager.getOwnerById(Integer.parseInt(textFields.get(5).getText())));
+                            purchase.getBuyer().toString();
+                        } catch (Exception p) {
+                            JOptionPane.showMessageDialog(TFPanel, "Please, input existing next owner (buyer) id as integer", "Not found", JOptionPane.WARNING_MESSAGE);
+                            break;
+                        }
                         dbManager.updatePurchase(purchase);
                         mainInterface.showPurchases(true);
+                        dispose();
                         break;
                     }
                 }
             }
 
+
         });
+        cancelUpdate.addActionListener(e -> dispose());
 
     }
 
