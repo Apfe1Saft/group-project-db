@@ -9,6 +9,7 @@ import org.h2.tools.RunScript;
 import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -71,6 +72,17 @@ public class DBManager implements // implementing interfaces with specific sql r
         } catch (Exception e) {
             logger.severe("Error: " + e.getMessage());
         }
+    }
+
+    public boolean checkInjectionSafety(String userInput) {
+        char[] unsafePattern = {'\'', '\"', '(', ')'};
+        for (char ch : unsafePattern) {
+            if (userInput.contains(String.valueOf(ch))) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     //LocationType queries
