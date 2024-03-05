@@ -110,29 +110,60 @@ public interface OwnerSQL {
 
     default void removeOwner(int ownerId, DBManager manager) {
         try {
-            //! update Purchase, update ArtObject
-            manager.getLogger().info("RUN removeOwner.");
+            manager.getLogger().info("RUN removeAuthor.");
 
-            String sql = "DELETE FROM Owner WHERE owner_id = ?";
-            try (PreparedStatement preparedStatement = manager.getConnection().prepareStatement(sql)) {
-                preparedStatement.setInt(1, ownerId);
-
-                for (Purchase purchase : manager.getAllPurchases().stream().filter(x -> x.getSeller().getId() == ownerId).collect(Collectors.toList())) {
-                    purchase.setSeller(null);
-                    manager.updatePurchase(purchase);
+            String checkDependenciesSql = "SELECT 1 FROM ArtObject WHERE current_owner_id = ?";
+            try (PreparedStatement checkDependenciesStatement = manager.getConnection().prepareStatement(checkDependenciesSql)) {
+                checkDependenciesStatement.setInt(1, ownerId);
+                try (ResultSet resultSet = checkDependenciesStatement.executeQuery()) {
+                    if (resultSet.next()) {
+                        manager.getLogger().info("Handling dependencies in ArtObject table.");
+                        String handleDependenciesSql = "UPDATE ArtObject SET current_owner_id = NULL WHERE current_owner_id = ?";
+                        try (PreparedStatement handleDependenciesStatement = manager.getConnection().prepareStatement(handleDependenciesSql)) {
+                            handleDependenciesStatement.setInt(1, ownerId);
+                            handleDependenciesStatement.executeUpdate();
+                        }
+                    }
                 }
-
-                for (Purchase purchase : manager.getAllPurchases().stream().filter(x -> x.getBuyer().getId() == ownerId).collect(Collectors.toList())) {
-                    purchase.setBuyer(null);
-                    manager.updatePurchase(purchase);
-                }
-
-                for (ArtObject artObject : manager.getAllArtObjects().stream().filter(x -> x.getCurrentOwner().getId() == ownerId).collect(Collectors.toList())) {
-                    artObject.setCurrentOwner(null);
-                    manager.updateArtObject(artObject);
-                }
-                preparedStatement.executeUpdate();
             }
+
+            checkDependenciesSql = "SELECT 1 FROM Purchase WHERE seller_id = ?";
+            try (PreparedStatement checkDependenciesStatement = manager.getConnection().prepareStatement(checkDependenciesSql)) {
+                checkDependenciesStatement.setInt(1, ownerId);
+                try (ResultSet resultSet = checkDependenciesStatement.executeQuery()) {
+                    if (resultSet.next()) {
+                        manager.getLogger().info("Handling dependencies in Purchase table.");
+                        String handleDependenciesSql = "UPDATE Purchase SET seller_id = NULL WHERE seller_id = ?";
+                        try (PreparedStatement handleDependenciesStatement = manager.getConnection().prepareStatement(handleDependenciesSql)) {
+                            handleDependenciesStatement.setInt(1, ownerId);
+                            handleDependenciesStatement.executeUpdate();
+                        }
+                    }
+                }
+            }
+
+            checkDependenciesSql = "SELECT 1 FROM Purchase WHERE buyer_id = ?";
+            try (PreparedStatement checkDependenciesStatement = manager.getConnection().prepareStatement(checkDependenciesSql)) {
+                checkDependenciesStatement.setInt(1, ownerId);
+                try (ResultSet resultSet = checkDependenciesStatement.executeQuery()) {
+                    if (resultSet.next()) {
+                        manager.getLogger().info("Handling dependencies in Purchase table.");
+                        String handleDependenciesSql = "UPDATE Purchase SET buyer_id = NULL WHERE buyer_id = ?";
+                        try (PreparedStatement handleDependenciesStatement = manager.getConnection().prepareStatement(handleDependenciesSql)) {
+                            handleDependenciesStatement.setInt(1, ownerId);
+                            handleDependenciesStatement.executeUpdate();
+                        }
+                    }
+                }
+            }
+
+            String deleteAuthorSql = "DELETE FROM Owner WHERE owner_id = ?";
+            try (PreparedStatement deleteAuthorStatement = manager.getConnection().prepareStatement(deleteAuthorSql)) {
+                deleteAuthorStatement.setInt(1, ownerId);
+                deleteAuthorStatement.executeUpdate();
+                manager.getLogger().info("Owner removed successfully.");
+            }
+
         } catch (SQLException e) {
             manager.getLogger().severe("Error: " + e.getMessage());
         }

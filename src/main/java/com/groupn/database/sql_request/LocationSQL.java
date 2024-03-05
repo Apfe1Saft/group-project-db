@@ -123,18 +123,30 @@ public interface LocationSQL {
 
     default void removeLocation(int locationId, DBManager manager) {
         try {
-            manager.getLogger().info("RUN removeLocation.");
+            manager.getLogger().info("RUN removeAuthor.");
 
-            String sql = "DELETE FROM Location WHERE location_id = ?";
-            try (PreparedStatement preparedStatement = manager.getConnection().prepareStatement(sql)) {
-                preparedStatement.setInt(1, locationId);
-
-                for (Event event : manager.getAllEvents().stream().filter(x -> x.getLocation().getId() == locationId).collect(Collectors.toList())) {
-                    event.setLocation(null);
-                    manager.updateEvent(event);
+            String checkDependenciesSql = "SELECT 1 FROM ArtObject WHERE current_location_id = ?";
+            try (PreparedStatement checkDependenciesStatement = manager.getConnection().prepareStatement(checkDependenciesSql)) {
+                checkDependenciesStatement.setInt(1, locationId);
+                try (ResultSet resultSet = checkDependenciesStatement.executeQuery()) {
+                    if (resultSet.next()) {
+                        manager.getLogger().info("Handling dependencies in ArtObject table.");
+                        String handleDependenciesSql = "UPDATE ArtObject SET current_location_id = NULL WHERE current_location_id = ?";
+                        try (PreparedStatement handleDependenciesStatement = manager.getConnection().prepareStatement(handleDependenciesSql)) {
+                            handleDependenciesStatement.setInt(1, locationId);
+                            handleDependenciesStatement.executeUpdate();
+                        }
+                    }
                 }
-                preparedStatement.executeUpdate();
             }
+
+            String deleteAuthorSql = "DELETE FROM Location WHERE location_id = ?";
+            try (PreparedStatement deleteAuthorStatement = manager.getConnection().prepareStatement(deleteAuthorSql)) {
+                deleteAuthorStatement.setInt(1, locationId);
+                deleteAuthorStatement.executeUpdate();
+                manager.getLogger().info("Location removed successfully.");
+            }
+
         } catch (SQLException e) {
             manager.getLogger().severe("Error: " + e.getMessage());
         }

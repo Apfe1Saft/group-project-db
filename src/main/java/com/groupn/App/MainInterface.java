@@ -1035,7 +1035,11 @@ public class MainInterface extends JFrame {
             tableModel.setColumnIdentifiers(columnNames);
             for (int i = 0; i < showPurchases.size(); i++) {
                 Purchase purchase = showPurchases.get(i);
-                Object[] rowData = new Object[]{purchase.getId(), purchase.getDateOfPurchase(), "€ "+purchase.getPrice(), purchase.getArtObject().getName(), purchase.getSeller().getName(), purchase.getBuyer().getName()};
+                Object[] rowData = new Object[]{purchase.getId(),
+                        purchase.getDateOfPurchase(), "€ "+purchase.getPrice(),
+                        purchase.getArtObject() != null ? purchase.getArtObject().getName() : "",
+                        purchase.getSeller() != null ? purchase.getSeller().getName() : "",
+                        purchase.getBuyer() != null ? purchase.getBuyer().getName() : ""};
                 tableModel.addRow(rowData);
             }
             tableModel.fireTableDataChanged();

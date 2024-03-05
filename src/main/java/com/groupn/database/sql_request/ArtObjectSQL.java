@@ -16,9 +16,9 @@ import java.util.stream.Collectors;
 public interface ArtObjectSQL {
     String artObjectJOINQuery = "SELECT * " +
             "FROM ArtObject as ao " +
-            "JOIN Author as au ON ao.author_id = au.author_id " +
-            "JOIN Owner as ow ON ao.current_owner_id = ow.owner_id " +
-            "JOIN Location as lo ON ao.current_location_id = lo.location_id ";
+            "LEFT JOIN Author as au ON ao.author_id = au.author_id " +
+            "LEFT JOIN Owner as ow ON ao.current_owner_id = ow.owner_id " +
+            "LEFT JOIN Location as lo ON ao.current_location_id = lo.location_id ";
 
     default ArtObject getArtObjectById(int artObjectId, DBManager manager) {
         try {
@@ -27,8 +27,8 @@ public interface ArtObjectSQL {
             try (PreparedStatement preparedStatement = manager.getConnection().prepareStatement(sql)) {
                 preparedStatement.setInt(1, artObjectId);
                 ResultSet resultSet = preparedStatement.executeQuery();
+                manager.getLogger().info(resultSet.toString());
                 if (resultSet.next()) {
-
                     return manager.getMapper().mapResultSetToArtObject(resultSet);
                 }
             }
@@ -146,22 +146,21 @@ public interface ArtObjectSQL {
 
     default void removeArtObjectById(int artObjectId, DBManager manager) {
         try {
-            //! update Purchase, update Event
+
+            List<EventObjects> eventObjectsList = manager.getAllEventObjects().stream().filter(x -> x.getArtObjectId() == artObjectId).collect(Collectors.toList());
+            for (EventObjects eventObjects : eventObjectsList) {
+                manager.deleteEventObject(eventObjects.getEventId(), eventObjects.getArtObjectId());
+            }
+            for (Purchase purchase : manager.getAllPurchases().stream().filter(x -> x.getArtObject().getId() == artObjectId).collect(Collectors.toList())) {
+                purchase.setArtObject(null);
+                manager.updatePurchase(purchase);
+            }
             manager.getLogger().info("RUN removeArtObjectById.");
             String sql = "DELETE FROM ArtObject WHERE art_object_id = ?";
             try (PreparedStatement preparedStatement = manager.getConnection().prepareStatement(sql)) {
                 preparedStatement.setInt(1, artObjectId);
                 preparedStatement.executeUpdate();
 
-                for (Purchase purchase : manager.getAllPurchases().stream().filter(x -> x.getArtObject().getId() == artObjectId).collect(Collectors.toList())) {
-                    purchase.setArtObject(null);
-                    manager.updatePurchase(purchase);
-                }
-
-                List<EventObjects> eventObjectsList = manager.getAllEventObjects().stream().filter(x->x.getArtObjectId() == artObjectId).collect(Collectors.toList());
-                for(EventObjects eventObjects: eventObjectsList){
-                    manager.deleteEventObject(eventObjects.getEventId(),eventObjects.getArtObjectId());
-                }
 
             }
 
@@ -181,13 +180,25 @@ public interface ArtObjectSQL {
             try (PreparedStatement preparedStatement = manager.getConnection().prepareStatement(sql)) {
                 preparedStatement.setString(1, artObject.getName());
                 preparedStatement.setString(2, artObject.getDescription());
-                preparedStatement.setInt(3, artObject.getAuthor().getId());
-                preparedStatement.setInt(4, artObject.getCurrentOwner().getId());
-                preparedStatement.setInt(5, artObject.getCurrentLocation().getId());
+
+                if (artObject.getAuthor() != null) {
+                    preparedStatement.setInt(3, artObject.getAuthor().getId());
+                } else {
+                    preparedStatement.setNull(3, java.sql.Types.INTEGER);
+                }
+                if (artObject.getCurrentOwner() != null) {
+                    preparedStatement.setInt(4, artObject.getCurrentOwner().getId());
+                } else {
+                    preparedStatement.setNull(4, java.sql.Types.INTEGER);
+                }
+                if (artObject.getCurrentLocation() != null) {
+                    preparedStatement.setInt(5, artObject.getCurrentLocation().getId());
+                } else {
+                    preparedStatement.setNull(5, java.sql.Types.INTEGER);
+                }
                 preparedStatement.setDate(6, Date.valueOf(artObject.getDateOfCreation()));
                 preparedStatement.setInt(7, artObject.getId());
 
-                preparedStatement.executeUpdate();
             }
         } catch (SQLException e) {
             manager.getLogger().severe("Error: " + e.getMessage());

@@ -135,20 +135,30 @@ public interface AuthorSQL {
 
     default void removeAuthor(int authorId, DBManager manager) {
         try {
-            //! update ArtObject
             manager.getLogger().info("RUN removeAuthor.");
 
-            String sql = "DELETE FROM Author WHERE author_id = ?";
-            try (PreparedStatement preparedStatement = manager.getConnection().prepareStatement(sql)) {
-                preparedStatement.setInt(1, authorId);
-
-            for (ArtObject artObject : manager.getAllArtObjects().stream().filter(x -> x.getAuthor().getId() == authorId).collect(Collectors.toList())) {
-                artObject.setAuthor(null);
-                manager.updateArtObject(artObject);
+            String checkDependenciesSql = "SELECT 1 FROM ArtObject WHERE author_id = ?";
+            try (PreparedStatement checkDependenciesStatement = manager.getConnection().prepareStatement(checkDependenciesSql)) {
+                checkDependenciesStatement.setInt(1, authorId);
+                try (ResultSet resultSet = checkDependenciesStatement.executeQuery()) {
+                    if (resultSet.next()) {
+                        manager.getLogger().info("Handling dependencies in ArtObject table.");
+                        String handleDependenciesSql = "UPDATE ArtObject SET author_id = NULL WHERE author_id = ?";
+                        try (PreparedStatement handleDependenciesStatement = manager.getConnection().prepareStatement(handleDependenciesSql)) {
+                            handleDependenciesStatement.setInt(1, authorId);
+                            handleDependenciesStatement.executeUpdate();
+                        }
+                    }
+                }
             }
-            preparedStatement.executeUpdate();
 
-        }
+            String deleteAuthorSql = "DELETE FROM Author WHERE author_id = ?";
+            try (PreparedStatement deleteAuthorStatement = manager.getConnection().prepareStatement(deleteAuthorSql)) {
+                deleteAuthorStatement.setInt(1, authorId);
+                deleteAuthorStatement.executeUpdate();
+                manager.getLogger().info("Author removed successfully.");
+            }
+
         } catch (SQLException e) {
             manager.getLogger().severe("Error: " + e.getMessage());
         }

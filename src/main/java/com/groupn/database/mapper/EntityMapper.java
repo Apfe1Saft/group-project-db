@@ -4,6 +4,7 @@ import com.groupn.database.DBManager;
 import com.groupn.entities.*;
 import lombok.Getter;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -23,14 +24,20 @@ public class EntityMapper {
     }
 
     public Location mapResultSetToLocation(ResultSet resultSet) throws SQLException {
-        return new Location(
-                resultSet.getInt("location_id"),
-                resultSet.getString("location_name"),
-                resultSet.getString("location_description"),
-                resultSet.getDate("date_of_opening").toLocalDate(),
-                resultSet.getString("placement"),
-                dbManager.getLocationTypeById(resultSet.getInt("location_type_id"))
-        );
+        int locationId = resultSet.getInt("location_id");
+        String locationName = resultSet.getString("location_name");
+        String locationDescription = resultSet.getString("location_description");
+
+        LocalDate dateOfOpening = null;
+        Date dateOfOpeningSql = resultSet.getDate("date_of_opening");
+        if (dateOfOpeningSql != null) {
+            dateOfOpening = dateOfOpeningSql.toLocalDate();
+        }
+
+        String placement = resultSet.getString("placement");
+        LocationType locationType = dbManager.getLocationTypeById(resultSet.getInt("location_type_id"));
+
+        return new Location(locationId, locationName, locationDescription, dateOfOpening, placement, locationType);
     }
 
     public Owner mapResultSetToOwner(ResultSet resultSet) throws SQLException {

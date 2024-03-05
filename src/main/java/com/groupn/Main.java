@@ -20,22 +20,11 @@ public class Main {
         try {
 
             manager.createConnection(DBConnector.JDBC_URL); // connect to JDBC_URL
-            //manager.setDefault(); // create tables
-            //manager.setDefaultData(); // add elements into tables
+            manager.setDefault(); // create tables
+            manager.setDefaultData(); // add elements into tables
 
-            Author author = manager.getAuthorById(1);
-            ArtObject artObject = manager.getArtObjectById(1);
-            Location location = manager.getLocationById(1);
-            Owner owner = manager.getOwnerById(1);
-            Purchase purchase = manager.getPurchaseById(1);
-            Event event = manager.getEventById(1);
-
-            System.out.println(author);
-            System.out.println(artObject);
-            System.out.println(location);
-            System.out.println(owner);
-            System.out.println(purchase);
-            System.out.println(event);
+            //manager.removeAuthor(1);
+            //System.out.println("==>" + manager.getArtObjectById(1));
 
             // Launch the UI
             SwingUtilities.invokeLater(() -> new MainInterface(manager)); // Comment out to skip ui

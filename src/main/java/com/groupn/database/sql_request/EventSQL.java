@@ -14,7 +14,7 @@ import java.util.List;
 public interface EventSQL {
     String eventJOINQuery = "SELECT * " +
             "FROM Event as ev " +
-            "JOIN Location as lo ON ev.event_location_id=lo.location_id ";
+            "LEFT JOIN Location as lo ON ev.event_location_id=lo.location_id ";
 
     default Event getEventById(int eventId, DBManager manager) {
         try {
@@ -114,7 +114,11 @@ public interface EventSQL {
                 preparedStatement.setString(3, event.getDescription());
                 preparedStatement.setDate(4, Date.valueOf(event.getStartDateOfEvent()));
                 preparedStatement.setDate(5, Date.valueOf(event.getEndDateOfEvent()));
-                preparedStatement.setInt(6, event.getLocation().getId());
+                if (event.getLocation() != null) {
+                    preparedStatement.setObject(6, event.getLocation().getId());
+                } else {
+                    preparedStatement.setNull(6, java.sql.Types.INTEGER);
+                }
                 preparedStatement.setInt(7, event.getPrice());
                 preparedStatement.setInt(8, event.getId());
 
@@ -129,11 +133,31 @@ public interface EventSQL {
         try {
             manager.getLogger().info("RUN removeEvent.");
 
-            String sql = "DELETE FROM Event WHERE event_id = ?";
-            try (PreparedStatement preparedStatement = manager.getConnection().prepareStatement(sql)) {
-                preparedStatement.setInt(1, eventId);
-
+            // Check for dependencies in other tables
+            String checkDependenciesSql = "SELECT 1 FROM EventObjects WHERE event_id = ?";
+            try (PreparedStatement checkDependenciesStatement = manager.getConnection().prepareStatement(checkDependenciesSql)) {
+                checkDependenciesStatement.setInt(1, eventId);
+                try (ResultSet resultSet = checkDependenciesStatement.executeQuery()) {
+                    if (resultSet.next()) {
+                        manager.getLogger().info("Handling dependencies in EventObjects table.");
+                        // Assuming EventObjects is a table linking events to art objects
+                        String handleDependenciesSql = "DELETE FROM EventObjects WHERE event_id = ?";
+                        try (PreparedStatement handleDependenciesStatement = manager.getConnection().prepareStatement(handleDependenciesSql)) {
+                            handleDependenciesStatement.setInt(1, eventId);
+                            handleDependenciesStatement.executeUpdate();
+                        }
+                    }
+                }
             }
+
+            // Delete the event
+            String deleteEventSql = "DELETE FROM Event WHERE event_id = ?";
+            try (PreparedStatement deleteEventStatement = manager.getConnection().prepareStatement(deleteEventSql)) {
+                deleteEventStatement.setInt(1, eventId);
+                deleteEventStatement.executeUpdate();
+                manager.getLogger().info("Event removed successfully.");
+            }
+
         } catch (SQLException e) {
             manager.getLogger().severe("Error: " + e.getMessage());
         }
