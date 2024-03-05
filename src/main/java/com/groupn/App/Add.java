@@ -95,8 +95,6 @@ public class Add extends JDialog {
                         }
                         artObject.setDescription(textFields.get(1).getText());
                         String dateString = textFields.get(2).getText();
-                        // artObject.setDateOfCreation(dateString);
-                        // Same "try catch" block deletion after date becomes string
                         try {
                             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                             LocalDate dateOfCreation = LocalDate.parse(dateString, formatter);
@@ -203,7 +201,7 @@ public class Add extends JDialog {
                             JOptionPane.showMessageDialog(TFPanel, "Location type id not found.", "Not found", JOptionPane.WARNING_MESSAGE);
                             break;
                         }
-//                        dbManager.addLocation(location);
+                        dbManager.addLocation(location);
                         dispose();
                         break;
                     } // Location
@@ -223,7 +221,7 @@ public class Add extends JDialog {
                             JOptionPane.showMessageDialog(TFPanel, "Please, input owner's description.", "Lack of data", JOptionPane.WARNING_MESSAGE);
                             break;
                         }
-//                        dbManager.addOwner(owner);
+                        dbManager.addOwner(owner);
                         dispose();
                         break;
                     } // Owner
@@ -268,8 +266,6 @@ public class Add extends JDialog {
                         dispose();
                         break;
                     } // Purchase
-//                    case 7: EventTypeAdd
-//                    case 8: LocationTypeAdd
                 }
             }
 

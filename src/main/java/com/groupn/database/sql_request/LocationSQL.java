@@ -90,6 +90,7 @@ public interface LocationSQL {
                 preparedStatement.setString(3, location.getPlacement());
                 preparedStatement.setDate(4, java.sql.Date.valueOf(location.getDateOfOpening()));
                 preparedStatement.setInt(5, locationType);
+                preparedStatement.executeUpdate();
 
             }
         } catch (SQLException e) {

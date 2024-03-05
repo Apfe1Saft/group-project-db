@@ -1131,11 +1131,6 @@ public class MainInterface extends JFrame {
                     break;
             }
         }
-        // Row sorter reset (if there would be a row sorter eventually)
-//        if (ArtObjectsTable.getRowSorter() != null) {
-//            System.out.println("Row sorter found");
-//            ArtObjectsTable.setRowSorter(null);
-//        }
 
         tableModel.fireTableDataChanged();
         ArtObjectsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);

@@ -286,38 +286,8 @@ public class UpdateUI extends JDialog {
             textField.setAlignmentX(JTextField.LEFT_ALIGNMENT);
             textField.setHorizontalAlignment(JTextField.LEFT);
             JLabel label = new JLabel("<html>"+columnName+"<html>");
-            switch (selectedTabIndex) {
-                case 1: {
-                    label.setMinimumSize(new Dimension(60, 20));
-                    label.setMaximumSize(new Dimension(60, 20));
-                    break;
-                }
-                case 2: {
-                    label.setMinimumSize(new Dimension(60, 20));
-                    label.setMaximumSize(new Dimension(60, 20));
-                    break;
-                    }
-                case 3: {
-                    label.setMinimumSize(new Dimension(60, 20));
-                    label.setMaximumSize(new Dimension(60, 20));
-                    break;
-                    }
-                case 4: {
-                    label.setMinimumSize(new Dimension(60, 20));
-                    label.setMaximumSize(new Dimension(60, 20));
-                    break;
-                    }
-                case 5: {
-                    label.setMinimumSize(new Dimension(60, 20));
-                    label.setMaximumSize(new Dimension(60, 20));
-                    break;
-                    }
-                case 6: {
-                    label.setMinimumSize(new Dimension(60, 20));
-                    label.setMaximumSize(new Dimension(60, 20));
-                    break;
-                    }
-            }
+            label.setMinimumSize(new Dimension(60, 20));
+            label.setMaximumSize(new Dimension(60, 20));
             label.setMinimumSize(new Dimension(100, 30));
             label.setMaximumSize(new Dimension(100, 30));
             if (columnName.equals("Author") || columnName.equals("Current owner") || columnName.equals("Location") || columnName.equals("Type") || columnName.equals("Art object") || columnName.equals("Seller") || columnName.equals("Buyer")) {
@@ -520,7 +490,6 @@ public class UpdateUI extends JDialog {
                             Object value = method.invoke(event);
                             if (value != null) {
                                 if (method.getName().equals("getLocation")) {
-                                    // Get the nested object's name
                                     Method getNameMethod = value.getClass().getMethod("getId");
                                     int id2 = (int) getNameMethod.invoke(value);
                                     textField.setText(Integer.toString(id2));
@@ -628,7 +597,6 @@ public class UpdateUI extends JDialog {
                             Object value = method.invoke(purchase);
                             if (value != null) {
                                 if (method.getName().equals("getArtObject") || method.getName().equals("getSeller") || method.getName().equals("getBuyer")) {
-                                    // Get the nested object's name
                                     Method getNameMethod = value.getClass().getMethod("getId");
                                     int id2 = (int) getNameMethod.invoke(value);
                                     textField.setText(Integer.toString(id2));
@@ -642,7 +610,6 @@ public class UpdateUI extends JDialog {
                                         labels.get(j).setText("<html>Initial buyer (id: "+purchase.getBuyer().getId()+"): "+purchase.getBuyer().getName()+"<html>");
                                     }
                                 } else {
-                                    // Handle other data types (e.g., DateOfCreation)
                                     textField.setText(value.toString());
                                 }
                                 textField.setCaretPosition(0);
