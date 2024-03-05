@@ -33,13 +33,6 @@
             <properties/>
             <border type="none"/>
             <children>
-              <vspacer id="1112">
-                <constraints>
-                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                    <minimum-size width="-1" height="75"/>
-                  </grid>
-                </constraints>
-              </vspacer>
               <hspacer id="22443">
                 <constraints>
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false">
@@ -47,18 +40,22 @@
                   </grid>
                 </constraints>
               </hspacer>
-              <grid id="b7362" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="b7362" layout-manager="GridLayoutManager" row-count="1" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="0" left="0" bottom="0" right="0"/>
                 <constraints>
                   <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                 </constraints>
-                <properties/>
+                <properties>
+                  <enabled value="false"/>
+                  <focusable value="false"/>
+                  <requestFocusEnabled value="false"/>
+                </properties>
                 <border type="none"/>
                 <children>
                   <grid id="43317" layout-manager="GridLayoutManager" row-count="5" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="0" vgap="0">
                     <margin top="0" left="0" bottom="0" right="0"/>
                     <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="8" fill="2" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="0" anchor="8" fill="2" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties/>
                     <border type="none"/>
@@ -70,7 +67,13 @@
                           </grid>
                         </constraints>
                         <properties>
+                          <focusPainted value="false"/>
+                          <focusable value="false"/>
+                          <font size="16"/>
+                          <opaque value="false"/>
+                          <requestFocusEnabled value="false"/>
                           <text value="Help"/>
+                          <verifyInputWhenFocusTarget value="false"/>
                         </properties>
                       </component>
                       <component id="b429d" class="javax.swing.JButton" binding="closeConn">
@@ -80,7 +83,13 @@
                           </grid>
                         </constraints>
                         <properties>
+                          <focusPainted value="false"/>
+                          <focusable value="false"/>
+                          <font size="16"/>
+                          <opaque value="false"/>
+                          <requestFocusEnabled value="false"/>
                           <text value="Exit"/>
+                          <verifyInputWhenFocusTarget value="false"/>
                         </properties>
                       </component>
                       <component id="32dea" class="javax.swing.JButton" binding="aboutButton" default-binding="true">
@@ -90,21 +99,26 @@
                           </grid>
                         </constraints>
                         <properties>
-                          <font size="14"/>
+                          <focusPainted value="false"/>
+                          <focusable value="false"/>
+                          <font size="16"/>
+                          <opaque value="false"/>
+                          <requestFocusEnabled value="false"/>
                           <text value="About"/>
+                          <verifyInputWhenFocusTarget value="false"/>
                         </properties>
                       </component>
                       <vspacer id="62f76">
                         <constraints>
-                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                            <minimum-size width="-1" height="50"/>
+                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="1" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                            <minimum-size width="-1" height="60"/>
                           </grid>
                         </constraints>
                       </vspacer>
                       <vspacer id="705ce">
                         <constraints>
-                          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                            <minimum-size width="-1" height="75"/>
+                          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="1" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                            <minimum-size width="-1" height="60"/>
                           </grid>
                         </constraints>
                       </vspacer>
@@ -112,11 +126,28 @@
                   </grid>
                   <hspacer id="e145c">
                     <constraints>
-                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                        <minimum-size width="100" height="-1"/>
+                      </grid>
                     </constraints>
                   </hspacer>
+                  <grid id="6b40e" binding="picturePanel" layout-manager="CardLayout" hgap="0" vgap="0">
+                    <constraints>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties/>
+                    <border type="none"/>
+                    <children/>
+                  </grid>
                 </children>
               </grid>
+              <vspacer id="b06ef">
+                <constraints>
+                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+                    <minimum-size width="-1" height="75"/>
+                  </grid>
+                </constraints>
+              </vspacer>
             </children>
           </grid>
           <grid id="d6807" layout-manager="GridLayoutManager" row-count="4" column-count="6" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
@@ -160,11 +191,13 @@
                       <preferredSize width="800" height="-1"/>
                       <requestFocusEnabled value="true"/>
                       <rowSelectionAllowed value="true"/>
+                      <selectionBackground color="-5980682"/>
+                      <showHorizontalLines value="true"/>
                       <surrendersFocusOnKeystroke value="false"/>
                       <verifyInputWhenFocusTarget value="true"/>
                     </properties>
                     <clientProperties>
-                      <Table.isFileList class="java.lang.Boolean" value="true"/>
+                      <Table.isFileList class="java.lang.Boolean" value="false"/>
                     </clientProperties>
                   </component>
                 </children>
@@ -289,11 +322,12 @@
                       <preferredSize width="800" height="-1"/>
                       <requestFocusEnabled value="false"/>
                       <rowSelectionAllowed value="true"/>
+                      <selectionBackground color="-5980682"/>
                       <updateSelectionOnSort value="true"/>
                       <verifyInputWhenFocusTarget value="true"/>
                     </properties>
                     <clientProperties>
-                      <Table.isFileList class="java.lang.Boolean" value="true"/>
+                      <Table.isFileList class="java.lang.Boolean" value="false"/>
                     </clientProperties>
                   </component>
                 </children>
@@ -422,11 +456,12 @@
                       <font name="Monospaced" size="11" style="0"/>
                       <requestFocusEnabled value="false"/>
                       <rowSelectionAllowed value="true"/>
+                      <selectionBackground color="-5980682"/>
                       <updateSelectionOnSort value="false"/>
                       <verifyInputWhenFocusTarget value="false"/>
                     </properties>
                     <clientProperties>
-                      <Table.isFileList class="java.lang.Boolean" value="true"/>
+                      <Table.isFileList class="java.lang.Boolean" value="false"/>
                     </clientProperties>
                   </component>
                 </children>
@@ -584,11 +619,12 @@
                       <font name="Monospaced" size="11" style="0"/>
                       <requestFocusEnabled value="false"/>
                       <rowSelectionAllowed value="true"/>
+                      <selectionBackground color="-5980682"/>
                       <updateSelectionOnSort value="false"/>
                       <verifyInputWhenFocusTarget value="false"/>
                     </properties>
                     <clientProperties>
-                      <Table.isFileList class="java.lang.Boolean" value="true"/>
+                      <Table.isFileList class="java.lang.Boolean" value="false"/>
                     </clientProperties>
                   </component>
                 </children>
@@ -782,11 +818,12 @@
                       <font name="Monospaced" size="14" style="0"/>
                       <requestFocusEnabled value="false"/>
                       <rowSelectionAllowed value="true"/>
+                      <selectionBackground color="-5980682"/>
                       <updateSelectionOnSort value="false"/>
                       <verifyInputWhenFocusTarget value="false"/>
                     </properties>
                     <clientProperties>
-                      <Table.isFileList class="java.lang.Boolean" value="true"/>
+                      <Table.isFileList class="java.lang.Boolean" value="false"/>
                     </clientProperties>
                   </component>
                 </children>
@@ -880,11 +917,12 @@
                       <inheritsPopupMenu value="true"/>
                       <requestFocusEnabled value="false"/>
                       <rowSelectionAllowed value="true"/>
+                      <selectionBackground color="-5980682"/>
                       <updateSelectionOnSort value="false"/>
                       <verifyInputWhenFocusTarget value="false"/>
                     </properties>
                     <clientProperties>
-                      <Table.isFileList class="java.lang.Boolean" value="true"/>
+                      <Table.isFileList class="java.lang.Boolean" value="false"/>
                     </clientProperties>
                   </component>
                 </children>

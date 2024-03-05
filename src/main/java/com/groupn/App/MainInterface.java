@@ -8,12 +8,10 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
+import javax.swing.text.html.HTMLDocument;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -78,6 +76,8 @@ public class MainInterface extends JFrame {
     private JTextField EventTypeTF;
     private JTextField LocationTypeTF;
     private JButton searchLocationType;
+    private JPanel picturePanel;
+    private JTextPane mainTA;
     private UpdateUI updateUI;
     private Add addUI;
     private final DBManager dbManager;
@@ -91,7 +91,66 @@ public class MainInterface extends JFrame {
         setResizable(false);
         setLocationRelativeTo(null);
         setVisible(true);
-
+        String aboutText = "<html>\n" +
+                "<body>\n" +
+                "  <h1 style=\"font-size: 1.3em;\">About [Your Database Program Name]</h1>\n" +
+                "  <p style=\"font-size: 1em;\">This comprehensive database system tracks information on:</p>\n" +
+                "  <ul>\n" +
+                "    <li><b>Authors</b>: Names and some information about each of them.</li>\n" +
+                "    <li><b>Artworks</b>: Paintings, sculptures, writings, music, etc. by authors.</li>\n" +
+                "    <li><b>Ownership</b>: Current owners information.</li>\n" +
+                "    <li><b>Purchases</b>: Price, date, and buyer information.</li>\n" +
+                "    <li><b>Locations</b>: Museums, collections, or exhibitions of artworks.</li>\n" +
+                "    <li><b>Events</b>: Exhibitions, or restorations related to artworks.</li>\n" +
+                "  </ul>\n" +
+                "  <p style=\"font-size: 1em;\">Benefits:</p>\n" +
+                "  <ul>\n" +
+                "    <li>Accurate and accessible data.</li>\n" +
+                "    <li>Efficient management of management of the data.</li>\n" +
+                "    <li>Multiple search options to find the most relevant data about the object/person/event you need!</li>\n" +
+                "  </ul>\n" +
+                "  <p style=\"font-size: 1em;\">A valuable tool for such enterprises that require management of data that is presented above!<br><br><br><br><br></p>\n" +
+                "</body>\n" +
+                "</html>";
+        String helpText = "<html><html>";
+        aboutButton.addActionListener(e -> {
+            JDialog aboutDialog = new JDialog(new JFrame(), "About [Your Database Program Name]", true); // Set modal
+            aboutDialog.setPreferredSize(new Dimension(600, 400));
+            JEditorPane aboutPane = new JEditorPane();
+            aboutPane.setContentType("text/html");
+            aboutPane.setText(aboutText);
+            aboutPane.setCaretPosition(0);
+            Font font = new Font("Verdana", Font.PLAIN, 14);
+            String bodyRule = "body { font-family: " + font.getFamily() + "; " +
+                    "font-size: " + font.getSize() + "pt; }";
+            ((HTMLDocument)aboutPane.getDocument()).getStyleSheet().addRule(bodyRule);
+            aboutPane.setEditable(false);
+            aboutPane.setFocusable(false);
+            JScrollPane scrollPane = new JScrollPane(aboutPane);
+            aboutDialog.getContentPane().add(scrollPane);
+            aboutDialog.pack();
+            aboutDialog.setLocationRelativeTo(null);
+            aboutDialog.setVisible(true);
+        });
+        helpButton.addActionListener(e -> {
+            JDialog aboutDialog = new JDialog(new JFrame(), "Help window", true); // Set modal
+            aboutDialog.setPreferredSize(new Dimension(600, 400));
+            JEditorPane aboutPane = new JEditorPane();
+            aboutPane.setContentType("text/html");
+            aboutPane.setText(helpText);
+            Font font = new Font("Verdana", Font.PLAIN, 14);
+            String bodyRule = "body { font-family: " + font.getFamily() + "; " +
+                    "font-size: " + font.getSize() + "pt; }";
+            ((HTMLDocument)aboutPane.getDocument()).getStyleSheet().addRule(bodyRule);
+            aboutPane.setEditable(false);
+            aboutPane.setFocusable(false);
+            JScrollPane scrollPane = new JScrollPane(aboutPane);
+            aboutDialog.getContentPane().add(scrollPane);
+            aboutDialog.pack();
+            aboutDialog.setLocationRelativeTo(null);
+            aboutDialog.setVisible(true);
+        });
+        picturePanel.add(new imagePanel());
 
         tabbedPane1.addChangeListener(e -> {
             int selectedTabIndex = tabbedPane1.getSelectedIndex();
@@ -642,167 +701,227 @@ public class MainInterface extends JFrame {
         });
         // update handlers
         updateAuthor.addActionListener(e -> {
-            updateUI = new UpdateUI(this, dbManager, new String[]{"ID", "Name", "Description", "Date of Birth"}, 1, rootPanel);
-            updateUI.addWindowListener(new WindowAdapter() {
-                @Override
-                public void windowClosed(WindowEvent e) {
-                    updateUI.setAlwaysOnTop(false);
-                    setFocusableWindowState(true);
-                    setAutoRequestFocus(true);
-                    setEnabled(true);
-                    requestFocus();
-                }
-            });
+            if ((addUI == null || !addUI.isVisible()) & (updateUI == null || !updateUI.isVisible())) {
+                updateUI = new UpdateUI(this, dbManager, new String[]{"ID", "Name", "Description", "Date of Birth"}, 1, rootPanel);
+                updateUI.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosed(WindowEvent e) {
+                        updateUI.setAlwaysOnTop(false);
+                        setFocusableWindowState(true);
+                        setAutoRequestFocus(true);
+                        setEnabled(true);
+                        requestFocus();
+                    }
+                });
+            } else {
+                JOptionPane.showMessageDialog(rootPanel, "Another window is already opened", "Some operation is in process already", JOptionPane.WARNING_MESSAGE);
+                LocationTF.setText("");
+            }
         });
         updateArt.addActionListener(e -> {
-            updateUI = new UpdateUI(this, dbManager, new String[]{"ID", "Name", "Description", "Creation date", "Author", "Current owner", "Location"}, 2, rootPanel);
-            updateUI.addWindowListener(new WindowAdapter() {
-                @Override
-                public void windowClosed(WindowEvent e) {
-                    updateUI.setAlwaysOnTop(false);
-                    setFocusableWindowState(true);
-                    setAutoRequestFocus(true);
-                    setEnabled(true);
-                    requestFocus();
-                }
-            });
+            if ((addUI == null || !addUI.isVisible()) & (updateUI == null || !updateUI.isVisible())) {
+                updateUI = new UpdateUI(this, dbManager, new String[]{"ID", "Name", "Description", "Creation date", "Author", "Current owner", "Location"}, 2, rootPanel);
+                updateUI.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosed(WindowEvent e) {
+                        updateUI.setAlwaysOnTop(false);
+                        setFocusableWindowState(true);
+                        setAutoRequestFocus(true);
+                        setEnabled(true);
+                        requestFocus();
+                    }
+                });
+            } else {
+                JOptionPane.showMessageDialog(rootPanel, "Another window is already opened", "Some operation is in process already", JOptionPane.WARNING_MESSAGE);
+                LocationTF.setText("");
+            }
         });
         updateEvent.addActionListener(e -> {
-            updateUI = new UpdateUI(this, dbManager, new String[]{"ID", "Name", "Type", "Description", "Start Date", "Event Date", "Location", "Price"}, 3, rootPanel);
-            updateUI.addWindowListener(new WindowAdapter() {
-                @Override
-                public void windowClosed(WindowEvent e) {
-                    updateUI.setAlwaysOnTop(false);
-                    setFocusableWindowState(true);
-                    setAutoRequestFocus(true);
-                    setEnabled(true);
-                    requestFocus();
-                }
-            });
+            if ((addUI == null || !addUI.isVisible()) & (updateUI == null || !updateUI.isVisible())) {
+                updateUI = new UpdateUI(this, dbManager, new String[]{"ID", "Name", "Type", "Description", "Start Date", "Event Date", "Location", "Price"}, 3, rootPanel);
+                updateUI.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosed(WindowEvent e) {
+                        updateUI.setAlwaysOnTop(false);
+                        setFocusableWindowState(true);
+                        setAutoRequestFocus(true);
+                        setEnabled(true);
+                        requestFocus();
+                    }
+                });
+            } else {
+                JOptionPane.showMessageDialog(rootPanel, "Another window is already opened", "Some operation is in process already", JOptionPane.WARNING_MESSAGE);
+                LocationTF.setText("");
+            }
         });
         updateLocation.addActionListener(e -> {
-            updateUI = new UpdateUI(this, dbManager, new String[]{"ID", "Name", "Description", "Opening date", "Placement", "Type"}, 4, rootPanel);
-            updateUI.addWindowListener(new WindowAdapter() {
-                @Override
-                public void windowClosed(WindowEvent e) {
-                    updateUI.setAlwaysOnTop(false);
-                    setFocusableWindowState(true);
-                    setAutoRequestFocus(true);
-                    setEnabled(true);
-                    requestFocus();
-                }
-            });
+            if ((addUI == null || !addUI.isVisible()) & (updateUI == null || !updateUI.isVisible())) {
+                updateUI = new UpdateUI(this, dbManager, new String[]{"ID", "Name", "Description", "Opening date", "Placement", "Type"}, 4, rootPanel);
+                updateUI.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosed(WindowEvent e) {
+                        updateUI.setAlwaysOnTop(false);
+                        setFocusableWindowState(true);
+                        setAutoRequestFocus(true);
+                        setEnabled(true);
+                        requestFocus();
+                    }
+                });
+            } else {
+                JOptionPane.showMessageDialog(rootPanel, "Another window is already opened", "Some operation is in process already", JOptionPane.WARNING_MESSAGE);
+                LocationTF.setText("");
+            }
         });
         updateOwner.addActionListener(e -> {
-            updateUI = new UpdateUI(this, dbManager, new String[]{"ID", "Name", "Description"}, 5, rootPanel);
-            updateUI.addWindowListener(new WindowAdapter() {
-                @Override
-                public void windowClosed(WindowEvent e) {
-                    updateUI.setAlwaysOnTop(false);
-                    setFocusableWindowState(true);
-                    setAutoRequestFocus(true);
-                    setEnabled(true);
-                    requestFocus();
-                }
-            });
+            if ((addUI == null || !addUI.isVisible()) & (updateUI == null || !updateUI.isVisible())) {
+                updateUI = new UpdateUI(this, dbManager, new String[]{"ID", "Name", "Description"}, 5, rootPanel);
+                updateUI.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosed(WindowEvent e) {
+                        updateUI.setAlwaysOnTop(false);
+                        setFocusableWindowState(true);
+                        setAutoRequestFocus(true);
+                        setEnabled(true);
+                        requestFocus();
+                    }
+                });
+            } else {
+                JOptionPane.showMessageDialog(rootPanel, "Another window is already opened", "Some operation is in process already", JOptionPane.WARNING_MESSAGE);
+                LocationTF.setText("");
+            }
         });
         updatePurchase.addActionListener(e -> {
-            updateUI = new UpdateUI(this, dbManager, new String[]{"ID", "Date of purchase", "Price", "Art object", "Seller", "Buyer"}, 6, rootPanel);
-            updateUI.addWindowListener(new WindowAdapter() {
-                @Override
-                public void windowClosed(WindowEvent e) {
-                    updateUI.setAlwaysOnTop(false);
-                    setFocusableWindowState(true);
-                    setAutoRequestFocus(true);
-                    setEnabled(true);
-                    requestFocus();
-                }
-            });
+            if ((addUI == null || !addUI.isVisible()) & (updateUI == null || !updateUI.isVisible())) {
+                updateUI = new UpdateUI(this, dbManager, new String[]{"ID", "Date of purchase", "Price", "Art object", "Seller", "Buyer"}, 6, rootPanel);
+                updateUI.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosed(WindowEvent e) {
+                        updateUI.setAlwaysOnTop(false);
+                        setFocusableWindowState(true);
+                        setAutoRequestFocus(true);
+                        setEnabled(true);
+                        requestFocus();
+                    }
+                });
+            } else {
+                JOptionPane.showMessageDialog(rootPanel, "Another window is already opened", "Some operation is in process already", JOptionPane.WARNING_MESSAGE);
+                LocationTF.setText("");
+            }
         });
         // add handlers
         addAuthor.addActionListener(e -> {
-            addUI = new Add(this, dbManager, new String[]{"Name", "Description", "Date of Birth"}, 1, rootPanel);
-            addUI.addWindowListener(new WindowAdapter() {
-                @Override
-                public void windowClosed(WindowEvent e) {
-                    addUI.setAlwaysOnTop(false);
-                    setFocusableWindowState(true);
-                    setAutoRequestFocus(true);
-                    setEnabled(true);
-                    requestFocus();
-                    showAuthors(true);
-                }
-            });
+            if ((addUI == null || !addUI.isVisible()) & (updateUI == null || !updateUI.isVisible())) {
+                addUI = new Add(this, dbManager, new String[]{"Name", "Description", "Date of Birth"}, 1, rootPanel);
+                addUI.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosed(WindowEvent e) {
+                        addUI.setAlwaysOnTop(false);
+                        setFocusableWindowState(true);
+                        setAutoRequestFocus(true);
+                        setEnabled(true);
+                        requestFocus();
+                        showAuthors(true);
+                    }
+                });
+            } else {
+                JOptionPane.showMessageDialog(rootPanel, "Another window is already opened", "Some operation is in process already", JOptionPane.WARNING_MESSAGE);
+                LocationTF.setText("");
+            }
         }); // Need to set date feature unnecessary
         addArt.addActionListener(e -> {
-            addUI = new Add(this, dbManager, new String[]{"Name", "Description", "Creation date", "Author", "Current owner", "Location"}, 2, rootPanel);
-            addUI.addWindowListener(new WindowAdapter() {
-                @Override
-                public void windowClosed(WindowEvent e) {
-                    addUI.setAlwaysOnTop(false);
-                    setFocusableWindowState(true);
-                    setAutoRequestFocus(true);
-                    setEnabled(true);
-                    requestFocus();
-                    showArtObjects(true);
-                }
-            });
+            if ((addUI == null || !addUI.isVisible()) & (updateUI == null || !updateUI.isVisible())) {
+                addUI = new Add(this, dbManager, new String[]{"Name", "Description", "Creation date", "Author", "Current owner", "Location"}, 2, rootPanel);
+                addUI.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosed(WindowEvent e) {
+                        addUI.setAlwaysOnTop(false);
+                        setFocusableWindowState(true);
+                        setAutoRequestFocus(true);
+                        setEnabled(true);
+                        requestFocus();
+                        showArtObjects(true);
+                    }
+                });
+            } else {
+                JOptionPane.showMessageDialog(rootPanel, "Another window is already opened", "Some operation is in process already", JOptionPane.WARNING_MESSAGE);
+                LocationTF.setText("");
+            }
         }); // Need to set date feature unnecessary
         addEvent.addActionListener(e -> {
-            addUI = new Add(this, dbManager, new String[]{"Name", "Type", "Description", "Start Date", "End Date", "Location", "Price"}, 3, rootPanel);
-            addUI.addWindowListener(new WindowAdapter() {
-                @Override
-                public void windowClosed(WindowEvent e) {
-                    addUI.setAlwaysOnTop(false);
-                    setFocusableWindowState(true);
-                    setAutoRequestFocus(true);
-                    setEnabled(true);
-                    requestFocus();
-                    showEvents(true);
-                }
-            });
+            if ((addUI == null || !addUI.isVisible()) & (updateUI == null || !updateUI.isVisible())) {
+                addUI = new Add(this, dbManager, new String[]{"Name", "Type", "Description", "Start Date", "End Date", "Location", "Price"}, 3, rootPanel);
+                addUI.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosed(WindowEvent e) {
+                        addUI.setAlwaysOnTop(false);
+                        setFocusableWindowState(true);
+                        setAutoRequestFocus(true);
+                        setEnabled(true);
+                        requestFocus();
+                        showEvents(true);
+                    }
+                });
+            } else {
+                JOptionPane.showMessageDialog(rootPanel, "Another window is already opened", "Some operation is in process already", JOptionPane.WARNING_MESSAGE);
+                LocationTF.setText("");
+            }
         });
         addLocation.addActionListener(e -> {
-            addUI = new Add(this, dbManager, new String[]{"Name", "Description", "Opening date", "Placement", "Type"}, 4, rootPanel);
-            addUI.addWindowListener(new WindowAdapter() {
-                @Override
-                public void windowClosed(WindowEvent e) {
-                    addUI.setAlwaysOnTop(false);
-                    setFocusableWindowState(true);
-                    setAutoRequestFocus(true);
-                    setEnabled(true);
-                    requestFocus();
-                    showLocations(true);
-                }
-            });
+            if ((addUI == null || !addUI.isVisible()) & (updateUI == null || !updateUI.isVisible())) {
+                addUI = new Add(this, dbManager, new String[]{"Name", "Description", "Opening date", "Placement", "Type"}, 4, rootPanel);
+                addUI.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosed(WindowEvent e) {
+                        addUI.setAlwaysOnTop(false);
+                        setFocusableWindowState(true);
+                        setAutoRequestFocus(true);
+                        setEnabled(true);
+                        requestFocus();
+                        showLocations(true);
+                    }
+                });
+            } else {
+                JOptionPane.showMessageDialog(rootPanel, "Another window is already opened", "Some operation is in process already", JOptionPane.WARNING_MESSAGE);
+                LocationTF.setText("");
+            }
         });
         addOwner.addActionListener(e -> {
-            addUI = new Add(this, dbManager, new String[]{"Name", "Description"}, 5, rootPanel);
-            addUI.addWindowListener(new WindowAdapter() {
-                @Override
-                public void windowClosed(WindowEvent e) {
-                    addUI.setAlwaysOnTop(false);
-                    setFocusableWindowState(true);
-                    setAutoRequestFocus(true);
-                    setEnabled(true);
-                    requestFocus();
-                    showOwners(true);
-                }
-            });
+            if ((addUI == null || !addUI.isVisible()) & (updateUI == null || !updateUI.isVisible())) {
+                addUI = new Add(this, dbManager, new String[]{"Name", "Description"}, 5, rootPanel);
+                addUI.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosed(WindowEvent e) {
+                        addUI.setAlwaysOnTop(false);
+                        setFocusableWindowState(true);
+                        setAutoRequestFocus(true);
+                        setEnabled(true);
+                        requestFocus();
+                        showOwners(true);
+                    }
+                });
+            } else {
+                JOptionPane.showMessageDialog(rootPanel, "Another window is already opened", "Some operation is in process already", JOptionPane.WARNING_MESSAGE);
+                LocationTF.setText("");
+            }
         });
         addPurchase.addActionListener(e -> {
-            addUI = new Add(this, dbManager, new String[]{"Date of purchase", "Price", "Art object", "Seller", "Buyer"}, 6, rootPanel);
-            addUI.addWindowListener(new WindowAdapter() {
-                @Override
-                public void windowClosed(WindowEvent e) {
-                    addUI.setAlwaysOnTop(false);
-                    setFocusableWindowState(true);
-                    setAutoRequestFocus(true);
-                    setEnabled(true);
-                    requestFocus();
-                    showPurchases(true);
-                }
-            });
+            if ((addUI == null || !addUI.isVisible()) & (updateUI == null || !updateUI.isVisible())) {
+                addUI = new Add(this, dbManager, new String[]{"Date of purchase", "Price", "Art object", "Seller", "Buyer"}, 6, rootPanel);
+                addUI.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosed(WindowEvent e) {
+                        addUI.setAlwaysOnTop(false);
+                        setFocusableWindowState(true);
+                        setAutoRequestFocus(true);
+                        setEnabled(true);
+                        requestFocus();
+                        showPurchases(true);
+                    }
+                });
+            } else {
+                JOptionPane.showMessageDialog(rootPanel, "Another window is already opened", "Some operation is in process already", JOptionPane.WARNING_MESSAGE);
+                LocationTF.setText("");
+            }
         });
         // delete handlers
         deleteAuthor.addActionListener(e -> {
@@ -811,9 +930,15 @@ public class MainInterface extends JFrame {
                 int idData = Integer.parseInt(AuthorTable.getValueAt(selectedRow, 0).toString());
                 int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure to delete author with the following id: " + idData, "Confirm", JOptionPane.YES_NO_OPTION);
                 if (dialogResult == JOptionPane.YES_OPTION) {
-                    dbManager.removeAuthor(idData);
+                    try {
+                        dbManager.removeAuthor(idData);
+                    } catch (Exception deletion) {
+                        JOptionPane.showMessageDialog(rootPanel, "Object doesn't exist and the deletion could not be complete", "Not found", JOptionPane.WARNING_MESSAGE);
+                        AuthorTable.clearSelection();
+                    }
                     showAuthors(true);
                     AuthorTable.clearSelection();
+
                 } else {
                     AuthorTable.clearSelection();
                 }
@@ -825,7 +950,12 @@ public class MainInterface extends JFrame {
                 int idData = Integer.parseInt(ArtObjectsTable.getValueAt(selectedRow, 0).toString());
                 int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure to delete art object with the following id: " + idData, "Confirm", JOptionPane.YES_NO_OPTION);
                 if (dialogResult == JOptionPane.YES_OPTION) {
-                    dbManager.removeArtObjectById(idData);
+                    try {
+                        dbManager.removeArtObjectById(idData);
+                    } catch (Exception deletion) {
+                        JOptionPane.showMessageDialog(rootPanel, "Object doesn't exist and the deletion could not be complete", "Not found", JOptionPane.WARNING_MESSAGE);
+                        AuthorTable.clearSelection();
+                    }
                     ArtObjectsTable.clearSelection();
                     showArtObjects(true);
                 } else {
@@ -839,7 +969,12 @@ public class MainInterface extends JFrame {
                 int idData = Integer.parseInt(EventTable.getValueAt(selectedRow, 0).toString());
                 int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure to delete event with the following id: " + idData, "Confirm", JOptionPane.YES_NO_OPTION);
                 if (dialogResult == JOptionPane.YES_OPTION) {
-                    dbManager.removeEvent(idData);
+                    try {
+                        dbManager.removeEvent(idData);
+                    } catch (Exception deletion) {
+                        JOptionPane.showMessageDialog(rootPanel, "Object doesn't exist and the deletion could not be complete", "Not found", JOptionPane.WARNING_MESSAGE);
+                        AuthorTable.clearSelection();
+                    }
                     showEvents(true);
                     EventTable.clearSelection();
                 } else {
@@ -853,7 +988,12 @@ public class MainInterface extends JFrame {
                 int idData = Integer.parseInt(LocationTable.getValueAt(selectedRow, 0).toString());
                 int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure to delete location with the following id: " + idData, "Confirm", JOptionPane.YES_NO_OPTION);
                 if (dialogResult == JOptionPane.YES_OPTION) {
-                    dbManager.removeLocation(idData);
+                    try {
+                        dbManager.removeLocation(idData);
+                    } catch (Exception deletion) {
+                        JOptionPane.showMessageDialog(rootPanel, "Object doesn't exist and the deletion could not be complete", "Not found", JOptionPane.WARNING_MESSAGE);
+                        AuthorTable.clearSelection();
+                    }
                     showLocations(true);
                 } else {
                     LocationTable.clearSelection();
@@ -866,7 +1006,12 @@ public class MainInterface extends JFrame {
                 int idData = Integer.parseInt(OwnerTable.getValueAt(selectedRow, 0).toString());
                 int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure to delete owner with the following id: " + idData, "Confirm", JOptionPane.YES_NO_OPTION);
                 if (dialogResult == JOptionPane.YES_OPTION) {
-                    dbManager.removeOwner(idData);
+                    try {
+                        dbManager.removeOwner(idData);
+                    } catch (Exception deletion) {
+                        JOptionPane.showMessageDialog(rootPanel, "Object doesn't exist and the deletion could not be complete", "Not found", JOptionPane.WARNING_MESSAGE);
+                        AuthorTable.clearSelection();
+                    }
                     showOwners(true);
                 } else {
                     OwnerTable.clearSelection();
@@ -879,7 +1024,12 @@ public class MainInterface extends JFrame {
                 int idData = Integer.parseInt(PurchaseTable.getValueAt(selectedRow, 0).toString());
                 int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure to delete purchase with the following id: " + idData, "Confirm", JOptionPane.YES_NO_OPTION);
                 if (dialogResult == JOptionPane.YES_OPTION) {
-                    dbManager.removePurchase(idData);
+                    try {
+                        dbManager.removePurchase(idData);
+                    } catch (Exception deletion) {
+                        JOptionPane.showMessageDialog(rootPanel, "Object doesn't exist and the deletion could not be complete", "Not found", JOptionPane.WARNING_MESSAGE);
+                        AuthorTable.clearSelection();
+                    }
                     showPurchases(true);
                 } else {
                     PurchaseTable.clearSelection();
