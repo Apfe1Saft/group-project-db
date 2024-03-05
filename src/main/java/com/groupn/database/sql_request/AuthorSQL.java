@@ -115,6 +115,7 @@ public interface AuthorSQL {
 
         return authors;
     }
+
     default void updateAuthor(Author author, DBManager manager) {
         try {
             manager.getLogger().info("RUN updateAuthor.");
@@ -127,6 +128,7 @@ public interface AuthorSQL {
                 preparedStatement.setString(2, author.getDescription());
                 preparedStatement.setDate(3, Date.valueOf(author.getDateOfBirth()));
                 preparedStatement.setInt(4, author.getId());
+                preparedStatement.executeUpdate();
             }
         } catch (SQLException e) {
             manager.getLogger().severe("Error: " + e.getMessage());
@@ -163,4 +165,5 @@ public interface AuthorSQL {
             manager.getLogger().severe("Error: " + e.getMessage());
         }
     }
+
 }

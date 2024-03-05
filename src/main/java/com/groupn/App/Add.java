@@ -263,6 +263,7 @@ public class Add extends JDialog {
                             JOptionPane.showMessageDialog(TFPanel, "Seller (previous owner) id not found.", "Not found", JOptionPane.WARNING_MESSAGE);
                             break;
                         }
+                        System.out.println("Should be added");
                         dbManager.addPurchase(purchase);
                         dispose();
                         break;

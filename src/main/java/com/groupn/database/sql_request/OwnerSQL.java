@@ -102,6 +102,7 @@ public interface OwnerSQL {
             try (PreparedStatement preparedStatement = manager.getConnection().prepareStatement(sql)) {
                 preparedStatement.setString(1, owner.getName());
                 preparedStatement.setString(2, owner.getDescription());
+                preparedStatement.executeUpdate();
             }
         } catch (SQLException e) {
             manager.getLogger().severe("Error: " + e.getMessage());

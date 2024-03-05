@@ -10,9 +10,12 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.text.html.HTMLDocument;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EventObject;
 import java.util.List;
 
 public class MainInterface extends JFrame {
@@ -65,7 +68,6 @@ public class MainInterface extends JFrame {
     private JButton updatePurchase;
     private JButton deletePurchase;
     private JButton addEvent;
-    private JButton eventTypes;
     private JButton addArt;
     private JButton addAuthor;
     private JButton addLocation;
@@ -77,10 +79,11 @@ public class MainInterface extends JFrame {
     private JTextField LocationTypeTF;
     private JButton searchLocationType;
     private JPanel picturePanel;
-    private JTextPane mainTA;
+    private JButton eventObjectsButton;
     private UpdateUI updateUI;
     private Add addUI;
     private final DBManager dbManager;
+    private static final String[] eventCBValues = {"By event id", "By word in description"};
 
     public MainInterface(DBManager dbManager) {
         this.dbManager = dbManager;
@@ -151,6 +154,16 @@ public class MainInterface extends JFrame {
             aboutDialog.setVisible(true);
         });
         picturePanel.add(new imagePanel());
+        eventObjectsButton.addActionListener(e -> {
+            showEventObjects(true);
+            if (EventCB.getItemCount() != 1) {
+                EventCB.setSelectedIndex(-1);
+                EventCB.removeAllItems();
+                EventCB.addItem(eventCBValues[0]);
+            }
+            EventCB.setSelectedIndex(0);
+            eventObjectsButton.setText("Refresh event Objects");
+        });
 
         tabbedPane1.addChangeListener(e -> {
             int selectedTabIndex = tabbedPane1.getSelectedIndex();
@@ -454,6 +467,8 @@ public class MainInterface extends JFrame {
         });
         searchEvent.addActionListener(e -> {
             int searchOptionEvent = EventCB.getSelectedIndex();
+            System.out.println(searchOptionEvent +"\n"+ EventCB.getItemCount());
+            if (EventCB.getItemCount() != 1) {
                 switch (searchOptionEvent) {
                     case 0:
                         if (EventTF.getText().isEmpty()) {
@@ -477,6 +492,7 @@ public class MainInterface extends JFrame {
                                         tableModel.addRow(rowData);
                                         tableModel.fireTableDataChanged();
                                     }
+                                    break;
                                 }
                             } catch (Exception a) {
                                 EventTF.setText("");
@@ -491,22 +507,60 @@ public class MainInterface extends JFrame {
                             break;
                         } else {
                             List<Event> events = dbManager.getEventsByFilter(EventTF.getText());
+                            DefaultTableModel tableModel = (DefaultTableModel) EventTable.getModel();
                             if (events.isEmpty()) {
                                 JOptionPane.showMessageDialog(rootPanel, "Events not found by word in description: \"" + EventTF.getText() + "\".", "Not found", JOptionPane.WARNING_MESSAGE);
                                 EventTF.setText("");
                                 break;
                             } else {
-                                DefaultTableModel tableModel = (DefaultTableModel) EventTable.getModel();
                                 tableModel.setRowCount(0);
                                 for (Event event : events) {
                                     Object[] rowData = new Object[]{event.getId(), event.getName(), event.getType(), event.getDescription(), event.getStartDateOfEvent(), event.getEndDateOfEvent(), event.getLocation().getName(), event.getPrice()};
                                     tableModel.addRow(rowData);
-                                    tableModel.fireTableDataChanged();
                                 }
+                                tableModel.fireTableDataChanged();
                             }
+                            break;
                         }
 
                 }
+            } else {
+                if (EventTF.getText().isEmpty()) {
+                    JOptionPane.showMessageDialog(rootPanel, "Please, input event id into a text field to execute search.", "No input", JOptionPane.WARNING_MESSAGE);
+                    EventTF.setText("");
+                } else {
+                    try {
+                        if (Integer.parseInt(EventTF.getText()) > 0) {
+
+                            int searchId = Integer.parseInt(EventTF.getText());
+                            List<EventObjects> eventObjects = dbManager.getAllEventObjects();
+                            List<EventObjects> foundEventObjects = new ArrayList<>();
+                            for (EventObjects eventObject : eventObjects) {
+                                if (eventObject.getEventId() == searchId) {
+                                    foundEventObjects.add(eventObject);
+                                }
+                            }
+                            if (foundEventObjects.isEmpty()) {
+                                JOptionPane.showMessageDialog(rootPanel, "Event not found.", "Not found", JOptionPane.WARNING_MESSAGE);
+                                EventTF.setText("");
+                            } else {
+                                DefaultTableModel tableModel = (DefaultTableModel) EventTable.getModel();
+                                tableModel.setRowCount(0);
+                                for (EventObjects eventObject : foundEventObjects) {
+                                    Event event = dbManager.getEventById(eventObject.getEventId());
+                                    ArtObject artObject = dbManager.getArtObjectById(eventObject.getArtObjectId());
+                                    Object[] rowData = new Object[]{event.getId(), event.getName(), event.getType(), event.getDescription(), artObject.getId(), artObject.getName()};
+                                    tableModel.addRow(rowData);
+                                }
+                                tableModel.fireTableDataChanged();
+                            }
+                        }
+                    } catch (Exception a) {
+                        EventTF.setText("");
+                        JOptionPane.showMessageDialog(rootPanel, "Please, input integer value.", "Inappropriate input", JOptionPane.WARNING_MESSAGE);
+                    }
+                }
+            }
 
 
         });
@@ -1203,6 +1257,79 @@ public class MainInterface extends JFrame {
         column.setMaxWidth(90);
         PurchaseTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         scrollableAreaAO(tableModel, PurchaseTable);
+    }
+    public void showEventObjects(boolean refresh) {
+        DefaultTableModel tableModel = (DefaultTableModel) EventTable.getModel();
+        if (tableModel.getRowCount() == 0 | refresh) {
+            tableModel.setRowCount(0);
+            List<EventObjects> eventObjects = dbManager.getAllEventObjects();
+            String[] columnNames = {"Event ID", "Name", "Type", "Description", "Art object id", "Art object name"};
+            tableModel.setColumnIdentifiers(columnNames);
+            int i = 0;
+            for (EventObjects eventObject : eventObjects) {
+                Event event = dbManager.getEventById(eventObject.getEventId());
+                ArtObject artObject = dbManager.getArtObjectById(eventObject.getArtObjectId());
+                Object[] rowData = new Object[]{event.getId(), event.getName(), event.getType(), event.getDescription(), artObject.getId(), artObject.getName()};
+                tableModel.addRow(rowData);
+            }
+            tableModel.fireTableDataChanged();
+        }
+        refreshEvent.setText("Get back to events");
+        refreshEvent.addActionListener(e -> {
+            showEvents(true);
+            refreshEvent.setText("Refresh table");
+            EventCB.addItem(eventCBValues[1]);
+            eventObjectsButton.setText("Show event objects");
+            deleteEvent.addActionListener(d -> {
+                int selectedRow = EventTable.getSelectedRow();
+                if (selectedRow != -1) {
+                    int idData = Integer.parseInt(EventTable.getValueAt(selectedRow, 0).toString());
+                    int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure to delete event with the following id: " + idData, "Confirm", JOptionPane.YES_NO_OPTION);
+                    if (dialogResult == JOptionPane.YES_OPTION) {
+                        try {
+                            dbManager.removeEvent(idData);
+                        } catch (Exception deletion) {
+                            JOptionPane.showMessageDialog(rootPanel, "Object doesn't exist and the deletion could not be complete", "Not found", JOptionPane.WARNING_MESSAGE);
+                            AuthorTable.clearSelection();
+                        }
+                        showEvents(true);
+                        EventTable.clearSelection();
+                    } else {
+                        EventTable.clearSelection();
+                    }
+                }
+            });
+        });
+        deleteEvent.addActionListener(d -> {
+            int selectedRow = EventTable.getSelectedRow();
+            if (selectedRow != -1) {
+                int eventId = Integer.parseInt(EventTable.getValueAt(selectedRow, 0).toString());
+                int artObjectId = Integer.parseInt(EventTable.getValueAt(selectedRow, 4).toString());
+                int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure to delete event object with the following id: " + artObjectId, "Confirm", JOptionPane.YES_NO_OPTION);
+                if (dialogResult == JOptionPane.YES_OPTION) {
+                    try {
+                        dbManager.deleteEventObject(eventId, artObjectId);
+                    } catch (Exception deletion) {
+                        JOptionPane.showMessageDialog(rootPanel, "Object doesn't exist and the deletion could not be complete", "Not found", JOptionPane.WARNING_MESSAGE);
+                        EventTable.clearSelection();
+                    }
+                    showEventObjects(true);
+                    EventTable.clearSelection();
+
+                } else {
+                    EventTable.clearSelection();
+                }
+            }
+        });
+        TableColumnModel columnModel = EventTable.getColumnModel();
+        TableColumn column = columnModel.getColumn(0);
+        column.setMinWidth(30);
+        column.setMaxWidth(30);
+        column = columnModel.getColumn(4);
+        column.setMinWidth(75);
+        column.setMaxWidth(75);
+        EventTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        scrollableAreaAO(tableModel, EventTable);
     }
     public void scrollableAreaAO(DefaultTableModel tableModel, JTable table) {
         int rowCount = tableModel.getRowCount();
