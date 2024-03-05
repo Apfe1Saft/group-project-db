@@ -38,18 +38,16 @@ public class Add extends JDialog {
         setTitle("Data addition");
         setLocationRelativeTo(null);
         setVisible(true);
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE); // Close dialog on window close
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         TFPanel.setLayout(new GridLayout(0, 3));
         ArrayList<JTextField> textFields = createFields(columnNames);
         setResizable(true);
         pack();
         setAlwaysOnTop(true);
-//        mainInterface.setFocusableWindowState(true);
         mainInterface.setAutoRequestFocus(false);
-//        mainInterface.setEnabled(true);
         confirmAdd.addActionListener(e -> {
             boolean allFilled = false;
-            String[] unnecessaryFields = {"Date of Birth", "Creation date", "Start Date", "End Date", "Opening date", "Price"};
+            String[] unnecessaryFields = {"Price (integer)*"};
             int i = 0;
             for (JTextField textField : textFields) {
                 if (textField.getText().isEmpty() && !Arrays.asList(unnecessaryFields).contains(labels.get(i).getText())) {
@@ -76,8 +74,6 @@ public class Add extends JDialog {
                         }
                         author.setDescription(textFields.get(1).getText());
                         String birthDate = textFields.get(2).getText();
-//                        author.setDateOfBirth(birthDate);
-                        // "try catch" block with date formatting shall be deleted after date becomes string
                         try {
                             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                             LocalDate dateOfBirth = LocalDate.parse(birthDate, formatter);
@@ -243,7 +239,11 @@ public class Add extends JDialog {
                             break;
                         }
                         try {
-                            purchase.setPrice(Integer.parseInt(textFields.get(1).getText()));
+                            if (textFields.get(1).getText().isEmpty()) {
+                                purchase.setPrice(0);
+                            } else {
+                                purchase.setPrice(Integer.parseInt(textFields.get(1).getText()));
+                            }
                         } catch (Exception price) {
                             JOptionPane.showMessageDialog(TFPanel, "Please, input price as integer value", "Incorrect format", JOptionPane.WARNING_MESSAGE);
                             break;
@@ -297,7 +297,7 @@ public class Add extends JDialog {
             if (columnName.equals("Price")) {
                 label.setText(label.getText()+" (integer)*");
             }
-            String[] dateFields = {"Start Date", "End Date", "Opening date", "Date of purchase"};
+            String[] dateFields = {"Date of Birth", "Creation date","Start Date", "End Date", "Opening date", "Date of purchase"};
             if (Arrays.asList(dateFields).contains(columnName)) {
                 label.setText("<html>"+label.getText()+" (YYYY-MM-DD)*<html>");
             }

@@ -53,7 +53,6 @@ public class MainInterface extends JFrame {
     private JComboBox PurchaseCB;
     private JButton refreshPurchase;
     private JTextField PurchaseTF;
-    private JButton helpButton;
     private JButton aboutButton;
     private JButton deleteAuthor;
     private JButton updateAuthor;
@@ -88,7 +87,8 @@ public class MainInterface extends JFrame {
     public MainInterface(DBManager dbManager) {
         this.dbManager = dbManager;
         setContentPane(rootPanel);
-        setTitle("MainInterface");
+        this.setIconImage((new ImageIcon("src/main/java/com/groupn/App/Logo/Icon.png")).getImage());
+        setTitle("Art catalog");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(900, 500);
         setResizable(false);
@@ -96,7 +96,7 @@ public class MainInterface extends JFrame {
         setVisible(true);
         String aboutText = "<html>\n" +
                 "<body>\n" +
-                "  <h1 style=\"font-size: 1.3em;\">About [Your Database Program Name]</h1>\n" +
+                "  <h1 style=\"font-size: 1.3em;\">About \"Art catalog\"</h1>\n" +
                 "  <p style=\"font-size: 1em;\">This comprehensive database system tracks information on:</p>\n" +
                 "  <ul>\n" +
                 "    <li><b>Authors</b>: Names and some information about each of them.</li>\n" +
@@ -115,9 +115,8 @@ public class MainInterface extends JFrame {
                 "  <p style=\"font-size: 1em;\">A valuable tool for such enterprises that require management of data that is presented above!<br><br><br><br><br></p>\n" +
                 "</body>\n" +
                 "</html>";
-        String helpText = "<html><html>";
         aboutButton.addActionListener(e -> {
-            JDialog aboutDialog = new JDialog(new JFrame(), "About [Your Database Program Name]", true); // Set modal
+            JDialog aboutDialog = new JDialog(new JFrame(), "Art catalog", true); // Set modal
             aboutDialog.setPreferredSize(new Dimension(600, 400));
             JEditorPane aboutPane = new JEditorPane();
             aboutPane.setContentType("text/html");
@@ -133,24 +132,7 @@ public class MainInterface extends JFrame {
             aboutDialog.getContentPane().add(scrollPane);
             aboutDialog.pack();
             aboutDialog.setLocationRelativeTo(null);
-            aboutDialog.setVisible(true);
-        });
-        helpButton.addActionListener(e -> {
-            JDialog aboutDialog = new JDialog(new JFrame(), "Help window", true); // Set modal
-            aboutDialog.setPreferredSize(new Dimension(600, 400));
-            JEditorPane aboutPane = new JEditorPane();
-            aboutPane.setContentType("text/html");
-            aboutPane.setText(helpText);
-            Font font = new Font("Verdana", Font.PLAIN, 14);
-            String bodyRule = "body { font-family: " + font.getFamily() + "; " +
-                    "font-size: " + font.getSize() + "pt; }";
-            ((HTMLDocument)aboutPane.getDocument()).getStyleSheet().addRule(bodyRule);
-            aboutPane.setEditable(false);
-            aboutPane.setFocusable(false);
-            JScrollPane scrollPane = new JScrollPane(aboutPane);
-            aboutDialog.getContentPane().add(scrollPane);
-            aboutDialog.pack();
-            aboutDialog.setLocationRelativeTo(null);
+            aboutDialog.setIconImage((new ImageIcon("src/main/java/com/groupn/App/Logo/Icon.png")).getImage());
             aboutDialog.setVisible(true);
         });
         picturePanel.add(new imagePanel());
@@ -162,7 +144,7 @@ public class MainInterface extends JFrame {
                 EventCB.addItem(eventCBValues[0]);
             }
             EventCB.setSelectedIndex(0);
-            eventObjectsButton.setText("Refresh event Objects");
+            eventObjectsButton.setText("Refresh event objects");
         });
 
         tabbedPane1.addChangeListener(e -> {
@@ -881,7 +863,7 @@ public class MainInterface extends JFrame {
                 JOptionPane.showMessageDialog(rootPanel, "Another window is already opened", "Some operation is in process already", JOptionPane.WARNING_MESSAGE);
                 LocationTF.setText("");
             }
-        }); // Need to set date feature unnecessary
+        });
         addArt.addActionListener(e -> {
             if ((addUI == null || !addUI.isVisible()) & (updateUI == null || !updateUI.isVisible())) {
                 addUI = new Add(this, dbManager, new String[]{"Name", "Description", "Creation date", "Author", "Current owner", "Location"}, 2, rootPanel);
@@ -900,7 +882,7 @@ public class MainInterface extends JFrame {
                 JOptionPane.showMessageDialog(rootPanel, "Another window is already opened", "Some operation is in process already", JOptionPane.WARNING_MESSAGE);
                 LocationTF.setText("");
             }
-        }); // Need to set date feature unnecessary
+        });
         addEvent.addActionListener(e -> {
             if ((addUI == null || !addUI.isVisible()) & (updateUI == null || !updateUI.isVisible())) {
                 addUI = new Add(this, dbManager, new String[]{"Name", "Type", "Description", "Start Date", "End Date", "Location", "Price"}, 3, rootPanel);
