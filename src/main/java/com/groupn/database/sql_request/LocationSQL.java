@@ -77,7 +77,6 @@ public interface LocationSQL {
 
     default void addLocation(Location location, DBManager manager) {
         try {
-            //! update Event, update ArtObject
             manager.getLogger().info("RUN addLocation.");
             int locationType = 1;
             if (location.getType() == LocationType.PRIVATE_LOCATION)

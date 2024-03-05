@@ -1,7 +1,6 @@
 package com.groupn.database.sql_request;
 
 import com.groupn.database.DBManager;
-import com.groupn.entities.ArtObject;
 import com.groupn.entities.Event;
 
 import java.sql.Date;
@@ -133,14 +132,12 @@ public interface EventSQL {
         try {
             manager.getLogger().info("RUN removeEvent.");
 
-            // Check for dependencies in other tables
             String checkDependenciesSql = "SELECT 1 FROM EventObjects WHERE event_id = ?";
             try (PreparedStatement checkDependenciesStatement = manager.getConnection().prepareStatement(checkDependenciesSql)) {
                 checkDependenciesStatement.setInt(1, eventId);
                 try (ResultSet resultSet = checkDependenciesStatement.executeQuery()) {
                     if (resultSet.next()) {
                         manager.getLogger().info("Handling dependencies in EventObjects table.");
-                        // Assuming EventObjects is a table linking events to art objects
                         String handleDependenciesSql = "DELETE FROM EventObjects WHERE event_id = ?";
                         try (PreparedStatement handleDependenciesStatement = manager.getConnection().prepareStatement(handleDependenciesSql)) {
                             handleDependenciesStatement.setInt(1, eventId);
@@ -149,8 +146,6 @@ public interface EventSQL {
                     }
                 }
             }
-
-            // Delete the event
             String deleteEventSql = "DELETE FROM Event WHERE event_id = ?";
             try (PreparedStatement deleteEventStatement = manager.getConnection().prepareStatement(deleteEventSql)) {
                 deleteEventStatement.setInt(1, eventId);
