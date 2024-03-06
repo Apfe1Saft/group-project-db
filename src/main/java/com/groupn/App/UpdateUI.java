@@ -53,14 +53,12 @@ public class UpdateUI extends JDialog {
             boolean allFilled = false;
             for (JTextField textField : textFields) {
                 if (textField.getText().isEmpty()) {
-                    JOptionPane.showMessageDialog(TFPanel, "Please, do not leave text fields empty. Those are required to update data.\n" +
-                            "To refresh data push \"Find\" button and continue editing.", "Lack of data", JOptionPane.WARNING_MESSAGE);
-                    allFilled = false;
-                    break;
-                } else if (!dbManager.checkInjectionSafety(textField.getText())) {
-                    JOptionPane.showMessageDialog(TFPanel, "The input data is unsafe to add.\nPlease, don't use symbols such as double/single quotes or round brackets", "Lack of data", JOptionPane.WARNING_MESSAGE);
-                    allFilled = false;
-                    break;
+                    if (!(selectedTabIndex == 3) && !(labels.get(1).getText() == "Name")) {
+                        JOptionPane.showMessageDialog(TFPanel, "Please, do not leave text fields empty. Those are required to update data.\n" +
+                                "To refresh data push \"Find\" button and continue editing.", "Lack of data", JOptionPane.WARNING_MESSAGE);
+                        allFilled = false;
+                        break;
+                    }
                 }else {
                     allFilled = true;
                 }
@@ -76,9 +74,13 @@ public class UpdateUI extends JDialog {
                             break;
                         }
                         author.setName(textFields.get(1).getText());
-                        author.setDescription(textFields.get(2).getText());
+                        String description = textFields.get(2).getText();
+//                        if (description != null && description.matches(".*[\\\'\\\"\\(\\)]+.*")) {
+//                            description = escapeChars(description);
+//                        }
+                        author.setDescription(description);
                         try {
-                            author.setDateOfBirth(LocalDate.parse(textFields.get(3).getText())); // Do we need check on correct date format?
+                            author.setDateOfBirth(LocalDate.parse(textFields.get(3).getText()).toString()); // Do we need check on correct date format?
                         } catch (DateTimeParseException p) {
                             JOptionPane.showMessageDialog(TFPanel, "Please, input date in the form YYYY-MM-DD", "Incorrect format", JOptionPane.WARNING_MESSAGE);
                             break;
@@ -99,12 +101,23 @@ public class UpdateUI extends JDialog {
                         artObject.setName(textFields.get(1).getText());
                         artObject.setDescription(textFields.get(2).getText());
                         String dateString = textFields.get(3).getText();
+                        DateTimeFormatter formatter;
                         try {
-                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                            LocalDate dateOfCreation = LocalDate.parse(dateString, formatter);
-                            artObject.setDateOfCreation(dateOfCreation);
+                            if (dateString == null || dateString.isEmpty()) {
+                                artObject.setDateOfCreation(null); // Set null explicitly
+                            } else {
+                                formatter = DateTimeFormatter.ofPattern("yyyy");
+                                if (dateString.length() > 5) {
+                                    String[] dates = dateString.split("-");
+                                    System.out.println(dateString.length()+"\n"+dates[0]+"\n"+dates[1]);
+                                    dateString = dates[0]+"-"+dates[1];
+                                    artObject.setDateOfCreation(dateString);
+                                } else {
+                                    artObject.setDateOfCreation(LocalDate.parse(dateString, formatter).toString());
+                                }
+                            }
                         } catch (DateTimeParseException p) {
-                            JOptionPane.showMessageDialog(TFPanel, "Please, input date in the form YYYY-MM-DD", "Incorrect format", JOptionPane.WARNING_MESSAGE);
+                            JOptionPane.showMessageDialog(TFPanel, "Please, input date in the form YYYY, or YYYY-YYYY, or leave empty to set null value", "Incorrect format", JOptionPane.WARNING_MESSAGE);
                             break;
                         }
                         try {
@@ -151,10 +164,20 @@ public class UpdateUI extends JDialog {
                         }
                         event.setDescription(textFields.get(3).getText());
                         try {
-                            event.setStartDateOfEvent(LocalDate.parse(textFields.get(4).getText()));
-                            event.setEndDateOfEvent(LocalDate.parse(textFields.get(5).getText()));
+                            String startDate = textFields.get(4).getText();
+                            if (startDate == null || startDate.isEmpty()) {
+                                event.setStartDateOfEvent(startDate);
+                            } else {
+                                event.setStartDateOfEvent((LocalDate.parse(textFields.get(4).getText())).toString());
+                            }
+                            String endDate = textFields.get(5).getText();
+                            if (endDate == null || endDate.isEmpty()) {
+                                event.setEndDateOfEvent(endDate);
+                            } else {
+                                event.setEndDateOfEvent((LocalDate.parse(textFields.get(5).getText())).toString());
+                            }
                         } catch (DateTimeParseException p) {
-                            JOptionPane.showMessageDialog(TFPanel, "Please, input date in the form YYYY-MM-DD", "Incorrect format", JOptionPane.WARNING_MESSAGE);
+                            JOptionPane.showMessageDialog(TFPanel, "Please, input date in the form YYYY-MM-DD or leave empty to set null value", "Incorrect format", JOptionPane.WARNING_MESSAGE);
                             break;
                         }
                         try {
@@ -353,15 +376,15 @@ public class UpdateUI extends JDialog {
                 break;
             } // Author window size
             case 2: {
-                setPreferredSize(new Dimension(600, 300));
-                setMinimumSize(new Dimension(600, 300));
-                setMaximumSize(new Dimension(600, 300));
+                setPreferredSize(new Dimension(600, 330));
+                setMinimumSize(new Dimension(600, 330));
+                setMaximumSize(new Dimension(600, 330));
                 break;
             } // Art window size
             case 3: {
-                setPreferredSize(new Dimension(600, 325));
-                setMinimumSize(new Dimension(600, 325));
-                setMaximumSize(new Dimension(600, 325));
+                setPreferredSize(new Dimension(600, 350));
+                setMinimumSize(new Dimension(600, 350));
+                setMaximumSize(new Dimension(600, 350));
                 break;
             } // Event window size
             case 4: {
@@ -376,9 +399,9 @@ public class UpdateUI extends JDialog {
                 break;
             } // Owner window size
             case 6: {
-                setPreferredSize(new Dimension(650, 275));
-                setMinimumSize(new Dimension(650, 275));
-                setMaximumSize(new Dimension(650, 275));
+                setPreferredSize(new Dimension(650, 285));
+                setMinimumSize(new Dimension(650, 285));
+                setMaximumSize(new Dimension(650, 285));
                 break;
             } // Purchase window size
         } // Window sizes for updates of different entities
@@ -498,7 +521,7 @@ public class UpdateUI extends JDialog {
                                 } else if (method.getName().equals("getType")) {
                                     Method getNameMethod = value.getClass().getMethod("ordinal");
                                     int id2 = (int) getNameMethod.invoke(value);
-                                    textField.setText(Integer.toString(id2)+1);
+                                    textField.setText(Integer.toString(id2+1));
                                     labels.get(j).setText("<html>Initial type: "+event.getType()+"<html>");
                                     j++;
                                 } else {
@@ -648,6 +671,18 @@ public class UpdateUI extends JDialog {
             }
             confirmUpdate.setEnabled(false);
         }
+    }
+
+    public static String escapeChars(String input) {
+        StringBuilder escapedString = new StringBuilder();
+        for (int i = 0; i < input.length(); i++) {
+            char currentChar = input.charAt(i);
+            if (currentChar == '\'' || currentChar == '"' || currentChar == '(' || currentChar == ')') {
+                escapedString.append('\\');
+            }
+            escapedString.append(currentChar);
+        }
+        return escapedString.toString();
     }
 }
 

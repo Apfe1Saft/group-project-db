@@ -131,7 +131,7 @@ public interface ArtObjectSQL {
                 preparedStatement.setInt(3, artObject.getAuthor().getId());
                 preparedStatement.setInt(4, artObject.getCurrentOwner().getId());
                 preparedStatement.setInt(5, artObject.getCurrentLocation().getId());
-                preparedStatement.setDate(6, Date.valueOf(artObject.getDateOfCreation()));
+                preparedStatement.setString(6, artObject.getDateOfCreation());
                 preparedStatement.executeUpdate();
 
                 ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
@@ -196,8 +196,9 @@ public interface ArtObjectSQL {
                 } else {
                     preparedStatement.setNull(5, java.sql.Types.INTEGER);
                 }
-                preparedStatement.setDate(6, Date.valueOf(artObject.getDateOfCreation()));
+                preparedStatement.setString(6, artObject.getDateOfCreation());
                 preparedStatement.setInt(7, artObject.getId());
+                preparedStatement.executeUpdate();
 
             }
         } catch (SQLException e) {

@@ -49,21 +49,12 @@ public class EntityMapper {
     }
 
     public ArtObject mapResultSetToArtObject(ResultSet resultSet) throws SQLException {
-        LocalDate dateOfCreation = null;
         String date = resultSet.getString("date_of_creation");
-        if (date != null) {
-            try {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                dateOfCreation = LocalDate.parse(date, formatter);
-            } catch (DateTimeParseException e) {
-                dbManager.getLogger().info(" Author date of birth cannot be converted into normal date.");
-            }
-        }
         return new ArtObject(
                 resultSet.getInt("art_object_id"),
                 resultSet.getString("art_object_name"),
                 resultSet.getString("art_object_description"),
-                dateOfCreation,
+                date,
                 mapResultSetToAuthor(resultSet),
                 mapResultSetToOwner(resultSet),
                 mapResultSetToLocation(resultSet)
@@ -82,12 +73,12 @@ public class EntityMapper {
     }
 
     public Author mapResultSetToAuthor(ResultSet resultSet) throws SQLException {
-        LocalDate dateOfCreation = null;
+        LocalDate dateOfBirth = null;
         String date = resultSet.getString("author_date_of_birth");
         if (date != null) {
             try {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                dateOfCreation = LocalDate.parse(date, formatter);
+                dateOfBirth = LocalDate.parse(date, formatter);
             } catch (DateTimeParseException e) {
                 dbManager.getLogger().info(" Author date of birth cannot be converted into normal date.");
             }
@@ -96,7 +87,7 @@ public class EntityMapper {
                 resultSet.getInt("author_id"),
                 resultSet.getString("author_name"),
                 resultSet.getString("author_description"),
-                dateOfCreation
+                date
         );
     }
 
@@ -118,8 +109,8 @@ public class EntityMapper {
                 resultSet.getString("event_name"),
                 dbManager.getEventTypeById(resultSet.getInt("event_type_id")),
                 resultSet.getString("event_description"),
-                resultSet.getDate("event_start_date").toLocalDate(),
-                resultSet.getDate("event_end_date").toLocalDate(),
+                resultSet.getString("event_start_date"),
+                resultSet.getString("event_end_date"),
                 mapResultSetToLocation(resultSet),
                 resultSet.getInt("event_price"),
                 artObjectList

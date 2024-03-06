@@ -15,8 +15,8 @@ public class Event {
     private String name;
     private EventType type;
     private String description;
-    private LocalDate startDateOfEvent;
-    private LocalDate EndDateOfEvent;
+    private String startDateOfEvent;
+    private String endDateOfEvent;
     private Location location;
     private int price;
     private List<ArtObject> artObjects;

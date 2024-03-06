@@ -47,17 +47,15 @@ public class Add extends JDialog {
         mainInterface.setAutoRequestFocus(false);
         confirmAdd.addActionListener(e -> {
             boolean allFilled = false;
-            String[] unnecessaryFields = {"Price (integer)*"};
+            String[] unnecessaryFields = {"Price (integer)*", "Creation date (YYYY)"};
             int i = 0;
             for (JTextField textField : textFields) {
                 if (textField.getText().isEmpty() && !Arrays.asList(unnecessaryFields).contains(labels.get(i).getText())) {
-                    JOptionPane.showMessageDialog(TFPanel, "Please, do not leave mandatory fields empty. Those are required to add data.\n", "Lack of data", JOptionPane.WARNING_MESSAGE);
-                    allFilled = false;
-                    break;
-                } else if (!dbManager.checkInjectionSafety(textField.getText())) {
-                    JOptionPane.showMessageDialog(TFPanel, "The input data is unsafe to add.\nPlease, don't use symbols such as double/single quotes or round brackets", "Lack of data", JOptionPane.WARNING_MESSAGE);
-                    allFilled = false;
-                    break;
+                    if (!(selectedTabIndex == 3 && !(labels.get(0).getText() == "Name"))) {
+                        JOptionPane.showMessageDialog(TFPanel, "Please, do not leave mandatory fields empty. Those are required to add data.\n", "Lack of data", JOptionPane.WARNING_MESSAGE);
+                        allFilled = false;
+                        break;
+                    }
                 } else {
                     allFilled = true;
                 }
@@ -76,8 +74,7 @@ public class Add extends JDialog {
                         String birthDate = textFields.get(2).getText();
                         try {
                             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                            LocalDate dateOfBirth = LocalDate.parse(birthDate, formatter);
-                            author.setDateOfBirth(dateOfBirth);
+                            author.setDateOfBirth(LocalDate.parse(birthDate, formatter).toString());
                         } catch (DateTimeParseException p) {
                             JOptionPane.showMessageDialog(TFPanel, "Please, input date in the form YYYY-MM-DD", "Incorrect format", JOptionPane.WARNING_MESSAGE);
                             break;
@@ -96,11 +93,14 @@ public class Add extends JDialog {
                         artObject.setDescription(textFields.get(1).getText());
                         String dateString = textFields.get(2).getText();
                         try {
-                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                            LocalDate dateOfCreation = LocalDate.parse(dateString, formatter);
-                            artObject.setDateOfCreation(dateOfCreation);
+                            if (dateString == null || dateString.isEmpty()) {
+                                artObject.setDateOfCreation(dateString);
+                            } else {
+                                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy");
+                                artObject.setDateOfCreation((LocalDate.parse(dateString, formatter)).toString());
+                            }
                         } catch (DateTimeParseException p) {
-                            JOptionPane.showMessageDialog(TFPanel, "Please, input date in the form YYYY-MM-DD", "Incorrect format", JOptionPane.WARNING_MESSAGE);
+                            JOptionPane.showMessageDialog(TFPanel, "Please, input date in the form YYYY or leave empty to set null value", "Incorrect format", JOptionPane.WARNING_MESSAGE);
                             break;
                         }
                         //
@@ -147,20 +147,24 @@ public class Add extends JDialog {
                         event.setDescription(textFields.get(2).getText());
                         String startDate = textFields.get(3).getText();
                         try {
-                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                            LocalDate dateOfStart = LocalDate.parse(startDate, formatter);
-                            event.setStartDateOfEvent(dateOfStart);
+                            if (startDate == null || startDate.isEmpty()) {
+                                event.setStartDateOfEvent(startDate);
+                            } else {
+                                event.setStartDateOfEvent((LocalDate.parse(textFields.get(3).getText())).toString());
+                            }
                         } catch (DateTimeParseException p) {
-                            JOptionPane.showMessageDialog(TFPanel, "Please, input start date in the form YYYY-MM-DD", "Incorrect format", JOptionPane.WARNING_MESSAGE);
+                            JOptionPane.showMessageDialog(TFPanel, "Please, input start date in the form YYYY-MM-DD or leave empty to set null value", "Incorrect format", JOptionPane.WARNING_MESSAGE);
                             break;
                         }
                         String endDate = textFields.get(4).getText();
                         try {
-                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                            LocalDate dateOfEnd = LocalDate.parse(endDate, formatter);
-                            event.setEndDateOfEvent(dateOfEnd);
+                            if (endDate == null || endDate.isEmpty()) {
+                                event.setEndDateOfEvent(endDate);
+                            } else {
+                                event.setEndDateOfEvent((LocalDate.parse(textFields.get(4).getText())).toString());
+                            }
                         } catch (DateTimeParseException p) {
-                            JOptionPane.showMessageDialog(TFPanel, "Please, input end date in the form YYYY-MM-DD", "Incorrect format", JOptionPane.WARNING_MESSAGE);
+                            JOptionPane.showMessageDialog(TFPanel, "Please, input end date in the form YYYY-MM-DD or leave empty to set null value", "Incorrect format", JOptionPane.WARNING_MESSAGE);
                             break;
                         }
                         event.setLocation(dbManager.getLocationById(Integer.parseInt(textFields.get(5).getText())));
@@ -293,9 +297,13 @@ public class Add extends JDialog {
             if (columnName.equals("Price")) {
                 label.setText(label.getText()+" (integer)*");
             }
-            String[] dateFields = {"Date of Birth", "Creation date","Start Date", "End Date", "Opening date", "Date of purchase"};
+            String[] dateFields = {"Date of Birth", "Start Date", "End Date", "Opening date", "Date of purchase"};
             if (Arrays.asList(dateFields).contains(columnName)) {
-                label.setText("<html>"+label.getText()+" (YYYY-MM-DD)*<html>");
+                label.setText(label.getText()+" (YYYY-MM-DD)*");
+            }
+            String[] yearDateFields = {"Creation date"};
+            if (Arrays.asList(yearDateFields).contains(columnName)) {
+                label.setText(label.getText()+" (YYYY)");
             }
             String[] mandatoryFields = {"Name", "Description", "Placement"};
             if (Arrays.asList(mandatoryFields).contains(columnName)) {

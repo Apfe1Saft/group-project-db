@@ -20,6 +20,8 @@ public interface EventTypeSQL {
                     return switch (resultSet.getInt("event_type_id")) {
                         case 1 -> EventType.EXHIBITION;
                         case 2 -> EventType.WRONGDOOR;
+                        case 3 -> EventType.ACCIDENT;
+                        case 4 -> EventType.RESTORATION;
                         default -> throw new Exception("Wrong Event Type");
                     };
                 }

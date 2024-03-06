@@ -13,7 +13,7 @@ public class ArtObject {
     private int id;
     private String name;
     private String description;
-    private LocalDate dateOfCreation;
+    private String dateOfCreation;
     private Author author;
     private Owner currentOwner;
     private Location currentLocation;

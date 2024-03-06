@@ -71,23 +71,23 @@ INSERT INTO Owner (owner_name, owner_description) VALUES
 
 
 INSERT INTO Author (author_name, author_description, author_date_of_birth) VALUES
-('Vincent Willem van Gogh', 'Dutch Post-Impressionist painter', '30 March 1853'),
-('Edvard Munch', 'Norwegian painter and printmaker', '12 December 1863'),
-('Yayoi Kusama', 'Japanese contemporary artist', '22 March 1929'),
-('Louise Josephine Bourgeois', 'French-American artist', '25 December 1911'),
-('Louise Nevelson', 'American sculptor', '23 September 1899'),
-('Marie-Françoise Constance Mayer La Martiniere', 'French painter of portraits, allegorical subjects, miniatures and genre works', '9 March 1775'),
-('Elisabeth Sophie Cheron', 'French painter, poet, musician, artist, and academician', '3 October 1648'),
-('Jackson Pollock', 'American painter in the abstract expressionist movement', '28 Janurary 1912'),
-('Eugene Henri Paul Gauguin', 'French painter, sculptor, printmaker, ceramist, and writer', '7 June 1848'),
-('Leonardo di ser Piero da Vinci', 'Italian painter, draughtsman, engineer, scientist, theorist, sculptor, and architect of the High Renaissance', '15 April 1452'),
-('Willem de Kooning', 'Dutch-American abstract expressionist artist', '24 April 1904'),
-('Tracey Karima Emin', 'An English artist known for autobiographical and confessional artwork', '3 July 1963'),
-('Andy Warhol', 'American visual artist, film director, producer, and leading figure in the pop art movement', '6 August 1928'),
-('Mark Rothko', 'Latvian-born American abstract painter', '25 February 1903'),
+('Vincent Willem van Gogh', 'Dutch Post-Impressionist painter', '1853-03-30'),
+('Edvard Munch', 'Norwegian painter and printmaker', '1863-02-12'),
+('Yayoi Kusama', 'Japanese contemporary artist', '1929-04-22'),
+('Louise Josephine Bourgeois', 'French-American artist', '1911-02-25'),
+('Louise Nevelson', 'American sculptor', '1899-09-23'),
+('Marie-Françoise Constance Mayer La Martiniere', 'French painter of portraits, allegorical subjects, miniatures and genre works', '1775-03-09'),
+('Elisabeth Sophie Cheron', 'French painter, poet, musician, artist, and academician', '1648-10-03'),
+('Jackson Pollock', 'American painter in the abstract expressionist movement', '1912-01-28'),
+('Eugene Henri Paul Gauguin', 'French painter, sculptor, printmaker, ceramist, and writer', '1848-06-07'),
+('Leonardo di ser Piero da Vinci', 'Italian painter, draughtsman, engineer, scientist, theorist, sculptor, and architect of the High Renaissance', '1452-04-15'),
+('Willem de Kooning', 'Dutch-American abstract expressionist artist', '1904-04-24'),
+('Tracey Karima Emin', 'An English artist known for autobiographical and confessional artwork', '1963-07-03'),
+('Andy Warhol', 'American visual artist, film director, producer, and leading figure in the pop art movement', '1928-08-06'),
+('Mark Rothko', 'Latvian-born American abstract painter', '1903-02-25'),
 ('Pablo Ruiz Picasso', 'Spanish painter, sculptor, printmaker, ceramicist, and theatre designer', '1881-10-25'),
 ('Rudolf Stingel', 'Italian artist', '1956-05-26'),
-('Raffaello (Raphael) Sanzio da Urbino', ' Italian painter and architect of the High Renaissance', '1483-03-28');
+('Raffaello (Raphael) Sanzio da Urbino', 'Italian painter and architect of the High Renaissance', '1483-03-28');
 
 INSERT INTO ArtObject (author_id, art_object_name, art_object_description, current_owner_id, current_location_id, date_of_creation) VALUES
 (7, 'Autoportrait', 'Self-portrait made in oil on canvas 88 x 73 cm.', 1, 1, '1672'),
@@ -143,7 +143,7 @@ INSERT INTO Event (event_name,event_type_id, event_description, event_start_date
 (NULL, 3, 'In 2004, the tent was destroyed in a fire at the East London Momart warehouse, along with two of Emin''s other works and 100 more from Saatchi''s collection, including works by Hirst, Jake and Dinos Chapman and Martin Maloney.', '2004-05-24', '2004-05-24', 20, NULL),
 ('Expansive Presentation of Andy Warhol', 1, 'An in-depth installation of Andy Warhol opened May 26, 2021, features 26 works. The exhibition is still active.', '2021-05-26', NULL, 21, NULL),
 ('Becoming Picasso: Paris 1901', 1, 'This exhibition tells the remarkable story of Pablo Picasso’s breakthrough year as an artist – 1901.  It was the year that the highly ambitious nineteen-year-old first launched his career in Parisat.', '2013-02-14', '2013-05-26', 24, NULL),
-('Rudolf Stingel', 1, 'A solo exhibition curated by the artist in collaboration with Elena Geuna.', '07 April 2013', '31 December 2013', 25, NULL),
+('Rudolf Stingel', 1, 'A solo exhibition curated by the artist in collaboration with Elena Geuna.', '2013-04-07', '2013-12-31', 25, NULL),
 ('Rudolf Stingel', 1, 'Employing such materials as rubber, carpet, painted aluminum, Styrofoam, and paint, Rudolf Stingel''s work questions and disrupts the viewer''s understanding and experience of an art object.', '2007-06-28', '2007-10-14', 26, NULL),
 ('Where are we going?', 1, 'First official exhibition of the Pinault Collection.', '2006-04-18', '2006-10-01', 25, NULL),
 ('Yayoi Kusama: Infinity Mirrors', 1, 'The exibition provided the unique opportunity to experience six infinity rooms—the artist''s most iconic kaleidoscopic environments—alongside large-scale installations and key paintings, sculptures and works on paper from the early 1950s to 2017.', '2017-10-21', '2018-01-01', 21, NULL),

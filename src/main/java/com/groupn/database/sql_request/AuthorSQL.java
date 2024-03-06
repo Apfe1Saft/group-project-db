@@ -126,7 +126,7 @@ public interface AuthorSQL {
             try (PreparedStatement preparedStatement = manager.getConnection().prepareStatement(sql)) {
                 preparedStatement.setString(1, author.getName());
                 preparedStatement.setString(2, author.getDescription());
-                preparedStatement.setDate(3, Date.valueOf(author.getDateOfBirth()));
+                preparedStatement.setString(3, author.getDateOfBirth());
                 preparedStatement.setInt(4, author.getId());
                 preparedStatement.executeUpdate();
             }

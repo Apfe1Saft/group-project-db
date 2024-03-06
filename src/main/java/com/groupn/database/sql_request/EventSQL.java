@@ -111,8 +111,8 @@ public interface EventSQL {
                 preparedStatement.setString(1, event.getName());
                 preparedStatement.setInt(2, event.getType().ordinal() + 1);
                 preparedStatement.setString(3, event.getDescription());
-                preparedStatement.setDate(4, Date.valueOf(event.getStartDateOfEvent()));
-                preparedStatement.setDate(5, Date.valueOf(event.getEndDateOfEvent()));
+                preparedStatement.setString(4, event.getStartDateOfEvent());
+                preparedStatement.setString(5, event.getEndDateOfEvent());
                 if (event.getLocation() != null) {
                     preparedStatement.setObject(6, event.getLocation().getId());
                 } else {

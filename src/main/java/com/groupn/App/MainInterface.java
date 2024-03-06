@@ -1255,6 +1255,8 @@ public class MainInterface extends JFrame {
         refreshEvent.addActionListener(e -> {
             showEvents(true);
             refreshEvent.setText("Refresh table");
+            EventCB.removeAllItems();
+            EventCB.addItem(eventCBValues[0]);
             EventCB.addItem(eventCBValues[1]);
             eventObjectsButton.setText("Show event objects");
             deleteEvent.addActionListener(d -> {
