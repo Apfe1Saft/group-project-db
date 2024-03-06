@@ -138,6 +138,8 @@ public class MainInterface extends JFrame {
         picturePanel.add(new imagePanel());
         eventObjectsButton.addActionListener(e -> {
             showEventObjects(true);
+            addEvent.setEnabled(false);
+            updateEvent.setEnabled(false);
             if (EventCB.getItemCount() != 1) {
                 EventCB.setSelectedIndex(-1);
                 EventCB.removeAllItems();
@@ -224,7 +226,7 @@ public class MainInterface extends JFrame {
                     }
                     List<Author> authors = dbManager.getAuthorsByFilter(AuthorTF.getText());
                     if (authors.isEmpty()) {
-                        JOptionPane.showMessageDialog(rootPanel, "Authors not found by word: \""+AuthorTF+"\".", "Not found", JOptionPane.WARNING_MESSAGE);
+                        JOptionPane.showMessageDialog(rootPanel, "Authors not found by word: \""+AuthorTF.getText()+"\".", "Not found", JOptionPane.WARNING_MESSAGE);
                         AuthorTF.setText("");
                         break;
                     }
@@ -473,6 +475,7 @@ public class MainInterface extends JFrame {
                                         Object[] rowData = new Object[]{event.getId(), event.getName(), event.getType(), event.getDescription(), event.getStartDateOfEvent(), event.getLocation(), event.getPrice()};
                                         tableModel.addRow(rowData);
                                         tableModel.fireTableDataChanged();
+                                        scrollableAreaAO(tableModel, EventTable);
                                     }
                                     break;
                                 }
@@ -501,6 +504,7 @@ public class MainInterface extends JFrame {
                                     tableModel.addRow(rowData);
                                 }
                                 tableModel.fireTableDataChanged();
+                                scrollableAreaAO(tableModel, EventTable);
                             }
                             break;
                         }
@@ -1254,6 +1258,8 @@ public class MainInterface extends JFrame {
         refreshEvent.setText("Get back to events");
         refreshEvent.addActionListener(e -> {
             showEvents(true);
+            addEvent.setEnabled(true);
+            updateEvent.setEnabled(true);
             refreshEvent.setText("Refresh table");
             EventCB.removeAllItems();
             EventCB.addItem(eventCBValues[0]);
@@ -1308,7 +1314,6 @@ public class MainInterface extends JFrame {
         column.setMinWidth(75);
         column.setMaxWidth(75);
         EventTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        scrollableAreaAO(tableModel, EventTable);
     }
     public void scrollableAreaAO(DefaultTableModel tableModel, JTable table) {
         int rowCount = tableModel.getRowCount();
