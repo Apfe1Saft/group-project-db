@@ -85,7 +85,9 @@ public class MainInterface extends JFrame {
     public MainInterface(DBManager dbManager) {
         this.dbManager = dbManager;
         setContentPane(rootPanel);
-        this.setIconImage((new ImageIcon("src/main/java/com/groupn/App/Logo/Icon.png")).getImage());
+        String filePath = "Logo/Icon.png";
+        ImageIcon icon = new ImageIcon(filePath);
+        this.setIconImage(icon.getImage());
         setTitle("Art catalog");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(900, 500);

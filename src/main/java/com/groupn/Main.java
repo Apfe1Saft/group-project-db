@@ -20,8 +20,8 @@ public class Main {
         try {
 
             manager.createConnection(DBConnector.JDBC_URL); // connect to JDBC_URL
-//            manager.setDefault(); // create tables
-//            manager.setDefaultData(); // add elements into tables
+            manager.setDefault(); // create tables
+            manager.setDefaultData(); // add elements into tables
 
             //manager.removeAuthor(1);
             //System.out.println("==>" + manager.getArtObjectById(1));

@@ -5,7 +5,7 @@ import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 
 public class imagePanel extends JPanel {
-    Image image = Toolkit.getDefaultToolkit().getImage("src/main/java/com/groupn/App/Logo/Logo.jpg");
+    Image image = Toolkit.getDefaultToolkit().getImage("Logo/Logo.jpg");
 
     @Override
     protected void paintComponent(Graphics g) {
